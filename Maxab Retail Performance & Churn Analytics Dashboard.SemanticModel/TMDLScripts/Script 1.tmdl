@@ -1,0 +1,224 @@
+createOrReplace
+
+	table MeasureLibrary
+		lineageTag: fe5d5704-32e9-4e95-afba-f6d578934beb
+
+		/// Total revenue generated from all orders
+		measure 'Total Sales' = SUM(Fact_Orders[Sales])
+			formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+			displayFolder: Performance KPIs
+			lineageTag: 5b7046fd-ba7c-40fb-9d63-230e82d4bc5d
+
+			annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+		/// Count of unique orders
+		measure 'Total Orders' = DISTINCTCOUNT(Fact_Orders[OrderId])
+			formatString: 0
+			displayFolder: Performance KPIs
+			lineageTag: 3a4ffe39-9bf9-4d73-88a2-131603f83606
+
+		/// Count of unique retailers who placed orders
+		measure 'Total Retailers' = DISTINCTCOUNT(Fact_Orders[RetailerID])
+			formatString: 0
+			displayFolder: Performance KPIs
+			lineageTag: 9f36bac9-13b0-43bb-a13c-8b8292c9e889
+
+		/// Average order value (Total Sales divided by Total Orders)
+		measure AOV = DIVIDE([Total Sales], [Total Orders])
+			formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+			displayFolder: Performance KPIs
+			lineageTag: c0b584b8-862a-4302-8d71-1e6bb5747bfd
+
+			annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+		/// Average number of orders per retailer
+		measure Frequency = DIVIDE([Total Orders], [Total Retailers])
+			displayFolder: Performance KPIs
+			lineageTag: c5c86b8f-6dbc-4370-b915-0e3afc26e639
+
+			annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+		/// Count of orders successfully delivered
+		measure 'Orders Success' = CALCULATE(COUNTROWS(Fact_Orders), Fact_Orders[Order Status] = "Delivered")
+			formatString: 0
+			displayFolder: Success & Fail
+			lineageTag: 97cd0594-d28f-467f-8753-9b693e1778cb
+
+		/// Count of orders that failed to be delivered
+		measure 'Orders Fail' = ```
+				CALCULATE(COUNTROWS(Fact_Orders), Fact_Orders[Order Status] = "Failed")
+				
+				```
+			formatString: 0
+			displayFolder: Success & Fail
+			lineageTag: 143410aa-d5a5-479e-b007-44d539660ddf
+
+		/// Percentage of successful orders out of total orders
+		measure 'Success Rate %' = DIVIDE([Orders Success], [Total Orders], 0)
+			formatString: 0.00%;-0.00%;0.00%
+			displayFolder: Success & Fail
+			lineageTag: f64dad00-3f70-421e-a567-bd9a468a4f3a
+
+		/// Count of first orders placed by retailers in the current month (activation event)
+		measure 'Retailer First Order In Month' = ```
+				
+				VAR FirstOrderDatePerRetailer =
+				    CALCULATE(
+				        MIN(Fact_Orders[Created]),
+				        ALLEXCEPT(Fact_Orders, Fact_Orders[RetailerID])
+				    )
+				
+				RETURN
+				CALCULATE(
+				    COUNTROWS(Fact_Orders),
+				    Fact_Orders[Created] = FirstOrderDatePerRetailer
+				)
+				
+				```
+			formatString: 0
+			displayFolder: Activation (Retailer first order in month)
+			lineageTag: 74a353d8-369f-4ae4-835a-cbca3c3892ab
+
+		/// Count of retailers who placed their first order within the selected month
+		measure 'Activation Retailers' = ```
+				
+				VAR FirstOrderPerRetailer =
+				    ADDCOLUMNS(
+				        SUMMARIZE(Fact_Orders, Fact_Orders[RetailerID]),
+				        "FirstOrderDate", CALCULATE(MIN(Fact_Orders[Created]), ALL(Fact_Orders))
+				    )
+				VAR RetailersThisMonth =
+				    FILTER(
+				        FirstOrderPerRetailer,
+				        [FirstOrderDate] >= MIN(Dim_Date[Date]) && [FirstOrderDate] <= MAX(Dim_Date[Date])
+				    )
+				RETURN
+				COUNTROWS(RetailersThisMonth)
+				
+				```
+			formatString: 0
+			displayFolder: Activation (Retailer first order in month)
+			lineageTag: 4b13600b-3a8c-4c1a-82d9-405b21483aed
+
+		/// Count of distinct retailers active in the selected period
+		measure 'Active Retailers' = DISTINCTCOUNT(Fact_Orders[RetailerID])
+			formatString: 0
+			displayFolder: Churn measures
+			lineageTag: 8c706329-4d15-40a3-887d-95c9382f26cb
+
+		/// Count of retailers who were active in prior 3 months but not in current month (churned)
+		measure 'Churned Retailers' = ```
+				
+				VAR CurrentMonthDates =
+				    VALUES(Dim_Date[Date])
+				
+				VAR Prior3MonthsDates =
+				    DATESINPERIOD(
+				        Dim_Date[Date],
+				        MIN(Dim_Date[Date]) - 1,
+				        -3,
+				        MONTH
+				    )
+				
+				VAR RetailersPrior =
+				    CALCULATETABLE(
+				        VALUES(Fact_Orders[RetailerID]),
+				        Prior3MonthsDates
+				    )
+				
+				VAR RetailersCurrent =
+				    CALCULATETABLE(
+				        VALUES(Fact_Orders[RetailerID]),
+				        CurrentMonthDates
+				    )
+				
+				VAR Churned =
+				    EXCEPT(RetailersPrior, RetailersCurrent)
+				
+				RETURN
+				COUNTROWS(Churned)
+				
+				```
+			formatString: 0
+			displayFolder: Churn measures
+			lineageTag: 5eb76b81-128b-4ad4-80e6-4839ab6cee75
+
+		/// Percentage of churned retailers relative to total retailers
+		measure 'Churn Rate %' = DIVIDE([Churned Retailers], COUNTROWS( VALUES(Fact_Orders[RetailerID]) ), 0)
+			formatString: 0.00%;-0.00%;0.00%
+			displayFolder: Churn measures
+			lineageTag: cf0e03b9-e8d7-46a4-8013-03506f216e6b
+
+		/// Total sales for the selected week in May
+		measure 'Weekly Sales' =
+				
+				CALCULATE(
+				    SUM(Fact_OrderLines[Sales]),
+				    FILTER(
+				        ALL(Dim_Date),
+				        Dim_Date[YearMonth] = "2025-05" && Dim_Date[WeekOfMonth] = SELECTEDVALUE(Dim_Date[WeekOfMonth])
+				    )
+				)
+			formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+			displayFolder: Drop analysis & weekly sales
+			lineageTag: 76e975dd-cebc-4ab9-b4d6-fedecdb8d013
+
+			annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+		/// Percentage change in weekly sales compared to previous week
+		measure 'Drop % vs Prior Week' = ```
+				
+				VAR Cur = [Weekly Sales]
+				VAR Prev = CALCULATE([Weekly Sales], FILTER(ALL(Dim_Date), Dim_Date[YearMonth] = "2025-05" && Dim_Date[WeekOfMonth] = SELECTEDVALUE(Dim_Date[WeekOfMonth]) - 1))
+				RETURN DIVIDE(Cur - Prev, Prev, 0)
+				
+				```
+			formatString: 0.00%;-0.00%;0.00%
+			displayFolder: Drop analysis & weekly sales
+			lineageTag: 2dea75c6-ddb3-48dd-96b6-1ccabfef14b3
+
+		/// Total net merchandise value (NMV) across all categories
+		measure 'Total NMV' = SUM(Fact_MaxabNMV[Total Sales])
+			formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+			displayFolder: Commercial / Juice
+			lineageTag: 2fa101d7-a0cb-43bf-9844-7f43f5a65067
+
+			annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+		/// Total sales for juice category
+		measure 'Juice NMV' = SUM(Fact_JuiceNMV[Sales])
+			formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+			displayFolder: Commercial / Juice
+			lineageTag: cb05016e-6ee6-4adc-8895-f06c46b2282f
+
+			annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+		/// Juice category sales as a percentage of total NMV
+		measure 'Juice Share %' = DIVIDE([Juice NMV], [Total NMV], 0)
+			formatString: 0.00%;-0.00%;0.00%
+			displayFolder: Commercial / Juice
+			lineageTag: 23e1896c-3c28-4af6-922b-24e03dc53950
+
+		/// Each juice brand's sales as a percentage of total juice sales
+		measure 'Brand Share %' = DIVIDE(SUM(Fact_JuiceNMV[Sales]), CALCULATE(SUM(Fact_JuiceNMV[Sales]), ALL(Fact_JuiceNMV[Brand])))
+			formatString: 0.00%;-0.00%;0.00%
+			displayFolder: Commercial / Juice
+			lineageTag: 81573887-60e1-495c-9660-71ace6e05b84
+
+		column Column
+			isHidden
+			formatString: 0
+			lineageTag: 819aebb0-684f-415d-b8ea-ffad19c2e928
+			summarizeBy: sum
+			isNameInferred
+			sourceColumn: [Column]
+
+			annotation SummarizationSetBy = Automatic
+
+		partition MeasureLibrary = calculated
+			mode: import
+			source = Row("Column", BLANK())
+
+		annotation PBI_Id = 7d02a0658abc4d8792569e2438140b8c
+
+		annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}

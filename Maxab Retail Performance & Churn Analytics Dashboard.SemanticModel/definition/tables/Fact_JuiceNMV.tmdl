@@ -1,0 +1,72 @@
+table Fact_JuiceNMV
+	lineageTag: 0ad93cf7-7e5b-416e-aeff-1c86ed6071f1
+
+	column Month
+		dataType: string
+		lineageTag: 42115697-da01-42e5-ad24-5fb655dbb8f9
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 5fb709e0-5521-43bb-bd48-50025cf00b82
+		summarizeBy: none
+		sourceColumn: MonthDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Category
+		dataType: string
+		lineageTag: 9357a887-0e89-416c-8a90-187cc395b21b
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: string
+		lineageTag: 87afdee9-ecab-40cc-bbc1-b91f9883c3e9
+		isDefaultLabel
+		summarizeBy: none
+		sourceColumn: Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sales
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 582acbbe-5d9c-430c-9517-1009de503dbf
+		summarizeBy: sum
+		sourceColumn: Sales
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	partition Fact_JuiceNMV = m
+		mode: import
+		queryGroup: 'Fact Tables'
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\courses\Data Science\Projects\Data Analysis Assessments Practice\Data Analysis Assessments Practice\Maxab_Growth Task 2024\Dataset 3 Final.xlsx"), null, true),
+				    #"Juice NMV_Sheet" = Source{[Item="Juice NMV",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Juice NMV_Sheet", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Month", type text}, {"Category", type text}, {"Brand", type text}, {"Sales", type number}, {"Column5", type any}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column5"}),
+				    #"Capitalized Each Word" = Table.TransformColumns(#"Removed Columns",{{"Category", Text.Proper, type text}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Capitalized Each Word",{{"Sales", Currency.Type}}),
+				    #"Added Custom" = Table.AddColumn(#"Changed Type1", "MonthDate", each Date.FromText("01 " & [Month] & " 2024")),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Added Custom",{{"MonthDate", type date}}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Changed Type2",{"Month", "MonthDate", "Category", "Brand", "Sales"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

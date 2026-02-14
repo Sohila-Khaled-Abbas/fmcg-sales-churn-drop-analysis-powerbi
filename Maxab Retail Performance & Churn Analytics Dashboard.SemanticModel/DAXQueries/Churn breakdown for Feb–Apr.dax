@@ -1,0 +1,16 @@
+EVALUATE
+SUMMARIZECOLUMNS(
+    Dim_Date[YearMonth],
+    -- FILTER must come before measures
+    FILTER(
+        ALL(Dim_Date),
+        Dim_Date[YearMonth] = "2024-02"
+        || Dim_Date[YearMonth] = "2024-03"
+        || Dim_Date[YearMonth] = "2024-04"
+    ),
+    "ActiveRetailers", [Active Retailers],
+    "ChurnedRetailers", [Churned Retailers],
+    "ChurnRate", [Churn Rate %]
+)
+ORDER BY Dim_Date[YearMonth]
+

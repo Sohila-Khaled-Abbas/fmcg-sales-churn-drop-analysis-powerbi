@@ -1,0 +1,186 @@
+table Fact_Orders
+	lineageTag: d59b240f-73b3-4a21-a771-3e2337da64d3
+
+	/// Unique retailer identifier
+	/// 
+	column RetailerID
+		dataType: int64
+		formatString: 0
+		lineageTag: 36542b18-a37e-4cf3-8026-e93635da7aa5
+		summarizeBy: none
+		sourceColumn: RetailerID
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Unique order identifier (source Order Id)
+	/// 
+	column OrderId
+		dataType: int64
+		formatString: 0
+		lineageTag: 611e032e-05db-405d-8542-843c39a0b394
+		isDefaultLabel
+		summarizeBy: count
+		sourceColumn: OrderId
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Order created date
+	/// 
+	/// 
+	column Created
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: d3701923-0120-481f-b0f8-43c7d110f62c
+		summarizeBy: none
+		sourceColumn: Created
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	/// Order delivered date (null if not delivered)
+	column Delivered
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 0378f274-e93f-4ad5-955c-781d42f8d8f8
+		summarizeBy: none
+		sourceColumn: Delivered
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DeliveryDays
+		dataType: int64
+		formatString: 0
+		lineageTag: 3bf0ec21-1e38-4f82-86a1-cc44451c373d
+		summarizeBy: sum
+		sourceColumn: DeliveryDays
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Status'
+		dataType: string
+		lineageTag: 8f1456a8-20c1-47fb-b425-13494a623eb5
+		summarizeBy: none
+		sourceColumn: Order Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: e7b53a14-6efe-4afc-9fd8-058f1ce467a6
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sales
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 898bd5ed-d578-4276-9a7d-9201159b32c9
+		summarizeBy: sum
+		sourceColumn: Sales
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column 'Discount Amount'
+		dataType: double
+		lineageTag: 6cb97a40-8ffa-4e09-a876-2bae942430bc
+		summarizeBy: sum
+		sourceColumn: Discount Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Channel
+		dataType: string
+		lineageTag: 84863fb1-98e1-4f3e-a04d-6cf09647c90c
+		summarizeBy: none
+		sourceColumn: Channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderMonthStart
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: abc1a8e0-95e8-4c61-a631-15048c60103b
+		summarizeBy: none
+		sourceColumn: OrderMonthStart
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column OrderYearMonth
+		dataType: string
+		lineageTag: 124810d9-0ae6-4672-8b73-29e4801b3c41
+		summarizeBy: none
+		sourceColumn: OrderYearMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column DeliveryBucket
+		dataType: string
+		lineageTag: c5c6e79f-3e55-4eae-9aa2-01e739ae7be2
+		summarizeBy: none
+		sourceColumn: DeliveryBucket
+
+		annotation SummarizationSetBy = Automatic
+
+	column NetSales
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 34a594dd-3fc1-435e-b87f-09d3cd6ac48e
+		summarizeBy: sum
+		sourceColumn: NetSales
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	partition Fact_Orders = m
+		mode: import
+		queryGroup: 'Fact Tables'
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\courses\Data Science\Projects\Data Analysis Assessments Practice\Data Analysis Assessments Practice\Maxab_Growth Task 2024\Dataset 1 Final.xlsx"), null, true),
+				    Sheet2_Sheet = Source{[Item="Sheet2",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Sheet2_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Retailer ID", Int64.Type}, {"Order Id", Int64.Type}, {"Created", type date}, {"Delivered", type date}, {"Order Status", type text}, {"Region", type text}, {"Sales", type number}, {"Discount Amount", type number}, {"Channel", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Retailer ID", "RetailerID"}, {"Order Id", "OrderId"}}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Renamed Columns",{{"Region", Text.Trim, type text}, {"Channel", Text.Trim, type text}}),
+				    #"Capitalized Each Word" = Table.TransformColumns(#"Trimmed Text",{{"Channel", Text.Proper, type text}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Capitalized Each Word",{{"Sales", Currency.Type}}),
+				    #"Added Delivery Days" = Table.AddColumn(#"Changed Type1", "OrderDaysToDeliver", each if [Delivered] = null then null else Duration.Days([Delivered] - [Created]) + (Duration.Hours([Delivered] - [Created]) / 24)),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Added Delivery Days",{{"OrderDaysToDeliver", Int64.Type}}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Changed Type2",{"RetailerID", "OrderId", "Created", "Delivered", "OrderDaysToDeliver", "Order Status", "Region", "Sales", "Discount Amount", "Channel"}),
+				    #"Added Custom1" = Table.AddColumn(#"Reordered Columns", "OrderMonthStart", each Date.StartOfMonth([Created])),
+				    #"Changed Type3" = Table.TransformColumnTypes(#"Added Custom1",{{"OrderMonthStart", type date}}),
+				    #"Reordered Columns1" = Table.ReorderColumns(#"Changed Type3",{"RetailerID", "OrderId", "Created", "Delivered", "OrderMonthStart", "OrderDaysToDeliver", "Order Status", "Region", "Sales", "Discount Amount", "Channel"}),
+				    #"Added Order Year Month" = Table.AddColumn(#"Reordered Columns1", "OrderYearMonth", each Date.ToText([Created], "yyyy-MM")),
+				    #"Changed Type4" = Table.TransformColumnTypes(#"Added Order Year Month",{{"OrderYearMonth", type text}}),
+				    #"Reordered Columns2" = Table.ReorderColumns(#"Changed Type4",{"RetailerID", "OrderId", "Created", "Delivered", "OrderMonthStart", "OrderYearMonth", "OrderDaysToDeliver", "Order Status", "Region", "Sales", "Discount Amount", "Channel"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Reordered Columns2",{{"OrderDaysToDeliver", "DeliveryDays"}}),
+				    #"Added Delivery Bucket" = Table.AddColumn(#"Renamed Columns1", "DeliveryBucket", each if [DeliveryDays] = null then "Not Delivered"
+				else if [DeliveryDays] <= 2 then "On Time"
+				else if [DeliveryDays] <= 3 then "Slight Delay"
+				else "Severe Delay"),
+				    #"Changed Type5" = Table.TransformColumnTypes(#"Added Delivery Bucket",{{"DeliveryBucket", type text}}),
+				    #"Reordered Columns3" = Table.ReorderColumns(#"Changed Type5",{"RetailerID", "OrderId", "Created", "Delivered", "OrderMonthStart", "OrderYearMonth", "DeliveryDays", "DeliveryBucket", "Order Status", "Region", "Sales", "Discount Amount", "Channel"}),
+				    #"Added Net Sales" = Table.AddColumn(#"Reordered Columns3", "NetSales", each [Sales] - [Discount Amount]),
+				    #"Changed Type6" = Table.TransformColumnTypes(#"Added Net Sales",{{"NetSales", Currency.Type}}),
+				    #"Reordered Columns4" = Table.ReorderColumns(#"Changed Type6",{"RetailerID", "OrderId", "Created", "Delivered", "OrderMonthStart", "OrderYearMonth", "DeliveryDays", "DeliveryBucket", "Order Status", "Region", "Sales", "Discount Amount", "NetSales", "Channel"}),
+				    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Reordered Columns4", {{"Sales", Currency.Type}}, "ar-EG"),
+				    #"Changed Type with Locale1" = Table.TransformColumnTypes(#"Changed Type with Locale", {{"NetSales", Currency.Type}}, "ar-EG"),
+				    #"Sorted Rows" = Table.Sort(#"Changed Type with Locale1",{{"Created", Order.Ascending}})
+				in
+				    #"Sorted Rows"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

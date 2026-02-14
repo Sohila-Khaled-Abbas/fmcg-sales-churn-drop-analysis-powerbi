@@ -1,0 +1,12 @@
+﻿EVALUATE
+SUMMARIZECOLUMNS (
+    Dim_Date[YearMonth],
+    Fact_Orders[Region],
+    "TotalSales", [Total Sales],
+    "TotalOrders", [Total Orders],
+    "AOV", [AOV],
+    "SuccessRate", [Success Rate %]
+)
+ORDER BY
+    Dim_Date[YearMonth],
+    Fact_Orders[Region]

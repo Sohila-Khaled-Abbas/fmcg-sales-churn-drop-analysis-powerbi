@@ -1,0 +1,45 @@
+table Holidays_2024
+	lineageTag: d2d17b93-3c9b-4fe2-a349-1b6770d00bf2
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: Short Date
+		lineageTag: 8a9b68c6-65d4-4667-af69-393ff76d2ce7
+		isDefaultLabel
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column LocalName
+		dataType: string
+		lineageTag: 26f18e6f-add2-41f5-ac6c-747cabdc4b6e
+		summarizeBy: none
+		sourceColumn: LocalName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: 5e9fe382-a90b-429b-beda-1d4b578fd2dd
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Holidays_2024 = m
+		mode: import
+		source =
+				let
+				    Source = fn_GetPublicHolidays("2024"),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Date", type date}, {"LocalName", type text}, {"Name", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

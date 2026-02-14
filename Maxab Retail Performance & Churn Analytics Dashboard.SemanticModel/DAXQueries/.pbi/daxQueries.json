@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "tabOrder": [
+    "Monthly performance KPIs by Region",
+    "Churn breakdown for Feb–Apr",
+    "Weekly sales trend for May (OrderLines)",
+    "Best Retailers by Sales"
+  ],
+  "defaultTab": "Weekly sales trend for May (OrderLines)"
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "1ebb42b66d7938015a8e",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "height": 288,
+    "width": 272,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "DeliveryThresholdDays"
+                    }
+                  },
+                  "Property": "DeliveryThresholdDays"
+                }
+              },
+              "queryRef": "DeliveryThresholdDays.DeliveryThresholdDays",
+              "nativeQueryRef": "DeliveryThresholdDays",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {}
+        }
+      ],
+      "general": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "e1409a2f44b4f605e5c1",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DeliveryThresholdDays"
+              }
+            },
+            "Property": "DeliveryThresholdDays"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

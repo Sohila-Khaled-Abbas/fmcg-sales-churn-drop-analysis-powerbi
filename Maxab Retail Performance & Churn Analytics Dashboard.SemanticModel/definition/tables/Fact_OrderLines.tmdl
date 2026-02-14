@@ -1,0 +1,105 @@
+table Fact_OrderLines
+	lineageTag: 75b6c669-471f-48b9-a013-445c5a1df706
+
+	column ParentOrderId
+		dataType: int64
+		formatString: 0
+		lineageTag: b58ab633-a712-472d-a0d4-effdd72e744a
+		isDefaultLabel
+		summarizeBy: count
+		sourceColumn: ParentOrderId
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderCreation
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: dd18efd5-ea5d-4d24-87dd-647c9629e65e
+		summarizeBy: none
+		sourceColumn: OrderCreation
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column OrderMonth
+		dataType: string
+		lineageTag: 901b1f4d-8d34-40b9-b8f8-81c962775fde
+		summarizeBy: none
+		sourceColumn: OrderMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 8ebc6ee6-6503-424f-b335-56b9544cc2b7
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: 5f559ad0-92ad-4368-915f-b419f19f3e1e
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SKU
+		dataType: string
+		lineageTag: f8c468ce-e105-4047-9c22-37078e180634
+		summarizeBy: none
+		sourceColumn: SKU
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sales
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 28d35f1a-bef9-479d-b94b-b98093235e4f
+		summarizeBy: sum
+		sourceColumn: Sales
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column OrderStatus
+		dataType: string
+		lineageTag: 535dfa20-091b-4ca8-8a44-d9963c050725
+		summarizeBy: none
+		sourceColumn: OrderStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_OrderLines = m
+		mode: import
+		queryGroup: 'Fact Tables'
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\courses\Data Science\Projects\Data Analysis Assessments Practice\Data Analysis Assessments Practice\Maxab_Growth Task 2024\Dataset 2 Final.xlsx"), null, true),
+				    Sheet6_Sheet = Source{[Item="Sheet6",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Sheet6_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"order creation", type date}, {"PARENT_SALES_ORDER_ID", Int64.Type}, {"category", type text}, {"product_id", Int64.Type}, {"sku", type text}, {"sales", type number}, {"order status", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"PARENT_SALES_ORDER_ID", "ParentOrderId"}, {"order creation", "OrderCreation"}}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Renamed Columns",{"ParentOrderId", "OrderCreation", "category", "product_id", "sku", "sales", "order status"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Reordered Columns",{{"product_id", "ProductID"}, {"sku", "SKU"}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns1",{{"sales", Currency.Type}}),
+				    #"Renamed Columns2" = Table.RenameColumns(#"Changed Type1",{{"sales", "Sales"}}),
+				    #"Capitalized Each Word" = Table.TransformColumns(#"Renamed Columns2",{{"order status", Text.Proper, type text}}),
+				    #"Renamed Columns3" = Table.RenameColumns(#"Capitalized Each Word",{{"order status", "OrderStatus"}}),
+				    #"Added Custom" = Table.AddColumn(#"Renamed Columns3", " OrderMonth", each Date.ToText(Date.StartOfMonth([OrderCreation]), "MMM")),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Added Custom",{{" OrderMonth", type text}}),
+				    #"Reordered Columns1" = Table.ReorderColumns(#"Changed Type2",{"ParentOrderId", "OrderCreation", " OrderMonth", "category", "ProductID", "SKU", "Sales", "OrderStatus"}),
+				    #"Renamed Columns4" = Table.RenameColumns(#"Reordered Columns1",{{"category", "Category"}, {" OrderMonth", "OrderMonth"}}),
+				    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Renamed Columns4", {{"Sales", Currency.Type}}, "ar-EG"),
+				    #"Reordered Columns2" = Table.ReorderColumns(#"Changed Type with Locale",{"ParentOrderId", "OrderCreation", "OrderMonth", "ProductID", "Category", "SKU", "Sales", "OrderStatus"})
+				in
+				    #"Reordered Columns2"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

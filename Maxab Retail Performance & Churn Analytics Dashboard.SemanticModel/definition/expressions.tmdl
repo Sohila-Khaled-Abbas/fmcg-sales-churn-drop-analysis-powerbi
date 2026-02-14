@@ -1,0 +1,49 @@
+expression fn_GetRegionGeo =
+		(Region as text) as record =>
+		let
+		    Source =
+		        Json.Document(
+		            Web.Contents(
+		                "https://nominatim.openstreetmap.org/search",
+		                [
+		                    Query = [
+		                        q = Region & ", Egypt",
+		                        format = "json",
+		                        limit = "1"
+		                    ],
+		                    Headers = [
+		                        #"User-Agent" = "PowerBI-Geocoding-Project"
+		                    ]
+		                ]
+		            )
+		        ),
+		    First = if List.Count(Source) > 0 then Source{0} else null,
+		    Lat = if First <> null then First[lat] else null,
+		    Lon = if First <> null then First[lon] else null
+		in
+		    [Latitude = Lat, Longitude = Lon]
+	lineageTag: 900efb04-e633-43fd-8884-89d8460804f2
+	queryGroup: Functions
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
+expression fn_GetPublicHolidays =
+		(year as text) =>
+		let
+		    Source = Json.Document(
+		        Web.Contents(
+		            "https://date.nager.at/api/v3/PublicHolidays/" & year & "/EG")
+		    ),
+		    ToTable = Table.FromList(Source, Splitter.SplitByNothing()),
+		    Expanded = Table.ExpandRecordColumn(ToTable, "Column1", {"date","localName","name"}, {"Date","LocalName","Name"})
+		in
+		    Expanded
+	lineageTag: fdf4987d-55be-4ee4-877a-08b41ff158fc
+	queryGroup: Functions
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+

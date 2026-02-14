@@ -1,0 +1,63 @@
+table Dim_Region
+	lineageTag: b90ebee8-1c6b-403a-9cf0-51b5c0a3e836
+
+	column RegionID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9394b483-b208-4506-be3e-68df3bc9102a
+		isDefaultLabel
+		summarizeBy: none
+		sourceColumn: RegionID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		isKey
+		lineageTag: fd9627d5-880f-41ac-bd81-d2a5334d2bcd
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Latitude
+		dataType: double
+		lineageTag: 99bf5762-a66a-47dc-9b13-8ae767c66e0d
+		summarizeBy: none
+		sourceColumn: Latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Longitude
+		dataType: string
+		lineageTag: 0387a71c-ea25-49d3-a568-ce527e63c20f
+		summarizeBy: none
+		sourceColumn: Longitude
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Region = m
+		mode: import
+		queryGroup: 'Dim Tables'
+		source =
+				let
+				    Source = Dim_Retailer,
+				    Regions = Table.Distinct(Table.SelectColumns(Source, {"Region"})),
+				    #"Added Index" = Table.AddIndexColumn(Regions, "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "RegionID"}}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Renamed Columns",{"RegionID", "Region"}),
+				    #"Added Custom" = Table.AddColumn(#"Reordered Columns", "GeoData", each fn_GetRegionGeo([Region])),
+				    #"Expanded GeoData" = Table.ExpandRecordColumn(#"Added Custom", "GeoData", {"Latitude", "Longitude"}, {"Latitude", "Longitude"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded GeoData",{{"Latitude", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

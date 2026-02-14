@@ -1,0 +1,148 @@
+table 'Model Relationships'
+	isHidden
+	lineageTag: 339811fe-d60b-4e65-bf32-66d7e3868cae
+
+	column ID
+		isHidden
+		formatString: 0
+		lineageTag: e1d4c55e-3e31-466c-885d-e01e948ecf61
+		summarizeBy: count
+		isNameInferred
+		sourceColumn: [ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		isHidden
+		lineageTag: a2a49373-9010-46ff-93f1-335026b316bd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Relationship
+		isHidden
+		lineageTag: f27b92e1-f274-4944-b86e-d9f5c41c27fd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Relationship]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Model
+		isHidden
+		lineageTag: da76044c-90bd-4c1c-9f01-ad806dbdc305
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Model]
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsActive
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d0d2bba8-68b5-43f2-beb1-e399796bf059
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [IsActive]
+
+		annotation SummarizationSetBy = Automatic
+
+	column CrossFilteringBehavior
+		isHidden
+		lineageTag: 3cc030fb-dc8c-4edd-a45c-0198f2f3694c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [CrossFilteringBehavior]
+
+		annotation SummarizationSetBy = Automatic
+
+	column RelyOnReferentialIntegrity
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 1709fcc9-8403-40b0-bf68-ee8fae39f357
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [RelyOnReferentialIntegrity]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FromTable
+		isHidden
+		lineageTag: 639aeddc-a239-43f3-9d46-9cedf9f57d85
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [FromTable]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FromColumn
+		isHidden
+		lineageTag: 4468e83d-191d-41f3-8e23-ec98583e68f8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [FromColumn]
+
+		annotation SummarizationSetBy = Automatic
+
+	column FromCardinality
+		isHidden
+		lineageTag: 79f7399b-1d30-47b5-8b9f-b888de0cbc56
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [FromCardinality]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ToTable
+		isHidden
+		lineageTag: d9cec4c9-edcb-479b-99d7-bf6c03ad5ca4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ToTable]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ToColumn
+		isHidden
+		lineageTag: 6b00751e-3a38-4845-8cce-edd408b15002
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ToColumn]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ToCardinality
+		isHidden
+		lineageTag: 27f37860-ba2c-4670-bbf2-750e401fe4ad
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ToCardinality]
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		isHidden
+		lineageTag: 01db8dfc-1270-493a-b393-620e26721f21
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [State]
+
+		annotation SummarizationSetBy = Automatic
+
+	column SecurityFilteringBehavior
+		isHidden
+		lineageTag: c5a8f1a6-e52c-47a8-8508-3f399bb3e82d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SecurityFilteringBehavior]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Model Relationships' = calculated
+		mode: import
+		source = INFO.VIEW.RELATIONSHIPS()
+
+	annotation PBI_Id = 8e6b47888d4d43e199fde56e6dc95ae1
+

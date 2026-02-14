@@ -1,0 +1,35 @@
+table 'Time Intelligence'
+	lineageTag: 06969c98-5eec-4b87-b167-f9254aa65ee2
+
+	calculationGroup
+
+		calculationItem 'MoM %' = ```
+				
+				VAR Curr = SELECTEDMEASURE()
+				VAR Prev = CALCULATE(SELECTEDMEASURE(), DATEADD(Dim_Date[Date], -1, MONTH))
+				RETURN DIVIDE(Curr - Prev, Prev, BLANK())
+				
+				```
+
+		calculationItem YTD = CALCULATE( SELECTEDMEASURE(), DATESYTD(Dim_Date[Date]) )
+
+		calculationItem PY = CALCULATE( SELECTEDMEASURE(), SAMEPERIODLASTYEAR(Dim_Date[Date]) )
+
+	column 'Calculation group column'
+		dataType: string
+		lineageTag: 6d5dc334-34a9-41ee-986b-c60ed26e3f87
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		formatString: 0
+		lineageTag: 1bb517a8-c8bc-4411-9b2c-3ba4aef7b25b
+		summarizeBy: sum
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+

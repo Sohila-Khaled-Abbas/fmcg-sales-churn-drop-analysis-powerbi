@@ -1,0 +1,44 @@
+table Dim_Brand
+	lineageTag: 442369b1-3ea0-4904-b75c-d209b58294f6
+
+	column BrandID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 64ef708f-234a-423a-9a4e-b5ebeea50aee
+		isDefaultLabel
+		summarizeBy: none
+		sourceColumn: BrandID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: string
+		isKey
+		lineageTag: 4e5e5b35-eb37-48ae-8e88-0aa2059d83cc
+		summarizeBy: none
+		sourceColumn: Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Brand = m
+		mode: import
+		queryGroup: 'Dim Tables'
+		source =
+				let
+				    Source = Fact_JuiceNMV,
+				    KeepCols = Table.SelectColumns(Source, {"Brand"}),
+				    Clean = Table.TransformColumns(KeepCols, {{"Brand", Text.Proper, type text}}),
+				    RemoveDup = Table.Distinct(Clean),
+				    #"Added Index" = Table.AddIndexColumn(RemoveDup, "Index", 1, 1, Int64.Type),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Added Index",{"Index", "Brand"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Reordered Columns",{{"Index", "BrandID"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,130 @@
+table Dim_Date
+	lineageTag: 7d8a817e-8cc4-44ec-a065-53d74fd06b67
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: Short Date
+		lineageTag: a468495d-c52b-4ba9-95bd-6e4ac31a2e46
+		isDefaultLabel
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 16be1215-6a60-4a00-89e3-d439982bf9be
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: int64
+		formatString: 0
+		lineageTag: 3ab8d3c3-a521-4e62-a367-de083895dabe
+		summarizeBy: sum
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthName
+		dataType: string
+		lineageTag: 054b8cf8-dab0-4b38-9759-d190b5daf9d1
+		summarizeBy: none
+		sourceColumn: MonthName
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonth
+		dataType: string
+		lineageTag: 82ae4fcb-77d3-4253-ac78-5c7ba1c50ad6
+		summarizeBy: none
+		sourceColumn: YearMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column Day
+		dataType: int64
+		formatString: 0
+		lineageTag: e54d9e1b-fc5c-468e-bcf7-78ad15afb37a
+		summarizeBy: sum
+		sourceColumn: Day
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeekOfMonth
+		dataType: int64
+		formatString: 0
+		lineageTag: 8e4c01d0-1529-4251-906e-575af1790029
+		summarizeBy: sum
+		sourceColumn: WeekOfMonth
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: a654d576-28b9-41fe-a044-2d43c614eeca
+		summarizeBy: sum
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Holidays / Work Days'
+		dataType: string
+		lineageTag: d8019bf5-d2f7-414d-ba42-82efe38bb568
+		summarizeBy: none
+		sourceColumn: Holidays / Work Days
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Date = m
+		mode: import
+		queryGroup: 'Dim Tables'
+		source =
+				let
+				    // Get min/max from your real data
+				    OrdersMin = Date.From(List.Min(Fact_Orders[Created])),
+				    OrdersMax = Date.From(List.Max(Fact_Orders[Created])),
+				    JuiceMin = Date.From(List.Min(Fact_JuiceNMV[MonthDate])),
+				    JuiceMax = Date.From(List.Max(Fact_JuiceNMV[MonthDate])),
+				
+				    StartDate = List.Min({OrdersMin, JuiceMin}),
+				    EndDate = List.Max({OrdersMax, JuiceMax}),
+				
+				    Dates = List.Dates(StartDate, Duration.Days(EndDate - StartDate) + 1, #duration(1,0,0,0)),
+				    Tbl = Table.FromList(Dates, Splitter.SplitByNothing(), {"Date"}),
+				
+				    AddYear = Table.AddColumn(Tbl, "Year", each Date.Year([Date]), Int64.Type),
+				    AddMonth = Table.AddColumn(AddYear, "Month", each Date.Month([Date]), Int64.Type),
+				    AddMonthName = Table.AddColumn(AddMonth, "MonthName", each Date.ToText([Date],"MMMM"), type text),
+				    AddYearMonth = Table.AddColumn(AddMonthName, "YearMonth", each Date.ToText([Date],"yyyy-MM"), type text),
+				    AddDay = Table.AddColumn(AddYearMonth, "Day", each Date.Day([Date]), Int64.Type),
+				
+				    // Business WeekOfMonth rule
+				    AddWeekOfMonth = Table.AddColumn(AddDay, "WeekOfMonth", each
+				        if [Day] <= 7 then 1
+				        else if [Day] <= 14 then 2
+				        else if [Day] <= 21 then 3
+				        else if [Day] <= 28 then 4
+				        else 5, Int64.Type),
+				
+				    AddQuarter = Table.AddColumn(AddWeekOfMonth, "Quarter", each Date.QuarterOfYear([Date]), Int64.Type),
+				    #"Changed Type" = Table.TransformColumnTypes(AddQuarter,{{"Date", type date}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Changed Type", {"Date"}, Holidays_2024, {"Date"}, "Holidays2024", JoinKind.LeftOuter),
+				    #"Expanded Holidays2024" = Table.ExpandTableColumn(#"Merged Queries", "Holidays2024", {"Name"}, {"Name"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Expanded Holidays2024",{{"Name", "Holidays / Work Days"}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Renamed Columns",null,"Work Day",Replacer.ReplaceValue,{"Holidays / Work Days"})
+				in
+				    #"Replaced Value"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

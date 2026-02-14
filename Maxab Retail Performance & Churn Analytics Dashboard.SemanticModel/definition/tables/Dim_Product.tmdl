@@ -1,0 +1,49 @@
+table Dim_Product
+	lineageTag: 7fd59e34-ee4e-4e57-8b7e-8157932abc22
+
+	column ProductID
+		dataType: int64
+		formatString: 0
+		lineageTag: dd3654dc-7e0b-4e6c-9ede-93b6e2385921
+		isDefaultLabel
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column SKU
+		dataType: string
+		isKey
+		lineageTag: 6b77af33-a866-4773-bd66-1e2cdd37bb80
+		summarizeBy: none
+		sourceColumn: SKU
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: 1e51cdb7-d52d-4c60-8aa1-6b47c8a78b65
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Product = m
+		mode: import
+		queryGroup: 'Dim Tables'
+		source =
+				let
+				    Source = Fact_OrderLines,
+				    KeepCols = Table.SelectColumns(Source, {"ProductID", "SKU", "Category"}),
+				    Clean = Table.TransformColumns(KeepCols, {
+				        {"SKU", Text.Trim, type text},
+				        {"Category", Text.Proper, type text}
+				    }),
+				    RemoveDup = Table.Distinct(Clean)
+				in
+				    RemoveDup
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

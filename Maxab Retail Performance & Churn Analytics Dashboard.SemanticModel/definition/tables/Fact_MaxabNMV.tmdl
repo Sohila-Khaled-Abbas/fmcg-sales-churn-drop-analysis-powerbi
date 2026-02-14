@@ -1,0 +1,42 @@
+table Fact_MaxabNMV
+	lineageTag: 0af581e0-6401-4f6d-8210-725244530f4c
+
+	column Month
+		dataType: string
+		isKey
+		lineageTag: 7a5f4bb0-4573-424f-924d-7f382eeb61bb
+		isDefaultLabel
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total Sales'
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 2e1e77cc-3137-4774-a613-8cff2bf56b85
+		summarizeBy: none
+		sourceColumn: Total Sales
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	partition Fact_MaxabNMV = m
+		mode: import
+		queryGroup: 'Fact Tables'
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("D:\courses\Data Science\Projects\Data Analysis Assessments Practice\Data Analysis Assessments Practice\Maxab_Growth Task 2024\Dataset 3 Final.xlsx"), null, true),
+				    #"Maxab total nmv_Sheet" = Source{[Item="Maxab total nmv",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Maxab total nmv_Sheet", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Month", type text}, {"Total Sales", type number}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Changed Type",{{"Total Sales", Currency.Type}}),
+				    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type1", {{"Total Sales", Currency.Type}}, "ar-EG")
+				in
+				    #"Changed Type with Locale"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

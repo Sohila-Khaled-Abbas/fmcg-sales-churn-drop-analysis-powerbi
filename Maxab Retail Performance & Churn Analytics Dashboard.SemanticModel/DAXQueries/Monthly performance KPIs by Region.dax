@@ -1,0 +1,12 @@
+// Welcome to DAX query view! Learn more about DAX queries at https://aka.ms/dax-queries.
+// Right-click on tables, columns, or measures in the data pane to access quick queries, or ask Copilot for help writing DAX.
+EVALUATE
+SUMMARIZECOLUMNS(
+  Dim_Date[YearMonth],
+  Fact_Orders[Region],
+  "TotalSales", [Total Sales],
+  "TotalOrders", [Total Orders],
+  "AOV", [AOV],
+  "SuccessRate", [Success Rate %]
+)
+ORDER BY Dim_Date[YearMonth], Fact_Orders[Region]

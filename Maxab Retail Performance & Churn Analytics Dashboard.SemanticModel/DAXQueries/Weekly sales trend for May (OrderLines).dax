@@ -1,0 +1,7 @@
+EVALUATE
+SUMMARIZECOLUMNS(
+  Dim_Date[YearMonth],
+  Dim_Date[WeekOfMonth],
+  "WeeklySales", SUM(Fact_OrderLines[Sales])
+)
+ORDER BY Dim_Date[WeekOfMonth]

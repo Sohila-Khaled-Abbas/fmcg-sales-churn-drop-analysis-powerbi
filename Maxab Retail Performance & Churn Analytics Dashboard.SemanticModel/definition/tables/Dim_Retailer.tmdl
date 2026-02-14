@@ -1,0 +1,41 @@
+table Dim_Retailer
+	lineageTag: aa1013fa-c69c-4613-962b-903d35eff816
+
+	column RetailerID
+		dataType: int64
+		formatString: 0
+		lineageTag: 19d053d0-e571-4945-a582-af7d2ff5552f
+		isDefaultLabel
+		summarizeBy: none
+		sourceColumn: RetailerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 81b33203-e3d0-4a70-be81-cc437a5d61ab
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Retailer = m
+		mode: import
+		queryGroup: 'Dim Tables'
+		source =
+				let
+				    Source = Fact_Orders,
+				    KeepCols = Table.SelectColumns(Source, {"RetailerID", "Region"}),
+				    CleanText = Table.TransformColumns(KeepCols, {
+				        {"Region", Text.Proper, type text}
+				    }),
+				    RemoveDup = Table.Distinct(CleanText),
+				    #"Replaced Value" = Table.ReplaceValue(RemoveDup,null,0,Replacer.ReplaceValue,{"RetailerID"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Replaced Value",{{"RetailerID", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Maxab Retail Performance & Churn Analytics Dashboard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "5cff9122-4833-4c63-96be-19976fce8ade"
+  }
+}

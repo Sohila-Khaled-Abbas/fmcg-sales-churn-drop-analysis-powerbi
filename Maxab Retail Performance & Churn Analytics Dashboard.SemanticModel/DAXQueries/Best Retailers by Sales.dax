@@ -1,0 +1,17 @@
+DEFINE
+    FUNCTION BestRetailers = ( metricExpr : EXPR ) =>
+        VAR RetailerMetrics =
+            ADDCOLUMNS(
+                Dim_Retailer,
+                "@Metric", CALCULATE( metricExpr )
+            )
+        VAR AverageMetric = AVERAGEX(RetailerMetrics, [@Metric])
+        VAR TopRetailers =
+            FILTER(
+                RetailerMetrics,
+                [@Metric] > AverageMetric
+            )
+        RETURN
+            TopRetailers
+EVALUATE
+    BestRetailers( SUMX( Fact_Orders, Fact_Orders[Sales] ) )

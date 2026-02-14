@@ -1,0 +1,44 @@
+table Dim_Channel
+	lineageTag: e56d6e1c-410d-4572-8421-8cadfd26dc9f
+
+	column ChannelID
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a8f2cbee-2f6c-4f03-adf7-2d1c4300a630
+		isDefaultLabel
+		summarizeBy: none
+		sourceColumn: ChannelID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Channel
+		dataType: string
+		isKey
+		lineageTag: b060166a-4655-4d79-b496-2185f19fce45
+		summarizeBy: none
+		sourceColumn: Channel
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Channel = m
+		mode: import
+		queryGroup: 'Dim Tables'
+		source =
+				let
+				    Source = Fact_Orders,
+				    Keep = Table.SelectColumns(Source, {"Channel"}),
+				    Clean = Table.TransformColumns(Keep, {{"Channel", Text.Proper, type text}}),
+				    DistinctVals = Table.Distinct(Clean),
+				    #"Added Index" = Table.AddIndexColumn(DistinctVals, "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "ChannelID"}}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Renamed Columns",{"ChannelID", "Channel"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
