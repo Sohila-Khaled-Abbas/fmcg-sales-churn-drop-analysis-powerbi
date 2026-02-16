@@ -76,28 +76,11 @@ table Dim_Date
 
 		annotation SummarizationSetBy = Automatic
 
-	column DayOfWeekNumber
+	column IsWeekend
 		dataType: int64
 		formatString: 0
-		lineageTag: b362c172-8ace-499a-9b40-11cbbd51e340
-		summarizeBy: sum
-		sourceColumn: DayOfWeekNumber
-
-		annotation SummarizationSetBy = Automatic
-
-	column DayName
-		dataType: string
-		lineageTag: fb614370-d1fa-4a71-bd59-6e17f7dc524c
-		summarizeBy: none
-		sourceColumn: DayName
-
-		annotation SummarizationSetBy = Automatic
-
-	column IsWeekend
-		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
 		lineageTag: 4fad68af-d03d-497d-8c3a-a7e463faf1e2
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: IsWeekend
 
 		annotation SummarizationSetBy = Automatic
@@ -111,20 +94,29 @@ table Dim_Date
 		annotation SummarizationSetBy = Automatic
 
 	column IsHoliday
-		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
+		dataType: int64
+		formatString: 0
 		lineageTag: 9da5147b-3ca6-4b3e-bd8b-3124054cde16
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: IsHoliday
 
 		annotation SummarizationSetBy = Automatic
 
-	column IsWorkday
-		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
-		lineageTag: ea6b6aaf-6e78-493d-85d9-fc2e612905e7
-		summarizeBy: none
-		sourceColumn: IsWorkday
+	column DayOfWeek
+		dataType: int64
+		formatString: 0
+		lineageTag: ab8c7c46-36f2-47a8-a141-4bc17139c5b4
+		summarizeBy: sum
+		sourceColumn: DayOfWeek
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsWorkingDay
+		dataType: int64
+		formatString: 0
+		lineageTag: 74007c8c-4370-4ac5-82ef-bcb866e9f213
+		summarizeBy: sum
+		sourceColumn: IsWorkingDay
 
 		annotation SummarizationSetBy = Automatic
 
@@ -145,14 +137,12 @@ table Dim_Date
 				    Dates = List.Dates(StartDate, Duration.Days(EndDate - StartDate) + 1, #duration(1,0,0,0)),
 				    Tbl = Table.FromList(Dates, Splitter.SplitByNothing(), {"Date"}),
 				
-				    // Calendar columns
 				    AddYear = Table.AddColumn(Tbl, "Year", each Date.Year([Date]), Int64.Type),
 				    AddMonth = Table.AddColumn(AddYear, "Month", each Date.Month([Date]), Int64.Type),
 				    AddMonthName = Table.AddColumn(AddMonth, "MonthName", each Date.ToText([Date],"MMMM"), type text),
 				    AddYearMonth = Table.AddColumn(AddMonthName, "YearMonth", each Date.ToText([Date],"yyyy-MM"), type text),
 				    AddDay = Table.AddColumn(AddYearMonth, "Day", each Date.Day([Date]), Int64.Type),
 				
-				    // Business WeekOfMonth rule (1–7, 8–14, etc.)
 				    AddWeekOfMonth = Table.AddColumn(AddDay, "WeekOfMonth", each
 				        if [Day] <= 7 then 1
 				        else if [Day] <= 14 then 2
@@ -162,28 +152,26 @@ table Dim_Date
 				
 				    AddQuarter = Table.AddColumn(AddWeekOfMonth, "Quarter", each Date.QuarterOfYear([Date]), Int64.Type),
 				
-				    // Day of week (Egypt weekend = Friday(5) & Saturday(6))
-				    AddDayOfWeek = Table.AddColumn(AddQuarter, "DayOfWeekNumber", each Date.DayOfWeek([Date], Day.Sunday), Int64.Type),
-				    AddDayName = Table.AddColumn(AddDayOfWeek, "DayName", each Date.ToText([Date], "dddd"), type text),
+				    // Weekend flag (Egypt: Friday & Saturday)
+				    AddDayOfWeek = Table.AddColumn(AddQuarter, "DayOfWeek", each Date.DayOfWeek([Date], Day.Monday), Int64.Type),
+				    AddWeekendFlag = Table.AddColumn(AddDayOfWeek, "IsWeekend", each 
+				        if [DayOfWeek] = 4 or [DayOfWeek] = 5 then 1 else 0, Int64.Type),
 				
-				    AddIsWeekend = Table.AddColumn(AddDayName, "IsWeekend", each 
-				        if [DayOfWeekNumber] = 5 or [DayOfWeekNumber] = 6 then true else false, 
-				        type logical),
+				    // Merge with Holidays table
+				    #"Changed Type" = Table.TransformColumnTypes(AddWeekendFlag,{{"Date", type date}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Changed Type", {"Date"}, Holidays_2024, {"Date"}, "Holidays2024", JoinKind.LeftOuter),
+				    #"Expanded Holidays2024" = Table.ExpandTableColumn(#"Merged Queries", "Holidays2024", {"Name"}, {"HolidayName"}),
 				
-				    // Merge Egypt Holidays
-				    MergeHolidays = Table.NestedJoin(AddIsWeekend, {"Date"}, Holidays_2024, {"Date"}, "HolidayTable", JoinKind.LeftOuter),
-				    ExpandHoliday = Table.ExpandTableColumn(MergeHolidays, "HolidayTable", {"Name"}, {"HolidayName"}),
+				    // Holiday flag
+				    AddHolidayFlag = Table.AddColumn(#"Expanded Holidays2024", "IsHoliday", each 
+				        if [HolidayName] <> null then 1 else 0, Int64.Type),
 				
-				    AddIsHoliday = Table.AddColumn(ExpandHoliday, "IsHoliday", each if [HolidayName] <> null then true else false, type logical),
+				    // Working Day logic
+				    AddWorkingDay = Table.AddColumn(AddHolidayFlag, "IsWorkingDay", each 
+				        if [IsWeekend] = 1 or [IsHoliday] = 1 then 0 else 1, Int64.Type)
 				
-				    // Final Workday logic
-				    AddIsWorkday = Table.AddColumn(AddIsHoliday, "IsWorkday", each 
-				        if [IsWeekend] = false and [IsHoliday] = false then true else false, 
-				        type logical),
-				
-				    #"Changed Type" = Table.TransformColumnTypes(AddIsWorkday,{{"Date", type date}})
 				in
-				    #"Changed Type"
+				    AddWorkingDay
 				```
 
 	annotation PBI_NavigationStepName = Navigation

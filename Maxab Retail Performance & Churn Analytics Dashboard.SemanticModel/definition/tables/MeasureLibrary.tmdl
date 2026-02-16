@@ -253,6 +253,36 @@ table MeasureLibrary
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	measure 'Delivery SLA (Working Days)' = ```
+			
+			VAR StartDate = SELECTEDVALUE(Fact_Order[Created])
+			VAR EndDate   = SELECTEDVALUE(Fact_Order[Delivered])
+			
+			RETURN
+			CALCULATE(
+			    COUNTROWS('Dim_Date'),
+			    'Dim_Date'[Date] >= StartDate,
+			    'Dim_Date'[Date] <= EndDate,
+			    'Dim_Date'[IsWorkingDay] = 1
+			)
+			
+			```
+		formatString: 0
+		displayFolder: Performance KPIs
+		lineageTag: e1df9435-9fff-44c7-af51-38ec7aa17fac
+
+	measure 'SLA Status' =
+			
+			IF(
+			    [Delivery SLA (Working Days)] <= 3,
+			    "On Time",
+			    "Late"
+			)
+		displayFolder: Performance KPIs
+		lineageTag: 8df76f87-bf9e-47ee-9385-7e96882b86fd
+
+		annotation PBI_FormatHint = {"isText":true}
+
 	column Column
 		isHidden
 		formatString: 0
