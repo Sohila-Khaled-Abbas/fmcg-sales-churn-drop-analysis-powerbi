@@ -18,17 +18,6 @@ table Holidays_2024
 
 		annotation UnderlyingDateTimeDataType = Date
 
-	column LocalName
-		dataType: string
-		isHidden
-		lineageTag: 26f18e6f-add2-41f5-ac6c-747cabdc4b6e
-		summarizeBy: none
-		sourceColumn: LocalName
-
-		changedProperty = IsHidden
-
-		annotation SummarizationSetBy = Automatic
-
 	column Name
 		dataType: string
 		isHidden
@@ -44,10 +33,30 @@ table Holidays_2024
 		mode: import
 		source =
 				let
-				    Source = fn_GetPublicHolidays("2024"),
-				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Date", type date}, {"LocalName", type text}, {"Name", type text}})
+				    Holidays = #table(
+				        type table [Date = date, Name = text],
+				        {
+				            {#date(2024, 1, 7),  "Coptic Christmas"},
+				            {#date(2024, 1, 25), "Revolution Day"},
+				            {#date(2024, 4, 10), "Eid Al-Fitr"},
+				            {#date(2024, 4, 11), "Eid Al-Fitr Holiday"},
+				            {#date(2024, 4, 12), "Eid Al-Fitr Holiday"},
+				            {#date(2024, 4, 25), "Sinai Liberation Day"},
+				            {#date(2024, 5, 1),  "Labour Day"},
+				            {#date(2024, 5, 6),  "Sham El-Nessim"},
+				            {#date(2024, 6, 16), "Arafat Day"},
+				            {#date(2024, 6, 17), "Eid Al-Adha"},
+				            {#date(2024, 6, 18), "Eid Al-Adha Holiday"},
+				            {#date(2024, 6, 19), "Eid Al-Adha Holiday"},
+				            {#date(2024, 6, 30), "June 30 Revolution"},
+				            {#date(2024, 7, 8),  "Islamic New Year"},
+				            {#date(2024, 7, 23), "Revolution Day"},
+				            {#date(2024, 9, 16), "Prophet’s Birthday"},
+				            {#date(2024, 10, 6), "Armed Forces Day"}
+				        }
+				    )
 				in
-				    #"Changed Type"
+				    Holidays
 
 	changedProperty = IsHidden
 
