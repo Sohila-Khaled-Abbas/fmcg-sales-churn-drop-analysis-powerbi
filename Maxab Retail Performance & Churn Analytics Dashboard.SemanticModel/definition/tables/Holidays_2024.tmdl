@@ -1,8 +1,10 @@
 table Holidays_2024
+	isHidden
 	lineageTag: d2d17b93-3c9b-4fe2-a349-1b6770d00bf2
 
 	column Date
 		dataType: dateTime
+		isHidden
 		isKey
 		formatString: Short Date
 		lineageTag: 8a9b68c6-65d4-4667-af69-393ff76d2ce7
@@ -10,23 +12,31 @@ table Holidays_2024
 		summarizeBy: none
 		sourceColumn: Date
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
 
 	column LocalName
 		dataType: string
+		isHidden
 		lineageTag: 26f18e6f-add2-41f5-ac6c-747cabdc4b6e
 		summarizeBy: none
 		sourceColumn: LocalName
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
 	column Name
 		dataType: string
+		isHidden
 		lineageTag: 5e9fe382-a90b-429b-beda-1d4b578fd2dd
 		summarizeBy: none
 		sourceColumn: Name
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -38,6 +48,8 @@ table Holidays_2024
 				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Date", type date}, {"LocalName", type text}, {"Name", type text}})
 				in
 				    #"Changed Type"
+
+	changedProperty = IsHidden
 
 	annotation PBI_NavigationStepName = Navigation
 

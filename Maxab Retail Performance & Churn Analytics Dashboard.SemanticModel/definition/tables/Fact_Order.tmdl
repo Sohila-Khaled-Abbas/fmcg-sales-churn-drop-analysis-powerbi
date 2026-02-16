@@ -1,4 +1,4 @@
-table Fact_Orders
+table Fact_Order
 	lineageTag: d59b240f-73b3-4a21-a771-3e2337da64d3
 
 	/// Unique retailer identifier
@@ -142,7 +142,7 @@ table Fact_Orders
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
-	partition Fact_Orders = m
+	partition Fact_Order = m
 		mode: import
 		queryGroup: 'Fact Tables'
 		source =

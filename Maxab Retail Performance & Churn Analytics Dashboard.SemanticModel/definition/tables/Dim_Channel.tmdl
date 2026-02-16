@@ -28,7 +28,7 @@ table Dim_Channel
 		queryGroup: 'Dim Tables'
 		source =
 				let
-				    Source = Fact_Orders,
+				    Source = Fact_Order,
 				    Keep = Table.SelectColumns(Source, {"Channel"}),
 				    Clean = Table.TransformColumns(Keep, {{"Channel", Text.Proper, type text}}),
 				    DistinctVals = Table.Distinct(Clean),

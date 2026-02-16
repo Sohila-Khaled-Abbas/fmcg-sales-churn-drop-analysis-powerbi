@@ -21,11 +21,11 @@ queryGroup 'Dim Tables'
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_QueryOrder = ["Fact_Orders","Fact_OrderLines","Fact_JuiceNMV","Fact_MaxabNMV","Dim_Date","Dim_Retailer","Dim_Region","Dim_Channel","Dim_Product","Dim_Brand","fn_GetRegionGeo","fn_GetPublicHolidays","Holidays_2024"]
+annotation PBI_QueryOrder = ["Fact_Order","Fact_OrderLines","Fact_JuiceNMV","Fact_MaxabNMV","Dim_Date","Dim_Retailer","Dim_Region","Dim_Channel","Dim_Product","Dim_Brand","fn_GetRegionGeo","fn_GetPublicHolidays","Holidays_2024"]
 
 annotation PBI_ProTooling = ["CalcGroup","DaxQueryView_Desktop","TMDLView_Desktop","DevMode"]
 
-ref table Fact_Orders
+ref table Fact_Order
 ref table Fact_OrderLines
 ref table Fact_JuiceNMV
 ref table Fact_MaxabNMV
@@ -37,7 +37,6 @@ ref table Dim_Product
 ref table Dim_Brand
 ref table MeasureLibrary
 ref table 'Time Intelligence'
-ref table 'Data Dictionary'
 ref table 'Model Measures'
 ref table 'Model Tables'
 ref table 'Model Columns'

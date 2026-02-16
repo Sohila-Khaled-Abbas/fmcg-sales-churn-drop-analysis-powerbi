@@ -44,6 +44,8 @@ table Fact_JuiceNMV
 		summarizeBy: sum
 		sourceColumn: Sales
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}

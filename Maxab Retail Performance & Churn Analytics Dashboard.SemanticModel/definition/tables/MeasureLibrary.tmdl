@@ -4,7 +4,7 @@ table MeasureLibrary
 	lineageTag: fe5d5704-32e9-4e95-afba-f6d578934beb
 
 	/// Total revenue generated from all orders
-	measure 'Total Sales' = SUM(Fact_Orders[Sales])
+	measure 'Total Sales' = SUM(Fact_Order[Sales])
 		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		displayFolder: Performance KPIs
 		lineageTag: 5b7046fd-ba7c-40fb-9d63-230e82d4bc5d
@@ -12,13 +12,13 @@ table MeasureLibrary
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
 	/// Count of unique orders
-	measure 'Total Orders' = DISTINCTCOUNT(Fact_Orders[OrderId])
+	measure 'Total Orders' = DISTINCTCOUNT(Fact_Order[OrderId])
 		formatString: 0
 		displayFolder: Performance KPIs
 		lineageTag: 3a4ffe39-9bf9-4d73-88a2-131603f83606
 
 	/// Count of unique retailers who placed orders
-	measure 'Total Retailers' = DISTINCTCOUNT(Fact_Orders[RetailerID])
+	measure 'Total Retailers' = DISTINCTCOUNT(Fact_Order[RetailerID])
 		formatString: 0
 		displayFolder: Performance KPIs
 		lineageTag: 9f36bac9-13b0-43bb-a13c-8b8292c9e889
@@ -39,14 +39,14 @@ table MeasureLibrary
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	/// Count of orders successfully delivered
-	measure 'Orders Success' = CALCULATE(COUNTROWS(Fact_Orders), Fact_Orders[Order Status] = "Delivered")
+	measure 'Orders Success' = CALCULATE(COUNTROWS(Fact_Order), Fact_Order[Order Status] = "Delivered")
 		formatString: 0
 		displayFolder: Success & Fail
 		lineageTag: 97cd0594-d28f-467f-8753-9b693e1778cb
 
 	/// Count of orders that failed to be delivered
 	measure 'Orders Fail' = ```
-			CALCULATE(COUNTROWS(Fact_Orders), Fact_Orders[Order Status] = "Failed")
+			CALCULATE(COUNTROWS(Fact_Order), Fact_Order[Order Status] = "Failed")
 			
 			```
 		formatString: 0
@@ -64,14 +64,14 @@ table MeasureLibrary
 			
 			VAR FirstOrderDatePerRetailer =
 			    CALCULATE(
-			        MIN(Fact_Orders[Created]),
-			        ALLEXCEPT(Fact_Orders, Fact_Orders[RetailerID])
+			        MIN(Fact_Order[Created]),
+			        ALLEXCEPT(Fact_Order, Fact_Order[RetailerID])
 			    )
 			
 			RETURN
 			CALCULATE(
-			    COUNTROWS(Fact_Orders),
-			    Fact_Orders[Created] = FirstOrderDatePerRetailer
+			    COUNTROWS(Fact_Order),
+			    Fact_Order[Created] = FirstOrderDatePerRetailer
 			)
 			
 			```
@@ -84,8 +84,8 @@ table MeasureLibrary
 			
 			VAR FirstOrderPerRetailer =
 			    ADDCOLUMNS(
-			        SUMMARIZE(Fact_Orders, Fact_Orders[RetailerID]),
-			        "FirstOrderDate", CALCULATE(MIN(Fact_Orders[Created]), ALL(Fact_Orders))
+			        SUMMARIZE(Fact_Order, Fact_Order[RetailerID]),
+			        "FirstOrderDate", CALCULATE(MIN(Fact_Order[Created]), ALL(Fact_Order))
 			    )
 			VAR RetailersThisMonth =
 			    FILTER(
@@ -101,7 +101,7 @@ table MeasureLibrary
 		lineageTag: 4b13600b-3a8c-4c1a-82d9-405b21483aed
 
 	/// Count of distinct retailers active in the selected period
-	measure 'Active Retailers' = DISTINCTCOUNT(Fact_Orders[RetailerID])
+	measure 'Active Retailers' = DISTINCTCOUNT(Fact_Order[RetailerID])
 		formatString: 0
 		displayFolder: Churn measures
 		lineageTag: 8c706329-4d15-40a3-887d-95c9382f26cb
@@ -122,13 +122,13 @@ table MeasureLibrary
 			
 			VAR RetailersPrior =
 			    CALCULATETABLE(
-			        VALUES(Fact_Orders[RetailerID]),
+			        VALUES(Fact_Order[RetailerID]),
 			        Prior3MonthsDates
 			    )
 			
 			VAR RetailersCurrent =
 			    CALCULATETABLE(
-			        VALUES(Fact_Orders[RetailerID]),
+			        VALUES(Fact_Order[RetailerID]),
 			        CurrentMonthDates
 			    )
 			
@@ -144,7 +144,7 @@ table MeasureLibrary
 		lineageTag: 5eb76b81-128b-4ad4-80e6-4839ab6cee75
 
 	/// Percentage of churned retailers relative to total retailers
-	measure 'Churn Rate %' = DIVIDE([Churned Retailers], COUNTROWS( VALUES(Fact_Orders[RetailerID]) ), 0)
+	measure 'Churn Rate %' = DIVIDE([Churned Retailers], COUNTROWS( VALUES(Fact_Order[RetailerID]) ), 0)
 		formatString: 0.00%;-0.00%;0.00%
 		displayFolder: Churn measures
 		lineageTag: cf0e03b9-e8d7-46a4-8013-03506f216e6b
@@ -211,8 +211,8 @@ table MeasureLibrary
 			
 			VAR MaxOrdersDate =
 			    MAXX(
-			        Fact_Orders,
-			        MAX(Fact_Orders[Created], Fact_Orders[Delivered])
+			        Fact_Order,
+			        MAX(Fact_Order[Created], Fact_Order[Delivered])
 			    )
 			VAR MaxOrderLinesDate =
 			    MAX(Fact_OrderLines[OrderCreation])
@@ -240,10 +240,10 @@ table MeasureLibrary
 			VAR Threshold = SELECTEDVALUE(DeliveryThresholdDays[DeliveryThresholdDays], 2)
 			RETURN
 			CALCULATE(
-			    COUNTROWS(Fact_Orders),
+			    COUNTROWS(Fact_Order),
 			    FILTER(
-			        Fact_Orders,
-			        DATEDIFF(Fact_Orders[Created], Fact_Orders[Delivered], DAY) > Threshold
+			        Fact_Order,
+			        DATEDIFF(Fact_Order[Created], Fact_Order[Delivered], DAY) > Threshold
 			    )
 			)
 			

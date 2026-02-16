@@ -24,7 +24,7 @@ table Dim_Retailer
 		queryGroup: 'Dim Tables'
 		source =
 				let
-				    Source = Fact_Orders,
+				    Source = Fact_Order,
 				    KeepCols = Table.SelectColumns(Source, {"RetailerID", "Region"}),
 				    CleanText = Table.TransformColumns(KeepCols, {
 				        {"Region", Text.Proper, type text}

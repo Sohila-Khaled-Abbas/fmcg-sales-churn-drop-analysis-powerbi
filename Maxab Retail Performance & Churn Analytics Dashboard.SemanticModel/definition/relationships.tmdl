@@ -1,5 +1,5 @@
 relationship 47a00d0d-8b86-e0d4-08ef-1fa22b9a88c6
-	fromColumn: Fact_Orders.Created
+	fromColumn: Fact_Order.Created
 	toColumn: Dim_Date.Date
 
 relationship eb31b42c-a4b1-c068-98a6-9181c1f1dcf5
@@ -19,22 +19,18 @@ relationship 2fb66622-4f70-5841-9fc0-8518fb2d2204
 	toColumn: Dim_Product.ProductID
 
 relationship d2ab882c-45c7-5823-8ab7-558d2ad600c9
-	fromColumn: Fact_Orders.Region
+	fromColumn: Fact_Order.Region
 	toColumn: Dim_Region.Region
 
 relationship 4b804d96-c2fb-c61a-8864-c444ae8322e3
-	fromColumn: Fact_Orders.Channel
+	fromColumn: Fact_Order.Channel
 	toColumn: Dim_Channel.Channel
 
-relationship 2cbea6f5-ee49-e072-9ef8-78fc4d490b02
-	fromColumn: Dim_Date.MonthName
-	toColumn: Fact_MaxabNMV.Month
-
 relationship 109d9c82-86a5-91c4-9412-54e816fcae8f
-	fromColumn: Fact_Orders.RetailerID
+	fromColumn: Fact_Order.RetailerID
 	toColumn: Dim_Retailer.RetailerID
 
-relationship 7adc8b36-5dc1-eee3-3ac4-daa37f131489
-	fromColumn: Fact_OrderLines.OrderCreation
-	toColumn: Holidays_2024.Date
+relationship e03b3cfd-00aa-f4fc-0229-17a8247223f2
+	fromColumn: Dim_Date.Month
+	toColumn: Fact_MaxabNMV.Month
 

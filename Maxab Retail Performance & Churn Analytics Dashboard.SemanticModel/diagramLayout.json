@@ -4,8 +4,8 @@
     {
       "ordinal": 0,
       "scrollPosition": {
-        "x": 695.801657857518,
-        "y": 0
+        "x": 53.770490552558272,
+        "y": 7.8688527716964973
       },
       "nodes": [
         {
@@ -32,7 +32,7 @@
             "height": 145,
             "width": 230.72131147540995
           },
-          "zIndex": 16
+          "zIndex": 12
         },
         {
           "location": {
@@ -45,7 +45,7 @@
             "height": 316.26229508196724,
             "width": 234
           },
-          "zIndex": 13
+          "zIndex": 18
         },
         {
           "location": {
@@ -88,8 +88,8 @@
         },
         {
           "location": {
-            "x": 1216.1694682193629,
-            "y": 21.886687578486359
+            "x": 1217.8088124816579,
+            "y": 21.886687578486356
           },
           "nodeIndex": "Fact_JuiceNMV",
           "nodeLineageTag": "0ad93cf7-7e5b-416e-aeff-1c86ed6071f1",
@@ -97,12 +97,12 @@
             "height": 221.31147540983608,
             "width": 234
           },
-          "zIndex": 8
+          "zIndex": 16
         },
         {
           "location": {
-            "x": 1154.4759755859475,
-            "y": 291.85410760513713
+            "x": 1167.5907296843079,
+            "y": 257.42787809694045
           },
           "nodeIndex": "Fact_MaxabNMV",
           "nodeLineageTag": "0af581e0-6401-4f6d-8210-725244530f4c",
@@ -110,12 +110,12 @@
             "height": 128,
             "width": 234
           },
-          "zIndex": 14
+          "zIndex": 17
         },
         {
           "location": {
-            "x": 1792.0967848506664,
-            "y": 41.370898243192592
+            "x": 1798.6541618998467,
+            "y": 28.256144144831936
           },
           "nodeIndex": "Fact_OrderLines",
           "nodeLineageTag": "75b6c669-471f-48b9-a013-445c5a1df706",
@@ -123,20 +123,7 @@
             "height": 293.31147540983608,
             "width": 234
           },
-          "zIndex": 12
-        },
-        {
-          "location": {
-            "x": 1526.5621229397782,
-            "y": 8.1967213114754109
-          },
-          "nodeIndex": "Fact_Orders",
-          "nodeLineageTag": "d59b240f-73b3-4a21-a771-3e2337da64d3",
-          "size": {
-            "height": 347.5409836065574,
-            "width": 234
-          },
-          "zIndex": 17
+          "zIndex": 19
         },
         {
           "location": {
@@ -149,7 +136,7 @@
             "height": 200,
             "width": 234
           },
-          "zIndex": 1
+          "zIndex": 3
         },
         {
           "location": {
@@ -162,20 +149,7 @@
             "height": 128,
             "width": 234
           },
-          "zIndex": 2
-        },
-        {
-          "location": {
-            "x": 517.21311475409823,
-            "y": 447.99692453143228
-          },
-          "nodeIndex": "Data Dictionary",
-          "nodeLineageTag": "cb8fa697-311e-4cc5-8182-c0b8df0ba7b2",
-          "size": {
-            "height": 200,
-            "width": 234
-          },
-          "zIndex": 3
+          "zIndex": 4
         },
         {
           "location": {
@@ -188,7 +162,7 @@
             "height": 200,
             "width": 234
           },
-          "zIndex": 4
+          "zIndex": 5
         },
         {
           "location": {
@@ -201,7 +175,7 @@
             "height": 200,
             "width": 234
           },
-          "zIndex": 5
+          "zIndex": 6
         },
         {
           "location": {
@@ -214,7 +188,7 @@
             "height": 200,
             "width": 234
           },
-          "zIndex": 6
+          "zIndex": 7
         },
         {
           "location": {
@@ -227,24 +201,25 @@
             "height": 200,
             "width": 234
           },
-          "zIndex": 7
+          "zIndex": 8
         },
         {
           "location": {
-            "x": 1770.4246086771902,
-            "y": 504.91803278688519
+            "x": 1186.818051300141,
+            "y": 704.91803278688508
           },
           "nodeIndex": "Holidays_2024",
+          "nodeLineageTag": "d2d17b93-3c9b-4fe2-a349-1b6770d00bf2",
           "size": {
             "height": 152,
             "width": 234
           },
-          "zIndex": 0
+          "zIndex": 14
         },
         {
           "location": {
-            "x": 1954.0311660542395,
-            "y": 302.98206882309324
+            "x": 2054.0311660542393,
+            "y": 117.73616718374899
           },
           "nodeIndex": "DeliveryThresholdDays",
           "nodeLineageTag": "e3dbacde-8daa-4a97-bb79-ce451d7e22c1",
@@ -252,19 +227,32 @@
             "height": 224,
             "width": 234
           },
-          "zIndex": 0
+          "zIndex": 2
         },
         {
           "location": {
-            "x": 1992.9491988411248,
-            "y": 314.98206882309324
+            "x": 519.17870703784615,
+            "y": 682.19518357719164
           },
           "nodeIndex": "IconsCatalog",
+          "nodeLineageTag": "f0a2ebe5-7715-4d3a-9649-2e2e66932562",
           "size": {
             "height": 200,
             "width": 234
           },
-          "zIndex": 0
+          "zIndex": 13
+        },
+        {
+          "location": {
+            "x": 1533.1194999889585,
+            "y": 0
+          },
+          "nodeIndex": "Fact_Order",
+          "size": {
+            "height": 347.5409836065574,
+            "width": 234
+          },
+          "zIndex": 1
         }
       ],
       "name": "All tables",
