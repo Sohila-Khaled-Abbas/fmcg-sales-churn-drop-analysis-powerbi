@@ -6,10 +6,6 @@ relationship eb31b42c-a4b1-c068-98a6-9181c1f1dcf5
 	fromColumn: Fact_OrderLines.OrderCreation
 	toColumn: Dim_Date.Date
 
-relationship a2f1bfe3-4700-3c20-dba3-a987faf69c79
-	fromColumn: Fact_JuiceNMV.MonthDate
-	toColumn: Dim_Date.Date
-
 relationship e66adf45-4f9c-296d-4ee1-bde9ae9a2a80
 	fromColumn: Fact_JuiceNMV.Brand
 	toColumn: Dim_Brand.Brand
@@ -30,7 +26,11 @@ relationship 109d9c82-86a5-91c4-9412-54e816fcae8f
 	fromColumn: Fact_Order.RetailerID
 	toColumn: Dim_Retailer.RetailerID
 
-relationship e03b3cfd-00aa-f4fc-0229-17a8247223f2
-	fromColumn: Dim_Date.Month
-	toColumn: Fact_MaxabNMV.Month
+relationship 9d4a0fcc-d2e4-ec88-8e66-25b8221be296
+	fromColumn: Fact_MaxabNMV.MonthDate
+	toColumn: Dim_Date.Date
+
+relationship f1410ad0-90ec-bb1c-feca-784edc2f017e
+	fromColumn: Fact_JuiceNMV.MonthDate
+	toColumn: Dim_Date.Date
 

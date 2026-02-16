@@ -28,7 +28,7 @@ table Dim_Date
 		dataType: int64
 		formatString: 0
 		lineageTag: 3ab8d3c3-a521-4e62-a367-de083895dabe
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: Month
 
 		annotation SummarizationSetBy = Automatic

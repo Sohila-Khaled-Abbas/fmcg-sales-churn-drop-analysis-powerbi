@@ -15,12 +15,23 @@ table Fact_MaxabNMV
 		dataType: decimal
 		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		lineageTag: 2e1e77cc-3137-4774-a613-8cff2bf56b85
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: Total Sales
 
 		annotation SummarizationSetBy = Automatic
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column MonthDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 353f3f02-ffc4-46bb-a52e-d4f5789c36da
+		summarizeBy: none
+		sourceColumn: MonthDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
 
 	partition Fact_MaxabNMV = m
 		mode: import
@@ -32,9 +43,12 @@ table Fact_MaxabNMV
 				    #"Promoted Headers" = Table.PromoteHeaders(#"Maxab total nmv_Sheet", [PromoteAllScalars=true]),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Month", type text}, {"Total Sales", type number}}),
 				    #"Changed Type1" = Table.TransformColumnTypes(#"Changed Type",{{"Total Sales", Currency.Type}}),
-				    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type1", {{"Total Sales", Currency.Type}}, "ar-EG")
+				    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type1", {{"Total Sales", Currency.Type}}, "ar-EG"),
+				    #"Added Month Date" = Table.AddColumn(#"Changed Type with Locale", "MonthDate", each Date.FromText("01 " & [Month] & " 2024")),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Added Month Date",{{"MonthDate", type date}}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Changed Type2",{"MonthDate", "Month", "Total Sales"})
 				in
-				    #"Changed Type with Locale"
+				    #"Reordered Columns"
 
 	annotation PBI_NavigationStepName = Navigation
 

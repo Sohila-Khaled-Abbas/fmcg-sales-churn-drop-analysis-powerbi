@@ -62,8 +62,8 @@ table Fact_JuiceNMV
 				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column5"}),
 				    #"Capitalized Each Word" = Table.TransformColumns(#"Removed Columns",{{"Category", Text.Proper, type text}}),
 				    #"Changed Type1" = Table.TransformColumnTypes(#"Capitalized Each Word",{{"Sales", Currency.Type}}),
-				    #"Added Custom" = Table.AddColumn(#"Changed Type1", "MonthDate", each Date.FromText("01 " & [Month] & " 2024")),
-				    #"Changed Type2" = Table.TransformColumnTypes(#"Added Custom",{{"MonthDate", type date}}),
+				    #"Added Month Date" = Table.AddColumn(#"Changed Type1", "MonthDate", each Date.FromText("01 " & [Month] & " 2024")),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Added Month Date",{{"MonthDate", type date}}),
 				    #"Reordered Columns" = Table.ReorderColumns(#"Changed Type2",{"Month", "MonthDate", "Category", "Brand", "Sales"})
 				in
 				    #"Reordered Columns"
