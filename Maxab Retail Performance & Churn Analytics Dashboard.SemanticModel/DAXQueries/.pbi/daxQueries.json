@@ -4,7 +4,9 @@
     "Monthly performance KPIs by Region",
     "Churn breakdown for Feb–Apr",
     "Weekly sales trend for May (OrderLines)",
-    "Best Retailers by Sales"
+    "Best Retailers by Sales",
+    "UDF Icons",
+    "Query 1"
   ],
-  "defaultTab": "Weekly sales trend for May (OrderLines)"
+  "defaultTab": "Query 1"
 }

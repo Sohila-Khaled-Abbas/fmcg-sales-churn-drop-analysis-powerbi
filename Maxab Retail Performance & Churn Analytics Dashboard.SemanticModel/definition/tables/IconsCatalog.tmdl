@@ -1,0 +1,245 @@
+table IconsCatalog
+	lineageTag: f0a2ebe5-7715-4d3a-9649-2e2e66932562
+
+	measure Icon = ```
+			
+			VAR IconType="Home" // ✅ Uses IconType
+			
+			VAR Color = "242423" // ✅ Uses HTML Color
+			RETURN
+			IconSelector(IconType, Color)
+			
+			```
+		lineageTag: 59399702-3f21-4bbd-8898-5be9375bebf2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column IconID
+		formatString: 0
+		lineageTag: d299ebc7-c970-478c-85b0-2eeb2864b004
+		summarizeBy: count
+		isNameInferred
+		sourceColumn: [IconID]
+
+		annotation SummarizationSetBy = Automatic
+
+	column IconName
+		lineageTag: c5747c58-da11-4bb2-8021-302c6bf39467
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [IconName]
+
+		annotation SummarizationSetBy = Automatic
+
+	column IconType
+		lineageTag: 00f5d8f3-55e0-4d2e-87a6-6445487986e5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [IconType]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		lineageTag: a5578e96-511e-43e1-af29-8b1bc3e686e6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Category]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ColorHex
+		lineageTag: 584a5d96-8b99-49ca-9252-e383819f6bff
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ColorHex]
+
+		annotation SummarizationSetBy = Automatic
+
+	column ColorName
+		lineageTag: 18eb4590-2aeb-4024-88c0-8e7f32607d0f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [ColorName]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Description
+		lineageTag: 9c07a78b-a0ea-4bf6-99ad-283528f8bd2c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Description]
+
+		annotation SummarizationSetBy = Automatic
+
+	column IconPreview
+		lineageTag: 3ba0d358-b199-47c9-9a5c-d84032b65b8a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [IconPreview]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition IconsCatalog = calculated
+		mode: import
+		source = ```
+				
+				VAR BaseTable = 
+				    DATATABLE(
+				        "IconID", INTEGER,
+				        "IconName", STRING,
+				        "IconType", STRING,
+				        "Category", STRING,
+				        "ColorHex", STRING,
+				        "ColorName", STRING,
+				        "Description", STRING,
+				        {
+				            // BASIC ICONS (1-10)
+				            {1, "Home", "Home", "Navigation", "9E9E9E", "Light Gray", "Main page"},
+				            {2, "User", "User", "Profiles", "9E9E9E", "Light Gray", "User account"},
+				            {3, "Settings", "Settings", "System", "9E9E9E", "Light Gray", "Settings and options"},
+				            {4, "Chart", "Chart", "Data", "9E9E9E", "Light Gray", "Statistics"},
+				            {5, "Mail", "Mail", "Communication", "9E9E9E", "Light Gray", "Email"},
+				            {6, "Calendar", "Calendar", "Time", "9E9E9E", "Light Gray", "Dates and events"},
+				            {7, "Folder", "Folder", "Files", "9E9E9E", "Light Gray", "Documents"},
+				            {8, "Search", "Search", "Action", "9E9E9E", "Light Gray", "Search"},
+				            {9, "Bell", "Bell", "Communication", "9E9E9E", "Light Gray", "Notifications"},
+				            {10, "Star", "Star", "Featured", "9E9E9E", "Light Gray", "Favorites"},
+				            
+				            // ADDITIONAL ICONS (11-50)
+				            {11, "Dashboard", "Dashboard", "Navigation", "9E9E9E", "Light Gray", "Main dashboard"},
+				            {12, "Download", "Download", "Action", "9E9E9E", "Light Gray", "Download file"},
+				            {13, "Upload", "Upload", "Action", "9E9E9E", "Light Gray", "Upload file"},
+				            {14, "Delete", "Delete", "Action", "9E9E9E", "Light Gray", "Delete item"},
+				            {15, "Edit", "Edit", "Action", "9E9E9E", "Light Gray", "Edit"},
+				            {16, "Save", "Save", "Action", "9E9E9E", "Light Gray", "Save changes"},
+				            {17, "Print", "Print", "Action", "9E9E9E", "Light Gray", "Print document"},
+				            {18, "Share", "Share", "Action", "9E9E9E", "Light Gray", "Share content"},
+				            {19, "Lock", "Lock", "Security", "9E9E9E", "Light Gray", "Locked"},
+				            {20, "Unlock", "Unlock", "Security", "9E9E9E", "Light Gray", "Unlocked"},
+				            {21, "Check", "Check", "Status", "9E9E9E", "Light Gray", "Completed"},
+				            {22, "Close", "Close", "Action", "9E9E9E", "Light Gray", "Close window"},
+				            {23, "Add", "Add", "Action", "9E9E9E", "Light Gray", "Add new"},
+				            {24, "Remove", "Remove", "Action", "9E9E9E", "Light Gray", "Remove"},
+				            {25, "Info", "Info", "Status", "9E9E9E", "Light Gray", "Information"},
+				            {26, "Warning", "Warning", "Status", "9E9E9E", "Light Gray", "Warning"},
+				            {27, "Error", "Error", "Status", "9E9E9E", "Light Gray", "Critical error"},
+				            {28, "Help", "Help", "Support", "9E9E9E", "Light Gray", "Help and support"},
+				            {29, "Refresh", "Refresh", "Action", "9E9E9E", "Light Gray", "Refresh"},
+				            {30, "Filter", "Filter", "Data", "9E9E9E", "Light Gray", "Filter data"},
+				            {31, "Sort", "Sort", "Data", "9E9E9E", "Light Gray", "Sort list"},
+				            {32, "Menu", "Menu", "Navigation", "9E9E9E", "Light Gray", "Main menu"},
+				            {33, "More Vertical", "MoreVert", "Navigation", "9E9E9E", "Light Gray", "More options"},
+				            {34, "More Horizontal", "MoreHoriz", "Navigation", "9E9E9E", "Light Gray", "More actions"},
+				            {35, "Arrow Up", "ArrowUp", "Navigation", "9E9E9E", "Light Gray", "Go up"},
+				            {36, "Arrow Down", "ArrowDown", "Navigation", "9E9E9E", "Light Gray", "Go down"},
+				            {37, "Arrow Left", "ArrowLeft", "Navigation", "9E9E9E", "Light Gray", "Previous"},
+				            {38, "Arrow Right", "ArrowRight", "Navigation", "9E9E9E", "Light Gray", "Next"},
+				            {39, "Phone", "Phone", "Communication", "9E9E9E", "Light Gray", "Call"},
+				            {40, "Location", "Location", "Maps", "9E9E9E", "Light Gray", "Location"},
+				            {41, "Time", "Time", "Time", "9E9E9E", "Light Gray", "Time and duration"},
+				            {42, "Favorite", "Favorite", "Featured", "9E9E9E", "Light Gray", "Like"},
+				            {43, "Bookmark", "Bookmark", "Featured", "9E9E9E", "Light Gray", "Save for later"},
+				            {44, "Visible", "Visibility", "Status", "9E9E9E", "Light Gray", "Show"},
+				            {45, "Hidden", "VisibilityOff", "Status", "9E9E9E", "Light Gray", "Hide"},
+				            {46, "Cloud", "Cloud", "Storage", "9E9E9E", "Light Gray", "Cloud storage"},
+				            {47, "Cloud Upload", "CloudUpload", "Storage", "9E9E9E", "Light Gray", "Upload to cloud"},
+				            {48, "Cloud Download", "CloudDownload", "Storage", "9E9E9E", "Light Gray", "Download from cloud"},
+				            {49, "Attach File", "AttachFile", "Files", "9E9E9E", "Light Gray", "Attach file"},
+				            {50, "Link", "Link", "Action", "9E9E9E", "Light Gray", "Link"},
+				            
+				            // CHART ICONS (51-70)
+				            {51, "Bar Chart", "BarChart", "Charts", "9E9E9E", "Light Gray", "Value comparison"},
+				            {52, "Line Chart", "LineChart", "Charts", "9E9E9E", "Light Gray", "Trends over time"},
+				            {53, "Pie Chart", "PieChart", "Charts", "9E9E9E", "Light Gray", "Percentage distribution"},
+				            {54, "Donut Chart", "DonutChart", "Charts", "9E9E9E", "Light Gray", "Part proportion"},
+				            {55, "Area Chart", "AreaChart", "Charts", "9E9E9E", "Light Gray", "Volume over time"},
+				            {56, "Scatter Plot", "ScatterPlot", "Charts", "9E9E9E", "Light Gray", "Data correlation"},
+				            {57, "Bubble Chart", "BubbleChart", "Charts", "9E9E9E", "Light Gray", "3 data dimensions"},
+				            {58, "Gauge Chart", "GaugeChart", "Charts", "9E9E9E", "Light Gray", "Performance indicator"},
+				            {59, "Trend Up", "TrendUp", "Charts", "9E9E9E", "Light Gray", "Positive growth"},
+				            {60, "Trend Down", "TrendDown", "Charts", "9E9E9E", "Light Gray", "Decrease"},
+				            {61, "Table View", "TableView", "Visualization", "9E9E9E", "Light Gray", "Tabular data"},
+				            {62, "Kanban Board", "KanbanBoard", "Visualization", "9E9E9E", "Light Gray", "Workflow"},
+				            {63, "Funnel Chart", "FunnelChart", "Charts", "9E9E9E", "Light Gray", "Sales conversion"},
+				            {64, "Waterfall Chart", "WaterfallChart", "Charts", "9E9E9E", "Light Gray", "Financial flow"},
+				            {65, "Heatmap", "Heatmap", "Charts", "9E9E9E", "Light Gray", "Data intensity"},
+				            {66, "Timeline", "Timeline", "Visualization", "9E9E9E", "Light Gray", "Event chronology"},
+				            {67, "Gantt Chart", "GanttChart", "Visualization", "9E9E9E", "Light Gray", "Project planning"},
+				            {68, "Dashboard Grid", "DashboardGrid", "Visualization", "9E9E9E", "Light Gray", "Control panel"},
+				            {69, "Report", "Report", "Documents", "9E9E9E", "Light Gray", "Detailed report"},
+				            {70, "Analytics", "Analytics", "Charts", "9E9E9E", "Light Gray", "Data analysis"},
+				            
+				            // HUMAN RESOURCES ICONS (71-80)
+				            {71, "Team", "Team", "Human Resources", "9E9E9E", "Light Gray", "Team and groups"},
+				            {72, "Badge", "Badge", "Human Resources", "9E9E9E", "Light Gray", "ID badge"},
+				            {73, "Interview", "Interview", "Human Resources", "9E9E9E", "Light Gray", "Job interview"},
+				            {74, "Training", "Training", "Human Resources", "9E9E9E", "Light Gray", "Training and education"},
+				            {75, "Payroll", "Payroll", "Human Resources", "9E9E9E", "Light Gray", "Payroll"},
+				            {76, "Benefits", "Benefits", "Human Resources", "9E9E9E", "Light Gray", "Employee benefits"},
+				            {77, "Attendance", "Attendance", "Human Resources", "9E9E9E", "Light Gray", "Attendance"},
+				            {78, "Recruitment", "Recruitment", "Human Resources", "9E9E9E", "Light Gray", "Recruitment"},
+				            {79, "Performance", "Performance", "Human Resources", "9E9E9E", "Light Gray", "Performance"},
+				            {80, "Contract", "Contract", "Human Resources", "9E9E9E", "Light Gray", "Contract"},
+				            
+				            // FINANCE ICONS (81-95)
+				            {81, "Money", "Money", "Finance", "9E9E9E", "Light Gray", "Money and currency"},
+				            {82, "Credit Card", "CreditCard", "Finance", "9E9E9E", "Light Gray", "Credit card"},
+				            {83, "Invoice", "Invoice", "Finance", "9E9E9E", "Light Gray", "Invoice"},
+				            {84, "Budget", "Budget", "Finance", "9E9E9E", "Light Gray", "Budget"},
+				            {85, "Calculator", "Calculator", "Finance", "9E9E9E", "Light Gray", "Calculator"},
+				            {86, "Bank", "Bank", "Finance", "9E9E9E", "Light Gray", "Bank"},
+				            {87, "Revenue", "Revenue", "Finance", "9E9E9E", "Light Gray", "Revenue"},
+				            {88, "Expense", "Expense", "Finance", "9E9E9E", "Light Gray", "Expenses"},
+				            {89, "Profit", "Profit", "Finance", "9E9E9E", "Light Gray", "Profit"},
+				            {90, "Tax", "Tax", "Finance", "9E9E9E", "Light Gray", "Taxes"},
+				            {91, "Audit", "Audit", "Finance", "9E9E9E", "Light Gray", "Audit"},
+				            {92, "Investment", "Investment", "Finance", "9E9E9E", "Light Gray", "Investment"},
+				            {93, "Cashflow", "Cashflow", "Finance", "9E9E9E", "Light Gray", "Cash flow"},
+				            {94, "Account Balance", "AccountBalance", "Finance", "9E9E9E", "Light Gray", "Account balance"},
+				            {95, "Wallet", "Wallet", "Finance", "9E9E9E", "Light Gray", "Wallet"},
+				            
+				            // LOGISTICS ICONS (96-110)
+				            {96, "Truck", "Truck", "Logistics", "9E9E9E", "Light Gray", "Truck delivery"},
+				            {97, "Package", "Package", "Logistics", "9E9E9E", "Light Gray", "Package"},
+				            {98, "Warehouse", "Warehouse", "Logistics", "9E9E9E", "Light Gray", "Warehouse"},
+				            {99, "Inventory", "Inventory", "Logistics", "9E9E9E", "Light Gray", "Inventory"},
+				            {100, "Shipping", "Shipping", "Logistics", "9E9E9E", "Light Gray", "Shipping"},
+				            {101, "Route", "Route", "Logistics", "9E9E9E", "Light Gray", "Route"},
+				            {102, "Barcode", "Barcode", "Logistics", "9E9E9E", "Light Gray", "Barcode"},
+				            {103, "QR Code", "QRCode", "Logistics", "9E9E9E", "Light Gray", "QR Code"},
+				            {104, "Scale", "Scale", "Logistics", "9E9E9E", "Light Gray", "Scale weight"},
+				            {105, "Pallet", "Pallet", "Logistics", "9E9E9E", "Light Gray", "Pallet"},
+				            {106, "Forklift", "Forklift", "Logistics", "9E9E9E", "Light Gray", "Forklift"},
+				            {107, "Container", "Container", "Logistics", "9E9E9E", "Light Gray", "Container"},
+				            {108, "Tracking", "Tracking", "Logistics", "9E9E9E", "Light Gray", "Tracking"},
+				            {109, "Supply Chain", "SupplyChain", "Logistics", "9E9E9E", "Light Gray", "Supply chain"},
+				            {110, "Distribution", "Distribution", "Logistics", "9E9E9E", "Light Gray", "Distribution"},
+				            
+				            // SALES ICONS (111-125)
+				            {111, "Shopping Cart", "ShoppingCart", "Sales", "9E9E9E", "Light Gray", "Shopping cart"},
+				            {112, "Store", "Store", "Sales", "9E9E9E", "Light Gray", "Store"},
+				            {113, "Sale", "Sale", "Sales", "9E9E9E", "Light Gray", "Sale"},
+				            {114, "Target", "Target", "Sales", "9E9E9E", "Light Gray", "Target"},
+				            {115, "Customer", "Customer", "Sales", "9E9E9E", "Light Gray", "Customer"},
+				            {116, "Leads", "Leads", "Sales", "9E9E9E", "Light Gray", "Leads"},
+				            {117, "Deal", "Deal", "Sales", "9E9E9E", "Light Gray", "Deal"},
+				            {118, "Quote", "Quote", "Sales", "9E9E9E", "Light Gray", "Quote"},
+				            {119, "Campaign", "Campaign", "Sales", "9E9E9E", "Light Gray", "Campaign"},
+				            {120, "Promotion", "Promotion", "Sales", "9E9E9E", "Light Gray", "Promotion"},
+				            {121, "CRM", "CRM", "Sales", "9E9E9E", "Light Gray", "Customer relationship"},
+				            {122, "Commission", "Commission", "Sales", "9E9E9E", "Light Gray", "Commission"},
+				            {123, "POS", "POS", "Sales", "9E9E9E", "Light Gray", "Point of sale"},
+				            {124, "Pipeline", "Pipeline", "Sales", "9E9E9E", "Light Gray", "Sales pipeline"},
+				            {125, "Discount", "Discount", "Sales", "9E9E9E", "Light Gray", "Discount"}
+				        }
+				    )
+				
+				RETURN
+				ADDCOLUMNS(
+				    BaseTable,
+				    "IconPreview", IconSelector([IconType], [ColorHex])
+				)
+				```
+
+	annotation PBI_Id = 75c0c7211907455f864db5abda37d188
+
