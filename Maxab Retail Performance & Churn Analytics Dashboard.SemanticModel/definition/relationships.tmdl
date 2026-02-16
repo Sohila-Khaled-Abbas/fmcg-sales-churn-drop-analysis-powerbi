@@ -34,3 +34,8 @@ relationship f1410ad0-90ec-bb1c-feca-784edc2f017e
 	fromColumn: Fact_JuiceNMV.MonthDate
 	toColumn: Dim_Date.Date
 
+relationship b42bb4d3-3ffc-5494-ed48-61ec3544af30
+	isActive: false
+	fromColumn: Fact_Order.Delivered
+	toColumn: Dim_Date.Date
+

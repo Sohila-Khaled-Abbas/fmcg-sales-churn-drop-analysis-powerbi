@@ -42,7 +42,6 @@ ref table 'Model Tables'
 ref table 'Model Columns'
 ref table 'Model Relationships'
 ref table Holidays_2024
-ref table DeliveryThresholdDays
 ref table IconsCatalog
 ref table 'Data Dictionary'
 
