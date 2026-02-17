@@ -47,7 +47,9 @@ table IconsCatalog
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Cardinality = 1, no analytical value
 	column ColorHex
+		isHidden
 		lineageTag: 584a5d96-8b99-49ca-9252-e383819f6bff
 		summarizeBy: none
 		isNameInferred
@@ -55,7 +57,9 @@ table IconsCatalog
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Cardinality = 1, no analytical value
 	column ColorName
+		isHidden
 		lineageTag: 18eb4590-2aeb-4024-88c0-8e7f32607d0f
 		summarizeBy: none
 		isNameInferred

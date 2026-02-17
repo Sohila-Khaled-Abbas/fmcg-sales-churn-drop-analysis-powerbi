@@ -1,3 +1,4 @@
+/// Maxab Retail Performance & Churn Analytics Dashboard — optimized model with clean star schema, dynamic DAX measures, and enforced measure-first design.
 model Model
 	culture: en-US
 	defaultPowerBIDataSourceVersion: powerBI_V3
@@ -21,7 +22,7 @@ queryGroup 'Dim Tables'
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_QueryOrder = ["Fact_Order","Fact_OrderLines","Fact_JuiceNMV","Fact_MaxabNMV","Dim_Date","Dim_Retailer","Dim_Region","Dim_Channel","Dim_Product","Dim_Brand","fn_GetRegionGeo","fn_GetPublicHolidays","Holidays_2024"]
+annotation PBI_QueryOrder = ["Fact_Order","Fact_OrderLines","Fact_JuiceNMV","Fact_MaxabNMV","Dim_Date","Dim_Retailer","Dim_Region","Dim_Channel","Dim_Product","Dim_Brand","fn_GetRegionGeo","Holidays_2024"]
 
 annotation PBI_ProTooling = ["CalcGroup","DaxQueryView_Desktop","TMDLView_Desktop","DevMode"]
 
@@ -44,6 +45,8 @@ ref table 'Model Relationships'
 ref table Holidays_2024
 ref table IconsCatalog
 ref table 'Data Dictionary'
+ref table DeliveryThresholdDays
+ref table ChurnLookbackMonths
 
 ref cultureInfo en-US
 

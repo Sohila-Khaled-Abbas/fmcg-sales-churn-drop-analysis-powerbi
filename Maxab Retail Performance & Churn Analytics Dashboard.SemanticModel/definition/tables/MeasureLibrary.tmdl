@@ -59,19 +59,22 @@ table MeasureLibrary
 		displayFolder: Success & Fail
 		lineageTag: f64dad00-3f70-421e-a567-bd9a468a4f3a
 
-	/// Count of first orders placed by retailers in the current month (activation event)
+	/// Count of retailers whose first-ever order falls within the currently selected date range
 	measure 'Retailer First Order In Month' = ```
 			
-			VAR FirstOrderDatePerRetailer =
-			    CALCULATE(
-			        MIN(Fact_Order[Created]),
-			        ALLEXCEPT(Fact_Order, Fact_Order[RetailerID])
+			VAR MinDate = MIN(Dim_Date[Date])
+			VAR MaxDate = MAX(Dim_Date[Date])
+			VAR FirstOrderPerRetailer =
+			    ADDCOLUMNS(
+			        SUMMARIZE(ALL(Fact_Order), Fact_Order[RetailerID]),
+			        "FirstOrderDate", CALCULATE(MIN(Fact_Order[Created]), ALL(Dim_Date))
 			    )
-			
 			RETURN
-			CALCULATE(
-			    COUNTROWS(Fact_Order),
-			    Fact_Order[Created] = FirstOrderDatePerRetailer
+			COUNTROWS(
+			    FILTER(
+			        FirstOrderPerRetailer,
+			        [FirstOrderDate] >= MinDate && [FirstOrderDate] <= MaxDate
+			    )
 			)
 			
 			```
@@ -106,24 +109,26 @@ table MeasureLibrary
 		displayFolder: Churn measures
 		lineageTag: 8c706329-4d15-40a3-887d-95c9382f26cb
 
-	/// Count of retailers who were active in prior 3 months but not in current month (churned)
+	/// Count of retailers active in the prior N months (controlled by ChurnLookbackMonths slicer, default = 3) but absent in the current selected period.
 	measure 'Churned Retailers' = ```
+			
+			VAR LookbackMonths = [Churn Lookback Months Value]
 			
 			VAR CurrentMonthDates =
 			    VALUES(Dim_Date[Date])
 			
-			VAR Prior3MonthsDates =
+			VAR PriorWindowDates =
 			    DATESINPERIOD(
 			        Dim_Date[Date],
 			        MIN(Dim_Date[Date]) - 1,
-			        -3,
+			        - LookbackMonths,
 			        MONTH
 			    )
 			
 			VAR RetailersPrior =
 			    CALCULATETABLE(
 			        VALUES(Fact_Order[RetailerID]),
-			        Prior3MonthsDates
+			        PriorWindowDates
 			    )
 			
 			VAR RetailersCurrent =
@@ -143,34 +148,51 @@ table MeasureLibrary
 		displayFolder: Churn measures
 		lineageTag: 5eb76b81-128b-4ad4-80e6-4839ab6cee75
 
-	/// Percentage of churned retailers relative to total retailers
-	measure 'Churn Rate %' = DIVIDE([Churned Retailers], COUNTROWS( VALUES(Fact_Order[RetailerID]) ), 0)
+	/// Percentage of churned retailers relative to active retailers in the prior 3 months
+	measure 'Churn Rate %' = DIVIDE([Churned Retailers], [Active Retailers], 0)
 		formatString: 0.00%;-0.00%;0.00%
 		displayFolder: Churn measures
 		lineageTag: cf0e03b9-e8d7-46a4-8013-03506f216e6b
 
-	/// Total sales for the selected week in May
-	measure 'Weekly Sales' =
+	/// Total sales for the selected week in the selected month (dynamic — no longer hardcoded to 2025-05)
+	measure 'Weekly Sales' = ```
 			
+			VAR SelectedYearMonth = SELECTEDVALUE(Dim_Date[YearMonth])
+			VAR SelectedWeek = SELECTEDVALUE(Dim_Date[WeekOfMonth])
+			RETURN
 			CALCULATE(
 			    SUM(Fact_OrderLines[Sales]),
 			    FILTER(
 			        ALL(Dim_Date),
-			        Dim_Date[YearMonth] = "2025-05" && Dim_Date[WeekOfMonth] = SELECTEDVALUE(Dim_Date[WeekOfMonth])
+			        Dim_Date[YearMonth] = SelectedYearMonth
+			            && Dim_Date[WeekOfMonth] = SelectedWeek
 			    )
 			)
+			
+			```
 		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
 		displayFolder: Drop analysis & weekly sales
 		lineageTag: 76e975dd-cebc-4ab9-b4d6-fedecdb8d013
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
-	/// Percentage change in weekly sales compared to previous week
+	/// Percentage change in weekly sales vs previous week in same month (dynamic)
 	measure 'Drop % vs Prior Week' = ```
 			
-			VAR Cur = [Weekly Sales]
-			VAR Prev = CALCULATE([Weekly Sales], FILTER(ALL(Dim_Date), Dim_Date[YearMonth] = "2025-05" && Dim_Date[WeekOfMonth] = SELECTEDVALUE(Dim_Date[WeekOfMonth]) - 1))
-			RETURN DIVIDE(Cur - Prev, Prev, 0)
+			VAR SelectedYearMonth = SELECTEDVALUE(Dim_Date[YearMonth])
+			VAR SelectedWeek = SELECTEDVALUE(Dim_Date[WeekOfMonth])
+			VAR CurrentWeekSales =
+			    CALCULATE(
+			        SUM(Fact_OrderLines[Sales]),
+			        FILTER(ALL(Dim_Date), Dim_Date[YearMonth] = SelectedYearMonth && Dim_Date[WeekOfMonth] = SelectedWeek)
+			    )
+			VAR PriorWeekSales =
+			    CALCULATE(
+			        SUM(Fact_OrderLines[Sales]),
+			        FILTER(ALL(Dim_Date), Dim_Date[YearMonth] = SelectedYearMonth && Dim_Date[WeekOfMonth] = SelectedWeek - 1)
+			    )
+			RETURN
+			DIVIDE(CurrentWeekSales - PriorWeekSales, PriorWeekSales, 0)
 			
 			```
 		formatString: 0.00%;-0.00%;0.00%
@@ -235,35 +257,16 @@ table MeasureLibrary
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Delayed Orders' = ```
-			
-			VAR Threshold = SELECTEDVALUE(DeliveryThresholdDays[DeliveryThresholdDays], 2)
-			RETURN
-			CALCULATE(
-			    COUNTROWS(Fact_Order),
-			    FILTER(
-			        Fact_Order,
-			        DATEDIFF(Fact_Order[Created], Fact_Order[Delivered], DAY) > Threshold
-			    )
-			)
-			
-			```
-		displayFolder: Performance KPIs
-		lineageTag: cadceacc-51bd-4766-9ae6-a29310381d57
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
+	/// Average working-day delivery duration per order. SLA target is driven dynamically by the DeliveryThresholdDays slicer (default = 2).
 	measure 'Delivery SLA (Working Days)' = ```
 			
-			VAR StartDate = SELECTEDVALUE(Fact_Order[Created])
-			VAR EndDate   = SELECTEDVALUE(Fact_Order[Delivered])
-			
-			RETURN
-			CALCULATE(
-			    COUNTROWS('Dim_Date'),
-			    'Dim_Date'[Date] >= StartDate,
-			    'Dim_Date'[Date] <= EndDate,
-			    'Dim_Date'[IsWorkingDay] = 1
+			AVERAGEX(
+			    FILTER(Fact_Order, NOT ISBLANK(Fact_Order[Delivered])),
+			    CALCULATE(
+			        COUNTROWS(Dim_Date),
+			        DATESBETWEEN(Dim_Date[Date], Fact_Order[Created], Fact_Order[Delivered]),
+			        Dim_Date[IsWorkingDay] = 1
+			    )
 			)
 			
 			```
@@ -271,17 +274,48 @@ table MeasureLibrary
 		displayFolder: Performance KPIs
 		lineageTag: e1df9435-9fff-44c7-af51-38ec7aa17fac
 
-	measure 'SLA Status' =
+	/// % of delivered orders meeting the dynamic SLA threshold (set via DeliveryThresholdDays slicer, default = 2 working days)
+	measure 'SLA Status' = ```
 			
-			IF(
-			    [Delivery SLA (Working Days)] <= 3,
-			    "On Time",
-			    "Late"
-			)
+			VAR Threshold = [Delivery Threshold Days Value]
+			VAR DeliveredOrders =
+			    FILTER(Fact_Order, NOT ISBLANK(Fact_Order[Delivered]))
+			VAR OnTimeOrders =
+			    FILTER(
+			        DeliveredOrders,
+			        CALCULATE(
+			            COUNTROWS(Dim_Date),
+			            DATESBETWEEN(Dim_Date[Date], Fact_Order[Created], Fact_Order[Delivered]),
+			            Dim_Date[IsWorkingDay] = 1
+			        ) <= Threshold
+			    )
+			RETURN
+			DIVIDE(COUNTROWS(OnTimeOrders), COUNTROWS(DeliveredOrders), 0)
+			
+			```
+		formatString: 0.00%;-0.00%;0.00%
 		displayFolder: Performance KPIs
 		lineageTag: 8df76f87-bf9e-47ee-9385-7e96882b86fd
 
 		annotation PBI_FormatHint = {"isText":true}
+
+	/// Returns the selected delivery SLA threshold from the slicer, defaulting to 2 working days if no selection is made.
+	measure 'Delivery Threshold Days Value' = SELECTEDVALUE('DeliveryThresholdDays'[Delivery Threshold Days], 2)
+		formatString: 0" days"
+		displayFolder: Parameters
+
+	/// Returns the selected churn lookback window from the slicer, defaulting to 3 months if no selection is made.
+	measure 'Churn Lookback Months Value' = SELECTEDVALUE('ChurnLookbackMonths'[Churn Lookback Months], 3)
+		formatString: 0" months"
+		displayFolder: Parameters
+
+	/// Dynamic card label showing the currently selected delivery SLA threshold
+	measure 'SLA Threshold Label' = "SLA Target: " & [Delivery Threshold Days Value] & " working days"
+		displayFolder: Parameters
+
+	/// Dynamic card label showing the currently selected churn lookback window
+	measure 'Churn Window Label' = "Churn Window: Last " & [Churn Lookback Months Value] & " months"
+		displayFolder: Parameters
 
 	column Column
 		isHidden

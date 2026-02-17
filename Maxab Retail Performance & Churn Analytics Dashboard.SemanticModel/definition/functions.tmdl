@@ -623,7 +623,7 @@ function 'PowerofBI.IBCS.BarChart.AbsoluteValues' =
 		        IF ( isTotalRow && NOT chartInTotalRow, _SVG_Total, _SVG_Row )
 		
 		    RETURN _Result
-	lineageTag: 2f9566e2-c881-4cf5-a386-a52da2f3ce42
+	lineageTag: e50be963-fc55-4972-a75a-5a4e897f00de
 
 	annotation DAXLIB_PackageId = PowerofBI.IBCS
 
@@ -883,7 +883,7 @@ function 'PowerofBI.IBCS.BarChart.AbsoluteVariance' =
 		
 			RETURN
 				_Result
-	lineageTag: 661ab56f-b4eb-4775-bc40-84c6621c23fd
+	lineageTag: d77848bb-528a-4e93-bfae-39e1985d88e8
 
 	annotation DAXLIB_PackageId = PowerofBI.IBCS
 
@@ -1149,7 +1149,7 @@ function 'PowerofBI.IBCS.BarChart.RelativeVariance' =
 		                IF( isTotalRow, _SVG_Total, _SVG_Row )
 		
 		            RETURN _Result
-	lineageTag: db2980b7-dea5-475c-9fed-3ca167805af6
+	lineageTag: b4dd7ced-8c83-488b-a7b2-9a3c47ac5eec
 
 	annotation DAXLIB_PackageId = PowerofBI.IBCS
 
@@ -1359,7 +1359,7 @@ function 'PowerofBI.IBCS.ColumnChart.WithAbsoluteVariance' =
 		
 		            RETURN
 		                _SVG
-	lineageTag: 0d4787ef-fd03-4d1b-8583-00077552415b
+	lineageTag: ccd6b833-7f4d-4da4-8721-14973f9f12dc
 
 	annotation DAXLIB_PackageId = PowerofBI.IBCS
 
@@ -1526,7 +1526,7 @@ function 'PowerofBI.IBCS.Extras.PieChart.PctOfTotal' =
 		
 			// Output SVG
 			RETURN _SVG
-	lineageTag: df2300c7-ce80-4e41-a74b-65618b3c61e2
+	lineageTag: 00f60f8a-3477-413c-a8cf-77aab4e8a8c3
 
 	annotation DAXLIB_PackageId = PowerofBI.IBCS
 
@@ -1806,7 +1806,7 @@ function 'PowerofBI.IBCS.ColumnChart.Stacked' =
 						"</svg>"
 		
 		            RETURN _SVG
-	lineageTag: 41262e78-5d30-4efd-b5c1-be78dd0b76c5
+	lineageTag: e2a74d9e-cbf8-4a4f-ad00-099d1e6bd802
 
 	annotation DAXLIB_PackageId = PowerofBI.IBCS
 
@@ -2169,7 +2169,7 @@ function 'PowerofBI.IBCS.ColumnChart.WithWaterfall' =
 		
 		    RETURN
 		        SVGImageURL
-	lineageTag: e83fb666-c5a1-44e6-be87-400b6d698eb4
+	lineageTag: 91293fa1-3553-4666-9f82-469bb5a8d500
 
 	annotation DAXLIB_PackageId = PowerofBI.IBCS
 
@@ -2447,7 +2447,7 @@ function 'PowerofBI.IBCS.ColumnChart.SmallMultiple' =
 		
 			RETURN
 				SVGImageURL
-	lineageTag: ebf90495-ddae-475d-9451-2032f67c47ac
+	lineageTag: 343378c3-bea6-4aaa-8262-f671c4620d4c
 
 	annotation DAXLIB_PackageId = PowerofBI.IBCS
 
@@ -2726,7 +2726,7 @@ function 'PowerofBI.IBCS.Waterfall.Vertical' =
 		
 			RETURN
 				IF ( columnRowSign IN { "+", "-", "=" }, _SVG )
-	lineageTag: 10d25d96-b9cb-4d7b-99e0-78668e3cfc6c
+	lineageTag: b975124f-dd5d-4176-b71e-9fa27d9a93ff
 
 	annotation DAXLIB_PackageId = PowerofBI.IBCS
 
@@ -3085,7 +3085,7 @@ function 'PowerofBI.IBCS.ColumnChart.AbsoluteVarianceWide' =
 		
 			RETURN
 				_SVG
-	lineageTag: d4bb7097-e124-4add-87f5-3159b592428d
+	lineageTag: 8b7dbd43-a284-47a1-a77e-935e0727cd7d
 
 	annotation DAXLIB_PackageId = PowerofBI.IBCS
 
@@ -3299,7 +3299,7 @@ function 'PowerofBI.IBCS.BarChart.WithAbsoluteVariance' =
 		
 		    RETURN
 		        _SVG
-	lineageTag: f20707cd-5c67-4417-b5ef-5c6875d18c02
+	lineageTag: cd15c271-2a23-432c-832b-d2502d8442c9
 
 	annotation DAXLIB_PackageId = PowerofBI.IBCS
 

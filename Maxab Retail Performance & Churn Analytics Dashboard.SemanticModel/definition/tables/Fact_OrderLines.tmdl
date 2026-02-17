@@ -22,16 +22,20 @@ table Fact_OrderLines
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// Cardinality = 1, no analytical value
 	column OrderMonth
 		dataType: string
+		isHidden
 		lineageTag: 901b1f4d-8d34-40b9-b8f8-81c962775fde
 		summarizeBy: none
 		sourceColumn: OrderMonth
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Redundant — use Dim_Product[Category] via ProductID relationship
 	column Category
 		dataType: string
+		isHidden
 		lineageTag: 8ebc6ee6-6503-424f-b335-56b9544cc2b7
 		summarizeBy: none
 		sourceColumn: Category
@@ -47,8 +51,10 @@ table Fact_OrderLines
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Redundant — use Dim_Product[SKU] via ProductID relationship
 	column SKU
 		dataType: string
+		isHidden
 		lineageTag: f8c468ce-e105-4047-9c22-37078e180634
 		summarizeBy: none
 		sourceColumn: SKU

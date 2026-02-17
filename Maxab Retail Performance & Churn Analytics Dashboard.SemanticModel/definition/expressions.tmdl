@@ -29,21 +29,3 @@ expression fn_GetRegionGeo =
 
 	annotation PBI_ResultType = Function
 
-expression fn_GetPublicHolidays =
-		(year as text) =>
-		let
-		    Source = Json.Document(
-		        Web.Contents(
-		            "https://date.nager.at/api/v3/PublicHolidays/" & year & "/EG")
-		    ),
-		    ToTable = Table.FromList(Source, Splitter.SplitByNothing()),
-		    Expanded = Table.ExpandRecordColumn(ToTable, "Column1", {"date","localName","name"}, {"Date","LocalName","Name"})
-		in
-		    Expanded
-	lineageTag: fdf4987d-55be-4ee4-877a-08b41ff158fc
-	queryGroup: Functions
-
-	annotation PBI_NavigationStepName = Navigation
-
-	annotation PBI_ResultType = Function
-

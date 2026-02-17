@@ -1,0 +1,15 @@
+/// What-If parameter: controls how many prior months are used in the churn lookback window. Default = 3. Connect a slicer to 'Churn Lookback Months' column.
+table ChurnLookbackMonths
+	lineageTag: 537f03a8-ceea-477e-a52b-2ae06b9f01a7
+
+	/// Churn lookback window in months — connect a slicer to this column. Default = 3 months.
+	column 'Churn Lookback Months'
+		formatString: 0
+		lineageTag: 07ce1afd-cd85-41e6-bc89-d48caef2dcd8
+		isNameInferred
+		sourceColumn: [Churn Lookback Months]
+
+	partition ChurnLookbackMonths-Partition = calculated
+		mode: import
+		source = SELECTCOLUMNS(GENERATESERIES(1, 6, 1), "Churn Lookback Months", [Value])
+

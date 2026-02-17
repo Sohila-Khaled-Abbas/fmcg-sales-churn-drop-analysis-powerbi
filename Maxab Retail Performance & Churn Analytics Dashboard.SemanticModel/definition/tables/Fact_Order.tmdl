@@ -67,8 +67,10 @@ table Fact_Order
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Redundant — use Dim_Region via relationship
 	column Region
 		dataType: string
+		isHidden
 		lineageTag: e7b53a14-6efe-4afc-9fd8-058f1ce467a6
 		summarizeBy: none
 		sourceColumn: Region
@@ -96,16 +98,20 @@ table Fact_Order
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	/// Redundant — use Dim_Channel via relationship
 	column Channel
 		dataType: string
+		isHidden
 		lineageTag: 84863fb1-98e1-4f3e-a04d-6cf09647c90c
 		summarizeBy: none
 		sourceColumn: Channel
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Redundant — use Dim_Date[Date] via relationship
 	column OrderMonthStart
 		dataType: dateTime
+		isHidden
 		formatString: Long Date
 		lineageTag: abc1a8e0-95e8-4c61-a631-15048c60103b
 		summarizeBy: none
@@ -115,8 +121,10 @@ table Fact_Order
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// Redundant — use Dim_Date[YearMonth] via relationship
 	column OrderYearMonth
 		dataType: string
+		isHidden
 		lineageTag: 124810d9-0ae6-4672-8b73-29e4801b3c41
 		summarizeBy: none
 		sourceColumn: OrderYearMonth

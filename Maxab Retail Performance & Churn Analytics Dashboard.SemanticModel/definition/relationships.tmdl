@@ -1,8 +1,10 @@
 relationship 47a00d0d-8b86-e0d4-08ef-1fa22b9a88c6
+	relyOnReferentialIntegrity
 	fromColumn: Fact_Order.Created
 	toColumn: Dim_Date.Date
 
 relationship eb31b42c-a4b1-c068-98a6-9181c1f1dcf5
+	relyOnReferentialIntegrity
 	fromColumn: Fact_OrderLines.OrderCreation
 	toColumn: Dim_Date.Date
 
@@ -11,26 +13,32 @@ relationship e66adf45-4f9c-296d-4ee1-bde9ae9a2a80
 	toColumn: Dim_Brand.Brand
 
 relationship 2fb66622-4f70-5841-9fc0-8518fb2d2204
+	relyOnReferentialIntegrity
 	fromColumn: Fact_OrderLines.ProductID
 	toColumn: Dim_Product.ProductID
 
 relationship d2ab882c-45c7-5823-8ab7-558d2ad600c9
+	relyOnReferentialIntegrity
 	fromColumn: Fact_Order.Region
 	toColumn: Dim_Region.Region
 
 relationship 4b804d96-c2fb-c61a-8864-c444ae8322e3
+	relyOnReferentialIntegrity
 	fromColumn: Fact_Order.Channel
 	toColumn: Dim_Channel.Channel
 
 relationship 109d9c82-86a5-91c4-9412-54e816fcae8f
+	relyOnReferentialIntegrity
 	fromColumn: Fact_Order.RetailerID
 	toColumn: Dim_Retailer.RetailerID
 
 relationship 9d4a0fcc-d2e4-ec88-8e66-25b8221be296
+	relyOnReferentialIntegrity
 	fromColumn: Fact_MaxabNMV.MonthDate
 	toColumn: Dim_Date.Date
 
 relationship f1410ad0-90ec-bb1c-feca-784edc2f017e
+	relyOnReferentialIntegrity
 	fromColumn: Fact_JuiceNMV.MonthDate
 	toColumn: Dim_Date.Date
 

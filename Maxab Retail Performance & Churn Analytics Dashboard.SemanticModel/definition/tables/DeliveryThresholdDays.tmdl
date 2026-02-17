@@ -1,0 +1,15 @@
+/// What-If parameter: controls the SLA threshold (in working days) used in SLA Status and Delivery SLA measures. Default = 2. Connect a slicer to 'Delivery Threshold Days' column.
+table DeliveryThresholdDays
+	lineageTag: 581f8e21-b45a-4d62-8c43-cb9dc8442488
+
+	/// SLA working-day threshold — connect a slicer to this column. Default = 2 days.
+	column 'Delivery Threshold Days'
+		formatString: 0
+		lineageTag: 7fe7ec08-23e4-4f6f-8a75-49dc61da028d
+		isNameInferred
+		sourceColumn: [Delivery Threshold Days]
+
+	partition DeliveryThresholdDays-Partition = calculated
+		mode: import
+		source = SELECTCOLUMNS(GENERATESERIES(1, 7, 1), "Delivery Threshold Days", [Value])
+

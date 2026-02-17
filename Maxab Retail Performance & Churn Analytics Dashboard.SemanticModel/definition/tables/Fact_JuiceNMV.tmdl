@@ -20,8 +20,10 @@ table Fact_JuiceNMV
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// Cardinality = 1, no analytical value
 	column Category
 		dataType: string
+		isHidden
 		lineageTag: 9357a887-0e89-416c-8a90-187cc395b21b
 		summarizeBy: none
 		sourceColumn: Category

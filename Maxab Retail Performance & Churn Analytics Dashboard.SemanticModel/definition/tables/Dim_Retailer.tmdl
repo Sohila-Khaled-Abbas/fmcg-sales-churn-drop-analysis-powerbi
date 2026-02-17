@@ -11,11 +11,14 @@ table Dim_Retailer
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Redundant — Region available in Dim_Region
 	column Region
 		dataType: string
 		lineageTag: 81b33203-e3d0-4a70-be81-cc437a5d61ab
 		summarizeBy: none
 		sourceColumn: Region
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
