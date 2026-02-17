@@ -824,9 +824,11 @@ table MeasureLibrary
 		lineageTag: 831afb34-b116-434b-bc52-b685b1d9b2c1
 
 	/// Dynamic page subtitle for P3 — includes live churn window value.
-	measure 'Page Subtitle P3' = "RETAILER LIFECYCLE  ·  CHURN WINDOW: " & [Churn Lookback Months Value] & " MONTHS  ·  " & SELECTEDVALUE(Dim_Date[YearMonth],"YTD 2025")
+	measure 'Page Subtitle P3' = "RETAILER LIFECYCLE  ·  CHURN WINDOW: " & [Churn Lookback Months Value] & " MONTHS  ·  " & SELECTEDVALUE(Dim_Date[YearMonth],"YTD 2024")
 		displayFolder: Page Subtitles
 		lineageTag: 29b98d8f-2eb3-4bde-af15-bba37811be92
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column Column
 		isHidden
