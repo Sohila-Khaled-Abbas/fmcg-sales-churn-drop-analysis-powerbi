@@ -1,0 +1,40 @@
+/// Scaffold table for the Cohort Retention Matrix on Page 3. Cross-join of distinct order months × offsets 0-4. Use as rows/columns in a Matrix visual with [Cohort Retention %] as values.
+table Cohort_Matrix
+	lineageTag: f9d9b0ed-aa07-4673-9fc0-fbe7f0a94a15
+
+	/// Cohort month in YYYY-MM format. Use as rows in the Matrix visual.
+	column CohortMonth
+		lineageTag: a190767d-8bee-499f-a43c-6db2670d9540
+		isNameInferred
+		sourceColumn: [CohortMonth]
+
+	/// Months since first order (0=acquisition month, 1=M+1, etc). Use as columns in Matrix.
+	column MonthOffset
+		formatString: "M+"0
+		lineageTag: 77b42146-6e9c-4d0c-9d94-6950a705f3ff
+		isNameInferred
+		sourceColumn: [MonthOffset]
+
+	partition Cohort_Matrix-Partition = calculated
+		mode: import
+		source = ```
+				
+				CROSSJOIN(
+				    SELECTCOLUMNS(
+				        SUMMARIZE(
+				            ADDCOLUMNS(
+				                SUMMARIZE(ALL(Fact_Order), Fact_Order[RetailerID]),
+				                "FirstMonth", FORMAT(CALCULATE(MIN(Fact_Order[Created]), ALL(Dim_Date)), "YYYY-MM")
+				            ),
+				            [FirstMonth]
+				        ),
+				        "CohortMonth", [FirstMonth]
+				    ),
+				    SELECTCOLUMNS(
+				        GENERATESERIES(0, 4, 1),
+				        "MonthOffset", [Value]
+				    )
+				)
+				
+				```
+

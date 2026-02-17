@@ -1,0 +1,71 @@
+{
+  "name": "Maxab Analytics Dark",
+  "dataColors": ["#f5a623","#2dd4bf","#60a5fa","#4ade80","#f87171","#a78bfa","#fb923c","#e2e8f0"],
+  "background":  "#0b0d0f",
+  "foreground":  "#c8cdd4",
+  "tableAccent": "#f5a623",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "fontFamily":  [{ "value": "DM Sans" }],
+        "fontSize":    [{ "value": 11 }],
+        "background":  [{ "color": { "solid": { "color": "#111418" } } }],
+        "foreground":  [{ "color": { "solid": { "color": "#c8cdd4" } } }],
+        "border":      [{ "color": { "solid": { "color": "#1e2328" } }, "show": true }]
+      }
+    },
+    "card": {
+      "*": {
+        "background":     [{ "color": { "solid": { "color": "#111418" } } }],
+        "dataLabels":     [{ "color": { "solid": { "color": "#ffffff" } }, "fontFamily": "Syne", "fontSize": 22, "fontWeight": "bold" }],
+        "categoryLabels": [{ "color": { "solid": { "color": "#5a6370" } }, "fontFamily": "IBM Plex Mono", "fontSize": 9 }]
+      }
+    },
+    "lineChart": {
+      "*": {
+        "background":   [{ "color": { "solid": { "color": "#111418" } } }],
+        "plotArea":     [{ "background": { "color": { "solid": { "color": "#0b0d0f" } } } }],
+        "gridlines":    [{ "color": { "solid": { "color": "#1e2328" } } }],
+        "axisLabels":   [{ "color": { "solid": { "color": "#5a6370" } }, "fontFamily": "IBM Plex Mono", "fontSize": 9 }]
+      }
+    },
+    "barChart": {
+      "*": {
+        "background":   [{ "color": { "solid": { "color": "#111418" } } }],
+        "plotArea":     [{ "background": { "color": { "solid": { "color": "#0b0d0f" } } } }],
+        "gridlines":    [{ "color": { "solid": { "color": "#1e2328" } } }],
+        "axisLabels":   [{ "color": { "solid": { "color": "#5a6370" } }, "fontFamily": "IBM Plex Mono", "fontSize": 9 }]
+      }
+    },
+    "matrix": {
+      "*": {
+        "background":      [{ "color": { "solid": { "color": "#111418" } } }],
+        "gridlines":       [{ "color": { "solid": { "color": "#1e2328" } } }],
+        "rowHeaders":      [{ "color": { "solid": { "color": "#5a6370" } }, "fontFamily": "IBM Plex Mono", "fontSize": 9 }],
+        "columnHeaders":   [{ "color": { "solid": { "color": "#5a6370" } }, "fontFamily": "IBM Plex Mono", "fontSize": 9 }],
+        "values":          [{ "color": { "solid": { "color": "#ffffff" } }, "fontFamily": "IBM Plex Mono", "fontSize": 10 }]
+      }
+    },
+    "slicer": {
+      "*": {
+        "background":  [{ "color": { "solid": { "color": "#111418" } } }],
+        "fontFamily":  [{ "value": "IBM Plex Mono" }],
+        "fontSize":    [{ "value": 10 }],
+        "fontColor":   [{ "color": { "solid": { "color": "#5a6370" } } }]
+      }
+    },
+    "treemap": {
+      "*": {
+        "fontFamily": [{ "value": "Syne" }],
+        "fontSize":   [{ "value": 11 }]
+      }
+    }
+  },
+  "textClasses": {
+    "label":      { "fontFace": "IBM Plex Mono", "color": "#5a6370",  "fontSize": 9  },
+    "callout":    { "fontFace": "Syne",          "color": "#ffffff",  "fontSize": 22, "fontWeight": "bold" },
+    "title":      { "fontFace": "Syne",          "color": "#ffffff",  "fontSize": 14, "fontWeight": "bold" },
+    "header":     { "fontFace": "IBM Plex Mono", "color": "#5a6370",  "fontSize": 10, "fontWeight": "semibold" },
+    "smallLabel": { "fontFace": "IBM Plex Mono", "color": "#2a3038",  "fontSize": 8  }
+  }
+}

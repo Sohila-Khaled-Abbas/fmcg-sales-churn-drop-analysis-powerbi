@@ -47,6 +47,7 @@ ref table IconsCatalog
 ref table 'Data Dictionary'
 ref table DeliveryThresholdDays
 ref table ChurnLookbackMonths
+ref table Cohort_Matrix
 
 ref cultureInfo en-US
 

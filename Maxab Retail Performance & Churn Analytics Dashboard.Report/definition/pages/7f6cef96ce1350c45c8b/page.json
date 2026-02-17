@@ -3,8 +3,8 @@
   "name": "7f6cef96ce1350c45c8b",
   "displayName": "Executive Overview",
   "displayOption": "FitToPage",
-  "height": 1080,
-  "width": 1920,
+  "height": 900,
+  "width": 1400,
   "objects": {
     "displayArea": [
       {
@@ -13,6 +13,19 @@
             "expr": {
               "Literal": {
                 "Value": "'Middle'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "background": [
+      {
+        "properties": {
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
               }
             }
           }

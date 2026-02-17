@@ -303,19 +303,530 @@ table MeasureLibrary
 	measure 'Delivery Threshold Days Value' = SELECTEDVALUE('DeliveryThresholdDays'[Delivery Threshold Days], 2)
 		formatString: 0" days"
 		displayFolder: Parameters
+		lineageTag: d362e388-fd43-46c0-91a4-162c36533a26
 
 	/// Returns the selected churn lookback window from the slicer, defaulting to 3 months if no selection is made.
 	measure 'Churn Lookback Months Value' = SELECTEDVALUE('ChurnLookbackMonths'[Churn Lookback Months], 3)
 		formatString: 0" months"
 		displayFolder: Parameters
+		lineageTag: 7e971e0a-cb04-4ff0-afc2-9fb1dcfa3ce6
 
 	/// Dynamic card label showing the currently selected delivery SLA threshold
 	measure 'SLA Threshold Label' = "SLA Target: " & [Delivery Threshold Days Value] & " working days"
 		displayFolder: Parameters
+		lineageTag: 516f4534-0c87-4547-bf75-b9d9afb20f0a
 
 	/// Dynamic card label showing the currently selected churn lookback window
 	measure 'Churn Window Label' = "Churn Window: Last " & [Churn Lookback Months Value] & " months"
 		displayFolder: Parameters
+		lineageTag: 7e2daf20-b2c4-451a-94f7-3c65e4f40c78
+
+	/// Year-to-date total sales using DATESYTD on Dim_Date
+	measure 'Total Sales YTD' = CALCULATE([Total Sales], DATESYTD(Dim_Date[Date]))
+		formatString: #,0.0,," EGP"
+		displayFolder: P1 — Executive Overview
+		lineageTag: fb7be309-fd35-4c42-81a5-c3573a2994b4
+
+	/// Prior month Total Sales — used for MoM delta calculations
+	measure 'Total Sales PM' = CALCULATE([Total Sales], DATEADD(Dim_Date[Date], -1, MONTH))
+		formatString: #,0.0,," EGP"
+		displayFolder: P1 — Executive Overview
+		lineageTag: c161a444-12c3-4256-8831-c9229388ea64
+
+	/// Month-over-month % change in Total Sales
+	measure 'Total Sales MoM %' = DIVIDE([Total Sales] - [Total Sales PM], [Total Sales PM], 0)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: P1 — Executive Overview
+		lineageTag: 09bbd701-d259-4cda-98d7-39842f717e17
+
+	/// Prior month order count
+	measure 'Total Orders PM' = CALCULATE([Total Orders], DATEADD(Dim_Date[Date], -1, MONTH))
+		formatString: #,0
+		displayFolder: P1 — Executive Overview
+		lineageTag: 5be5d3c3-1a76-497f-91aa-e394788a0534
+
+	/// Month-over-month % change in Total Orders
+	measure 'Total Orders MoM %' = DIVIDE([Total Orders] - [Total Orders PM], [Total Orders PM], 0)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: P1 — Executive Overview
+		lineageTag: 3be0ba44-f204-4ecb-9e0f-00622a2796e1
+
+	/// Prior month active retailer count
+	measure 'Total Retailers PM' = CALCULATE([Total Retailers], DATEADD(Dim_Date[Date], -1, MONTH))
+		formatString: #,0
+		displayFolder: P1 — Executive Overview
+		lineageTag: ffd0bb43-7200-4e06-b3da-ca8e16e155d9
+
+	/// Month-over-month % change in active retailers
+	measure 'Total Retailers MoM %' = DIVIDE([Total Retailers] - [Total Retailers PM], [Total Retailers PM], 0)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: P1 — Executive Overview
+		lineageTag: 391183d9-98f5-41db-9c8f-ede5e8ce76dc
+
+	/// Prior month AOV
+	measure 'AOV PM' = CALCULATE([AOV], DATEADD(Dim_Date[Date], -1, MONTH))
+		formatString: #,0.00" EGP"
+		displayFolder: P1 — Executive Overview
+		lineageTag: 7510c9e5-b59c-4911-96fe-54e4a86c333a
+
+	/// Month-over-month % change in AOV
+	measure 'AOV MoM %' = DIVIDE([AOV] - [AOV PM], [AOV PM], 0)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: P1 — Executive Overview
+		lineageTag: f71f6e9e-6280-45e5-b827-402987c8906e
+
+	/// Prior month Success Rate %
+	measure 'Success Rate PM' = CALCULATE([Success Rate %], DATEADD(Dim_Date[Date], -1, MONTH))
+		formatString: 0.00%
+		displayFolder: P1 — Executive Overview
+		lineageTag: 4805592a-c2f3-4d41-a193-4fe0b5b4c1a4
+
+	/// Month-over-month change in Success Rate in percentage points (pp)
+	measure 'Success Rate MoM pp' = [Success Rate %] - [Success Rate PM]
+		formatString: +0.00pp;-0.00pp;0.00pp
+		displayFolder: P1 — Executive Overview
+		lineageTag: 5687d626-5468-4fbe-818e-8dad4bc100d9
+
+	/// Total net sales after discounts
+	measure 'Net Sales' = SUM(Fact_Order[NetSales])
+		formatString: #,0.0,," EGP"
+		displayFolder: P1 — Executive Overview
+		lineageTag: a2b6ec8c-e626-4c0d-a978-59d0af2fa4a7
+
+	/// Sum of all discounts applied across orders
+	measure 'Total Discount Amount' = SUM(Fact_Order[Discount Amount])
+		formatString: #,0.0,," EGP"
+		displayFolder: P1 — Executive Overview
+		lineageTag: a44abc5e-1c91-4e22-b501-96981cffe485
+
+	/// Percentage of orders that failed to deliver
+	measure 'Delay Rate %' = DIVIDE([Orders Fail], [Total Orders], 0)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: P2 — Performance & Delivery
+		lineageTag: 6dd2696b-2271-4092-8054-7f89bad920e5
+
+	/// Count of failed/delayed orders — alias for card visual on P2
+	measure 'Delayed Orders' = [Orders Fail]
+		formatString: #,0
+		displayFolder: P2 — Performance & Delivery
+		lineageTag: f3a060e7-7976-443a-a39a-64deeb9a373a
+
+	/// Count of orders delivered within the dynamic SLA threshold
+	measure 'On Time Orders' =
+			
+			VAR Threshold = [Delivery Threshold Days Value]
+			VAR DeliveredOrders =
+			    FILTER(Fact_Order, NOT ISBLANK(Fact_Order[Delivered]))
+			RETURN
+			COUNTROWS(
+			    FILTER(
+			        DeliveredOrders,
+			        CALCULATE(
+			            COUNTROWS(Dim_Date),
+			            DATESBETWEEN(Dim_Date[Date], Fact_Order[Created], Fact_Order[Delivered]),
+			            Dim_Date[IsWorkingDay] = 1
+			        ) <= Threshold
+			    )
+			)
+		formatString: #,0
+		displayFolder: P2 — Performance & Delivery
+		lineageTag: 322715f5-0115-4d66-b110-9abab878383c
+
+	/// Count of orders exceeding the dynamic SLA threshold (working days)
+	measure 'Late Orders' =
+			
+			VAR Threshold = [Delivery Threshold Days Value]
+			VAR DeliveredOrders =
+			    FILTER(Fact_Order, NOT ISBLANK(Fact_Order[Delivered]))
+			RETURN
+			COUNTROWS(
+			    FILTER(
+			        DeliveredOrders,
+			        CALCULATE(
+			            COUNTROWS(Dim_Date),
+			            DATESBETWEEN(Dim_Date[Date], Fact_Order[Created], Fact_Order[Delivered]),
+			            Dim_Date[IsWorkingDay] = 1
+			        ) > Threshold
+			    )
+			)
+		formatString: #,0
+		displayFolder: P2 — Performance & Delivery
+		lineageTag: 4a98da4c-3b67-43e1-a743-f82edd77129a
+
+	/// Human-readable average delivery label for card visual
+	measure 'Delivery SLA (Working Days) Format' = FORMAT([Delivery SLA (Working Days)], "0.0") & " days avg"
+		displayFolder: P2 — Performance & Delivery
+		lineageTag: e73c88bd-3199-47cf-8a5d-da9f33dd7395
+
+	/// Delta between current success rate and the 86% target. Negative = below target.
+	measure 'Success Rate vs Target' = [Success Rate %] - 0.86
+		formatString: +0.00pp;-0.00pp;0.00pp
+		displayFolder: P2 — Performance & Delivery
+		lineageTag: 63bf0af0-5af3-4034-a6f0-5650999ddeaa
+
+	/// Average working-day delivery per DayOfWeek×WeekOfMonth cell. Drop into Matrix rows=DayOfWeek, cols=WeekOfMonth for the heatmap.
+	measure 'Heatmap Avg Delivery' =
+			
+			CALCULATE(
+			    AVERAGEX(
+			        FILTER(Fact_Order, NOT ISBLANK(Fact_Order[Delivered])),
+			        CALCULATE(
+			            COUNTROWS(Dim_Date),
+			            DATESBETWEEN(Dim_Date[Date], Fact_Order[Created], Fact_Order[Delivered]),
+			            Dim_Date[IsWorkingDay] = 1
+			        )
+			    )
+			)
+		formatString: 0.0
+		displayFolder: P2 — Performance & Delivery
+		lineageTag: fbbc8465-623e-4b03-97db-171729f9aa2d
+
+	/// Net change in retailer base = new activations minus churned retailers. Positive = growing base.
+	measure 'Net Retailer Growth' = [Activation Retailers] - [Churned Retailers]
+		formatString: +#,0;-#,0;0
+		displayFolder: P3 — Churn & Activation
+		lineageTag: e79ed158-8684-4d8a-a9b6-9d2054c14e39
+
+	/// Percentage of prior-period retailers who remained active (complement of Churn Rate %)
+	measure 'Retailer Retention Rate %' = 1 - [Churn Rate %]
+		formatString: 0.00%
+		displayFolder: P3 — Churn & Activation
+		lineageTag: 7fb928fc-366c-43c1-a8e9-ec5e842cd4b1
+
+	/// New activations as a share of total active retailers in period
+	measure 'Activation Rate %' = DIVIDE([Activation Retailers], [Total Retailers], 0)
+		formatString: 0.00%
+		displayFolder: P3 — Churn & Activation
+		lineageTag: 860eb40c-e3ee-4aff-843a-bfcfc53717cb
+
+	/// Cohort retention rate for Matrix visual. Rows=CohortMonth, Cols=MonthOffset (0–4). Use conditional formatting green→red.
+	measure 'Cohort Retention %' =
+			
+			VAR CohortMonth   = SELECTEDVALUE('Cohort_Matrix'[CohortMonth])
+			VAR MonthOffset   = SELECTEDVALUE('Cohort_Matrix'[MonthOffset])
+			VAR CohortStart   = DATEVALUE(CohortMonth & "-01")
+			VAR CohortEnd     = EOMONTH(CohortStart, 0)
+			VAR OffsetStart   = EOMONTH(CohortStart, MonthOffset - 1) + 1
+			VAR OffsetEnd     = EOMONTH(CohortStart, MonthOffset)
+			
+			VAR RetailersInCohort =
+			    CALCULATETABLE(
+			        VALUES(Fact_Order[RetailerID]),
+			        Fact_Order[Created] >= CohortStart,
+			        Fact_Order[Created] <= CohortEnd,
+			        CALCULATE(MIN(Fact_Order[Created]), ALL(Dim_Date)) >= CohortStart,
+			        CALCULATE(MIN(Fact_Order[Created]), ALL(Dim_Date)) <= CohortEnd
+			    )
+			
+			VAR RetainedInOffset =
+			    CALCULATETABLE(
+			        VALUES(Fact_Order[RetailerID]),
+			        Fact_Order[Created] >= OffsetStart,
+			        Fact_Order[Created] <= OffsetEnd
+			    )
+			
+			VAR Retained = INTERSECT(RetailersInCohort, RetainedInOffset)
+			
+			RETURN
+			IF(
+			    MonthOffset = 0,
+			    1,
+			    DIVIDE(COUNTROWS(Retained), COUNTROWS(RetailersInCohort), BLANK())
+			)
+		formatString: 0%
+		displayFolder: P3 — Churn & Activation
+		lineageTag: 003d7088-e730-4c29-876f-46ad44d0d37c
+
+	/// Number of retailers in the cohort (first-order count per cohort month)
+	measure 'Cohort Size' =
+			
+			VAR CohortMonth = SELECTEDVALUE('Cohort_Matrix'[CohortMonth])
+			VAR CohortStart = DATEVALUE(CohortMonth & "-01")
+			VAR CohortEnd   = EOMONTH(CohortStart, 0)
+			RETURN
+			CALCULATETABLE(
+			    SUMMARIZE(
+			        FILTER(
+			            ADDCOLUMNS(
+			                SUMMARIZE(ALL(Fact_Order), Fact_Order[RetailerID]),
+			                "FirstDate", CALCULATE(MIN(Fact_Order[Created]), ALL(Dim_Date))
+			            ),
+			            [FirstDate] >= CohortStart && [FirstDate] <= CohortEnd
+			        ),
+			        Fact_Order[RetailerID]
+			    ),
+			    COUNTROWS
+			)
+		displayFolder: P3 — Churn & Activation
+		lineageTag: f0eb0200-214f-45ca-899e-5bc34856fb6c
+
+	/// Total order-line sales for May 2025 Week 1
+	measure 'May Wk1 Sales' = CALCULATE(SUM(Fact_OrderLines[Sales]), Dim_Date[YearMonth] = "2024-05", Dim_Date[WeekOfMonth] = 1)
+		formatString: #,0.0" EGP"
+		displayFolder: P4 — Drop Analysis
+		lineageTag: fecf4116-c465-4204-935e-45f2c4c018a7
+
+	/// Total order-line sales for May 2025 Week 2
+	measure 'May Wk2 Sales' = CALCULATE(SUM(Fact_OrderLines[Sales]), Dim_Date[YearMonth] = "2024-05", Dim_Date[WeekOfMonth] = 2)
+		formatString: #,0.0" EGP"
+		displayFolder: P4 — Drop Analysis
+		lineageTag: 468ab0e7-4321-4e4a-97b3-5a8ee0fb5c4b
+
+	/// Total order-line sales for May 2025 Week 3 (lowest week)
+	measure 'May Wk3 Sales' = CALCULATE(SUM(Fact_OrderLines[Sales]), Dim_Date[YearMonth] = "2024-05", Dim_Date[WeekOfMonth] = 3)
+		formatString: #,0.0" EGP"
+		displayFolder: P4 — Drop Analysis
+		lineageTag: f5056928-3f02-4419-aeb5-6b12dff9ac63
+
+	/// Total order-line sales for May 2025 Week 4
+	measure 'May Wk4 Sales' = CALCULATE(SUM(Fact_OrderLines[Sales]), Dim_Date[YearMonth] = "2024-05", Dim_Date[WeekOfMonth] = 4)
+		formatString: #,0.0" EGP"
+		displayFolder: P4 — Drop Analysis
+		lineageTag: beda723f-b518-48d2-bb0f-c08a17fe0773
+
+	/// Absolute sales change from Week 2 to Week 3 in May
+	measure 'May Wk3 vs Wk2 Delta' = [May Wk3 Sales] - [May Wk2 Sales]
+		formatString: +#,0.0" EGP";-#,0.0" EGP";0
+		displayFolder: P4 — Drop Analysis
+		lineageTag: 0b9fa195-edc8-4a7f-94f9-f1ffa15858f6
+
+	/// % change Wk2→Wk3 in May. Negative = drop.
+	measure 'May Wk3 vs Wk2 Delta %' = DIVIDE([May Wk3 Sales] - [May Wk2 Sales], [May Wk2 Sales], 0)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: P4 — Drop Analysis
+		lineageTag: 31f3429b-69cd-45e1-b79c-a1371dc932a3
+
+	/// SKU-level May Wk2 sales — use in Table visual on P4 with Dim_Product[SKU] as row
+	measure 'SKU Sales Wk2' = CALCULATE([May Wk2 Sales])
+		formatString: #,0.0" EGP"
+		displayFolder: P4 — Drop Analysis
+		lineageTag: 7e0ae4ff-4707-436c-9ec7-00e20706f3c5
+
+	/// SKU-level May Wk3 sales — sort ASC to surface biggest drops at top
+	measure 'SKU Sales Wk3' = CALCULATE([May Wk3 Sales])
+		formatString: #,0.0" EGP"
+		displayFolder: P4 — Drop Analysis
+		lineageTag: 9fb8001f-202a-44b9-b165-74fae2c81c81
+
+	/// Absolute sales delta per SKU between Wk2 and Wk3. Sort ASC for drop table.
+	measure 'SKU Drop Delta' = [SKU Sales Wk3] - [SKU Sales Wk2]
+		formatString: +#,0.0" EGP";-#,0.0" EGP";0
+		displayFolder: P4 — Drop Analysis
+		lineageTag: 7dfa7e81-af0f-42dd-b1b8-43778cd475a3
+
+	/// % change per SKU Wk2→Wk3. Apply conditional formatting red < 0.
+	measure 'SKU Drop Delta %' = DIVIDE([SKU Sales Wk3] - [SKU Sales Wk2], [SKU Sales Wk2], 0)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: P4 — Drop Analysis
+		lineageTag: 7b9c42d1-ad80-4b6c-86b6-72d57296bb38
+
+	/// Text label identifying the lowest-sales week in May. Drop into a Card visual.
+	measure 'Lowest Week Label' =
+			
+			VAR W1 = [May Wk1 Sales]
+			VAR W2 = [May Wk2 Sales]
+			VAR W3 = [May Wk3 Sales]
+			VAR W4 = [May Wk4 Sales]
+			VAR MinSales = MINX({W1,W2,W3,W4}, [Value])
+			RETURN
+			SWITCH(TRUE(),
+			    MinSales = W1, "Week 1",
+			    MinSales = W2, "Week 2",
+			    MinSales = W3, "Week 3",
+			    MinSales = W4, "Week 4"
+			)
+		displayFolder: P4 — Drop Analysis
+		lineageTag: 3d1549df-47cd-4bcb-a8cb-20eb832fa203
+
+	/// Non-juice NMV = Total NMV minus Juice NMV. Use as stack base in stacked column chart.
+	measure 'Other NMV' = [Total NMV] - [Juice NMV]
+		formatString: #,0.0,," EGP"
+		displayFolder: P5 — Commercial / Juice
+		lineageTag: 8e045d7c-12e8-4f28-a350-a905a77b6397
+
+	/// Prior month Juice NMV
+	measure 'Juice NMV PM' = CALCULATE([Juice NMV], DATEADD(Dim_Date[Date], -1, MONTH))
+		formatString: #,0.0,," EGP"
+		displayFolder: P5 — Commercial / Juice
+		lineageTag: 09fa5072-4e0d-4b3d-8d90-101f91f7cf12
+
+	/// Month-over-month % change in Juice NMV
+	measure 'Juice NMV MoM %' = DIVIDE([Juice NMV] - [Juice NMV PM], [Juice NMV PM], 0)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: P5 — Commercial / Juice
+		lineageTag: ff1dd137-8338-4a7d-9482-78bc120b2342
+
+	/// Prior month Juice Share %
+	measure 'Juice Share PM' = CALCULATE([Juice Share %], DATEADD(Dim_Date[Date], -1, MONTH))
+		formatString: 0.00%
+		displayFolder: P5 — Commercial / Juice
+		lineageTag: e9f7f058-a5ed-47bf-8b79-1dd11bbb1543
+
+	/// Month-over-month change in Juice share in percentage points
+	measure 'Juice Share MoM pp' = [Juice Share %] - [Juice Share PM]
+		formatString: +0.00pp;-0.00pp;0.00pp
+		displayFolder: P5 — Commercial / Juice
+		lineageTag: d630fcd1-285d-45bb-8a27-a447a88358da
+
+	/// Text name of the brand with highest Juice NMV in the selected period. Use in Card visual.
+	measure 'Top Brand Name' =
+			
+			VAR BrandSales =
+			    ADDCOLUMNS(
+			        ALL(Dim_Brand[Brand]),
+			        "BrandNMV", CALCULATE([Juice NMV])
+			    )
+			RETURN
+			MAXX(
+			    TOPN(1, BrandSales, [BrandNMV], DESC),
+			    Dim_Brand[Brand]
+			)
+		displayFolder: P5 — Commercial / Juice
+		lineageTag: 29b0f060-dda5-4961-8352-34120368b167
+
+	/// Combined NMV share of the top 3 juice brands. Shows market concentration.
+	measure 'Top 3 Brands NMV Share' =
+			
+			VAR Top3 =
+			    TOPN(
+			        3,
+			        ALL(Dim_Brand[Brand]),
+			        CALCULATE([Juice NMV]),
+			        DESC
+			    )
+			RETURN
+			DIVIDE(
+			    CALCULATE([Juice NMV], KEEPFILTERS(Top3)),
+			    CALCULATE([Juice NMV], ALL(Dim_Brand[Brand])),
+			    0
+			)
+		formatString: 0.0%
+		displayFolder: P5 — Commercial / Juice
+		lineageTag: caaf4721-6c27-4592-a532-0d541a727e3d
+
+	/// Juice NMV per brand — use in Treemap and Small Multiples with Dim_Brand[Brand] as axis/legend
+	measure 'Brand NMV' = SUM(Fact_JuiceNMV[Sales])
+		formatString: #,0.0,," EGP"
+		displayFolder: P5 — Commercial / Juice
+		lineageTag: f822d528-5b33-460b-8bcd-29697124ed74
+
+	/// Multi-line tooltip text for KPI card visuals. Drop into tooltip field on New Card.
+	measure 'KPI Card Tooltip' =
+			
+			"Period: " & SELECTEDVALUE(Dim_Date[YearMonth], "All") & UNICHAR(10) &
+			"Sales: " & FORMAT([Total Sales], "#,0 EGP") & UNICHAR(10) &
+			"Orders: " & FORMAT([Total Orders], "#,0") & UNICHAR(10) &
+			"AOV: " & FORMAT([AOV], "#,0 EGP") & UNICHAR(10) &
+			"Success Rate: " & FORMAT([Success Rate %], "0.0%")
+		displayFolder: Tooltips
+		lineageTag: 57bff383-2fd9-4f16-9eb7-585338318bfe
+
+	/// Tooltip for delivery visuals on Page 2
+	measure 'Delivery Tooltip' =
+			
+			"Avg Delivery: " & FORMAT([Delivery SLA (Working Days)], "0.0") & " working days" & UNICHAR(10) &
+			"SLA Target: " & [Delivery Threshold Days Value] & " days" & UNICHAR(10) &
+			"On Time: " & FORMAT([SLA Status], "0.0%") & UNICHAR(10) &
+			"Late Orders: " & FORMAT([Late Orders], "#,0")
+		displayFolder: Tooltips
+		lineageTag: 3b5cc9a6-9a86-42eb-af97-308cf6b182b5
+
+	/// Tooltip for churn visuals on Page 3
+	measure 'Churn Tooltip' =
+			
+			"Active Retailers: " & FORMAT([Active Retailers], "#,0") & UNICHAR(10) &
+			"Churned: " & FORMAT([Churned Retailers], "#,0") & UNICHAR(10) &
+			"Churn Rate: " & FORMAT([Churn Rate %], "0.0%") & UNICHAR(10) &
+			"Lookback: " & [Churn Lookback Months Value] & " months"
+		displayFolder: Tooltips
+		lineageTag: 60de2655-eb7a-4c5e-81d5-0511f86f6682
+
+	/// Hex color for conditional formatting on Sales delta cards. Plug into Format → Conditional format → Field value.
+	measure 'CF Sales Color' =
+			
+			VAR Delta = [Total Sales MoM %]
+			RETURN
+			SWITCH(TRUE(),
+			    Delta > 0.05,  "#4ade80",
+			    Delta > 0,     "#a3e635",
+			    Delta > -0.05, "#fb923c",
+			    "#f87171"
+			)
+		displayFolder: Conditional Format Colors
+		lineageTag: fb0f25ad-706c-4f9c-9ac2-09947d669e00
+
+	/// Hex color for conditional formatting on Churn Rate. Green < 5%, orange 5–10%, red > 10%.
+	measure 'CF Churn Color' =
+			
+			VAR Rate = [Churn Rate %]
+			RETURN
+			SWITCH(TRUE(),
+			    Rate < 0.05,  "#4ade80",
+			    Rate < 0.10,  "#fb923c",
+			    "#f87171"
+			)
+		displayFolder: Conditional Format Colors
+		lineageTag: e2a4aebc-49d2-415d-9655-784e4a0debb4
+
+	/// Hex color for SLA Status card. Green ≥ 90%, orange 85–90%, red < 85%.
+	measure 'CF SLA Color' =
+			
+			VAR Rate = [SLA Status]
+			RETURN
+			SWITCH(TRUE(),
+			    Rate >= 0.90, "#4ade80",
+			    Rate >= 0.85, "#fb923c",
+			    "#f87171"
+			)
+		displayFolder: Conditional Format Colors
+		lineageTag: d7a0a065-2bd2-4b51-8b6e-17540b6618d6
+
+	/// Cell background color for the Delivery Heatmap matrix. Apply to background via conditional formatting → Field value.
+	measure 'CF Delivery Heatmap' =
+			
+			VAR Avg = [Heatmap Avg Delivery]
+			RETURN
+			SWITCH(TRUE(),
+			    ISBLANK(Avg),  "#111418",
+			    Avg <= 1.5,    "#166534",
+			    Avg <= 2.0,    "#4ade80",
+			    Avg <= 2.5,    "#ca8a04",
+			    Avg <= 3.0,    "#f97316",
+			    "#dc2626"
+			)
+		displayFolder: Conditional Format Colors
+		lineageTag: 17bef36e-891e-473d-b336-5b4ef51c4ed3
+
+	/// Cell color for Cohort retention matrix. Apply as background conditional format → Field value.
+	measure 'CF Cohort Color' =
+			
+			VAR Rate = [Cohort Retention %]
+			RETURN
+			SWITCH(TRUE(),
+			    ISBLANK(Rate), "#111418",
+			    Rate >= 0.75,  "#166534",
+			    Rate >= 0.60,  "#4ade80",
+			    Rate >= 0.45,  "#ca8a04",
+			    Rate >= 0.30,  "#f97316",
+			    "#dc2626"
+			)
+		displayFolder: Conditional Format Colors
+		lineageTag: 918e61fb-e7c7-4ea5-9d8c-a222d1ddd2b0
+
+	/// Dynamic page subtitle for P1. Drop into a Card or Text Box visual at the top of the page.
+	measure 'Page Subtitle P1' = "RETAIL PERFORMANCE SUMMARY  ·  " & SELECTEDVALUE(Dim_Date[YearMonth],"YTD 2025") & "  ·  " & SELECTEDVALUE(Dim_Region[Region],"ALL REGIONS") & "  ·  " & SELECTEDVALUE(Dim_Channel[Channel],"ALL CHANNELS")
+		displayFolder: Page Subtitles
+		lineageTag: 08f09fd5-fdbb-47b6-a3d0-a9b414d7ff64
+
+	/// Dynamic page subtitle for P2 — includes live SLA parameter value.
+	measure 'Page Subtitle P2' = "OPERATIONAL KPIs  ·  SLA THRESHOLD: " & [Delivery Threshold Days Value] & " WORKING DAYS  ·  " & SELECTEDVALUE(Dim_Region[Region],"ALL REGIONS")
+		displayFolder: Page Subtitles
+		lineageTag: 831afb34-b116-434b-bc52-b685b1d9b2c1
+
+	/// Dynamic page subtitle for P3 — includes live churn window value.
+	measure 'Page Subtitle P3' = "RETAILER LIFECYCLE  ·  CHURN WINDOW: " & [Churn Lookback Months Value] & " MONTHS  ·  " & SELECTEDVALUE(Dim_Date[YearMonth],"YTD 2025")
+		displayFolder: Page Subtitles
+		lineageTag: 29b98d8f-2eb3-4bde-af15-bba37811be92
 
 	column Column
 		isHidden
