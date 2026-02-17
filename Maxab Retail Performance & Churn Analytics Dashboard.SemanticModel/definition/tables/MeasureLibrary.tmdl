@@ -500,24 +500,32 @@ table MeasureLibrary
 		lineageTag: 860eb40c-e3ee-4aff-843a-bfcfc53717cb
 
 	/// Cohort retention rate for Matrix visual. Rows=CohortMonth, Cols=MonthOffset (0–4). Use conditional formatting green→red.
-	measure 'Cohort Retention %' =
+	measure 'Cohort Retention %' = ```
 			
-			VAR CohortMonth   = SELECTEDVALUE('Cohort_Matrix'[CohortMonth])
-			VAR MonthOffset   = SELECTEDVALUE('Cohort_Matrix'[MonthOffset])
-			VAR CohortStart   = DATEVALUE(CohortMonth & "-01")
-			VAR CohortEnd     = EOMONTH(CohortStart, 0)
-			VAR OffsetStart   = EOMONTH(CohortStart, MonthOffset - 1) + 1
-			VAR OffsetEnd     = EOMONTH(CohortStart, MonthOffset)
+			VAR CohortMonth = SELECTEDVALUE('Cohort_Matrix'[CohortMonth])
+			VAR MonthOffset = SELECTEDVALUE('Cohort_Matrix'[MonthOffset])
 			
+			VAR CohortStart = DATEVALUE(CohortMonth & "-01")
+			VAR CohortEnd   = EOMONTH(CohortStart, 0)
+			
+			VAR OffsetStart = EOMONTH(CohortStart, MonthOffset - 1) + 1
+			VAR OffsetEnd   = EOMONTH(CohortStart, MonthOffset)
+			
+			-- 1️⃣ Get retailers whose FIRST order is inside cohort month
 			VAR RetailersInCohort =
-			    CALCULATETABLE(
+			    FILTER(
 			        VALUES(Fact_Order[RetailerID]),
-			        Fact_Order[Created] >= CohortStart,
-			        Fact_Order[Created] <= CohortEnd,
-			        CALCULATE(MIN(Fact_Order[Created]), ALL(Dim_Date)) >= CohortStart,
-			        CALCULATE(MIN(Fact_Order[Created]), ALL(Dim_Date)) <= CohortEnd
+			        VAR FirstOrderDate =
+			            CALCULATE(
+			                MIN(Fact_Order[Created]),
+			                ALL(Fact_Order)
+			            )
+			        RETURN
+			            FirstOrderDate >= CohortStart &&
+			            FirstOrderDate <= CohortEnd
 			    )
 			
+			-- 2️⃣ Retailers active in offset month
 			VAR RetainedInOffset =
 			    CALCULATETABLE(
 			        VALUES(Fact_Order[RetailerID]),
@@ -525,40 +533,56 @@ table MeasureLibrary
 			        Fact_Order[Created] <= OffsetEnd
 			    )
 			
-			VAR Retained = INTERSECT(RetailersInCohort, RetainedInOffset)
+			-- 3️⃣ Intersection
+			VAR Retained =
+			    INTERSECT(
+			        RetailersInCohort,
+			        RetainedInOffset
+			    )
 			
 			RETURN
 			IF(
 			    MonthOffset = 0,
 			    1,
-			    DIVIDE(COUNTROWS(Retained), COUNTROWS(RetailersInCohort), BLANK())
+			    DIVIDE(
+			        COUNTROWS(Retained),
+			        COUNTROWS(RetailersInCohort)
+			    )
 			)
+			
+			```
 		formatString: 0%
 		displayFolder: P3 — Churn & Activation
 		lineageTag: 003d7088-e730-4c29-876f-46ad44d0d37c
 
 	/// Number of retailers in the cohort (first-order count per cohort month)
-	measure 'Cohort Size' =
+	measure 'Cohort Size' = ```
 			
 			VAR CohortMonth = SELECTEDVALUE('Cohort_Matrix'[CohortMonth])
 			VAR CohortStart = DATEVALUE(CohortMonth & "-01")
 			VAR CohortEnd   = EOMONTH(CohortStart, 0)
+			
+			VAR RetailersInCohort =
+			    FILTER(
+			        VALUES(Fact_Order[RetailerID]),
+			        VAR FirstOrderDate =
+			            CALCULATE(
+			                MIN(Fact_Order[Created]),
+			                ALL(Fact_Order)
+			            )
+			        RETURN
+			            FirstOrderDate >= CohortStart &&
+			            FirstOrderDate <= CohortEnd
+			    )
+			
 			RETURN
-			CALCULATETABLE(
-			    SUMMARIZE(
-			        FILTER(
-			            ADDCOLUMNS(
-			                SUMMARIZE(ALL(Fact_Order), Fact_Order[RetailerID]),
-			                "FirstDate", CALCULATE(MIN(Fact_Order[Created]), ALL(Dim_Date))
-			            ),
-			            [FirstDate] >= CohortStart && [FirstDate] <= CohortEnd
-			        ),
-			        Fact_Order[RetailerID]
-			    ),
-			    COUNTROWS
-			)
+			COUNTROWS(RetailersInCohort)
+			
+			```
 		displayFolder: P3 — Churn & Activation
 		lineageTag: f0eb0200-214f-45ca-899e-5bc34856fb6c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	/// Total order-line sales for May 2025 Week 1
 	measure 'May Wk1 Sales' = CALCULATE(SUM(Fact_OrderLines[Sales]), Dim_Date[YearMonth] = "2024-05", Dim_Date[WeekOfMonth] = 1)
@@ -782,20 +806,28 @@ table MeasureLibrary
 		lineageTag: d7a0a065-2bd2-4b51-8b6e-17540b6618d6
 
 	/// Cell background color for the Delivery Heatmap matrix. Apply to background via conditional formatting → Field value.
-	measure 'CF Delivery Heatmap' =
+	measure 'CF Delivery Heatmap' = ```
 			
-			VAR Avg = [Heatmap Avg Delivery]
+			VAR x = [Heatmap Avg Delivery]
 			RETURN
-			SWITCH(TRUE(),
-			    ISBLANK(Avg),  "#111418",
-			    Avg <= 1.5,    "#166534",
-			    Avg <= 2.0,    "#4ade80",
-			    Avg <= 2.5,    "#ca8a04",
-			    Avg <= 3.0,    "#f97316",
-			    "#dc2626"
+			IF(
+			    ISBLANK(x),
+			    "#111418",
+			    SWITCH(
+			        TRUE(),
+			        x <= 1.5, "#166534",
+			        x <= 2.0, "#4ade80",
+			        x <= 2.5, "#ca8a04",
+			        x <= 3.0, "#f97316",
+			        "#dc2626"
+			    )
 			)
+			
+			```
 		displayFolder: Conditional Format Colors
 		lineageTag: 17bef36e-891e-473d-b336-5b4ef51c4ed3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	/// Cell color for Cohort retention matrix. Apply as background conditional format → Field value.
 	measure 'CF Cohort Color' =
