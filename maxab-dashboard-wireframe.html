@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maxab Analytics — Dashboard Wireframe</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0b0d0f;
+    --surface:   #111418;
+    --border:    #1e2328;
+    --border2:   #2a3038;
+    --text:      #c8cdd4;
+    --muted:     #5a6370;
+    --amber:     #f5a623;
+    --amber-dim: #7a5010;
+    --teal:      #2dd4bf;
+    --teal-dim:  #0d4a44;
+    --red:       #f87171;
+    --green:     #4ade80;
+    --blue:      #60a5fa;
+    --purple:    #a78bfa;
+    --chart1:    #f5a623;
+    --chart2:    #2dd4bf;
+    --chart3:    #60a5fa;
+    --chart4:    #f87171;
+    --chart5:    #a78bfa;
+    --mono:      'IBM Plex Mono', monospace;
+    --head:      'Syne', sans-serif;
+    --body:      'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SHELL ─────────────────────────────────────────── */
+  .shell {
+    display: grid;
+    grid-template-rows: 48px 36px 1fr;
+    grid-template-columns: 200px 1fr;
+    height: 100vh;
+    max-width: 1440px;
+    margin: 0 auto;
+    border: 1px solid var(--border);
+  }
+
+  /* ── TOP BAR ─────────────────────────────────────────── */
+  .topbar {
+    grid-column: 1 / -1;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 16px;
+  }
+  .logo {
+    font-family: var(--head);
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--amber);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .logo span { color: var(--text); font-weight: 400; }
+  .topbar-sep { width: 1px; height: 20px; background: var(--border2); }
+  .topbar-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .topbar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .refresh-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--teal);
+    background: var(--teal-dim);
+    border: 1px solid var(--teal);
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+  .param-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--amber);
+    background: var(--amber-dim);
+    border: 1px solid var(--amber);
+    padding: 2px 8px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+
+  /* ── PAGE TABS ─────────────────────────────────────────── */
+  .tabs {
+    grid-column: 1 / -1;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: stretch;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tab {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    padding: 0 18px;
+    cursor: pointer;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    transition: color 0.15s;
+    border-bottom: 2px solid transparent;
+    position: relative;
+    top: 1px;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    color: var(--amber);
+    border-bottom: 2px solid var(--amber);
+    background: rgba(245,166,35,0.05);
+  }
+  .tab-num {
+    font-size: 9px;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  /* ── SIDEBAR ─────────────────────────────────────────── */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+  }
+  .sidebar-section {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 16px 4px;
+  }
+  .sidebar-item {
+    font-size: 12px;
+    color: var(--muted);
+    padding: 6px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.12s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+  .sidebar-item.active { color: var(--amber); border-left-color: var(--amber); background: rgba(245,166,35,0.06); }
+  .sicon { width: 14px; opacity: 0.7; flex-shrink: 0; font-size: 12px; }
+
+  /* ── MAIN CANVAS ─────────────────────────────────────────── */
+  .canvas {
+    overflow-y: auto;
+    padding: 20px;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* ── PAGE HEADER ─────────────────────────────────────────── */
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-title {
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 20px;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+  .page-sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+  .page-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .ctrl-chip {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    border: 1px solid var(--border2);
+    padding: 4px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .ctrl-chip:hover { color: var(--text); border-color: var(--muted); }
+  .ctrl-chip.active { color: var(--amber); border-color: var(--amber); background: rgba(245,166,35,0.08); }
+
+  /* ── KPI STRIP ─────────────────────────────────────────── */
+  .kpi-strip {
+    display: grid;
+    gap: 12px;
+  }
+  .kpi-strip-5 { grid-template-columns: repeat(5, 1fr); }
+  .kpi-strip-4 { grid-template-columns: repeat(4, 1fr); }
+  .kpi-strip-3 { grid-template-columns: repeat(3, 1fr); }
+  .kpi-card {
+    background: rgba(17,20,24,0.85);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(2px);
+  }
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .kpi-card.amber::before { background: var(--amber); }
+  .kpi-card.teal::before  { background: var(--teal); }
+  .kpi-card.blue::before  { background: var(--blue); }
+  .kpi-card.red::before   { background: var(--red); }
+  .kpi-card.green::before { background: var(--green); }
+  .kpi-card.purple::before { background: var(--purple); }
+  .kpi-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .kpi-value {
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 22px;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .kpi-delta {
+    font-family: var(--mono);
+    font-size: 10px;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .kpi-delta.up { color: var(--green); }
+  .kpi-delta.down { color: var(--red); }
+  .kpi-delta.neutral { color: var(--muted); }
+  .kpi-sparkline {
+    position: absolute;
+    bottom: 10px; right: 12px;
+    width: 60px; height: 24px;
+    opacity: 0.4;
+  }
+
+  /* ── CHART CONTAINERS ─────────────────────────────────────────── */
+  .chart-row {
+    display: grid;
+    gap: 12px;
+  }
+  .chart-row-2-1 { grid-template-columns: 2fr 1fr; }
+  .chart-row-1-1 { grid-template-columns: 1fr 1fr; }
+  .chart-row-3-2 { grid-template-columns: 3fr 2fr; }
+  .chart-row-2-2-1 { grid-template-columns: 2fr 2fr 1fr; }
+  .chart-row-full { grid-template-columns: 1fr; }
+
+  .chart-box {
+    background: rgba(17,20,24,0.88);
+    border: 1px solid var(--border);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    backdrop-filter: blur(2px);
+  }
+  .chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .chart-title {
+    font-family: var(--head);
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .chart-meta {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .chart-tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    border: 1px solid var(--border2);
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+
+  /* ── CHART CANVAS AREA ─────────────────────────────────────────── */
+  .chart-area {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  .chart-area canvas { display: block; }
+
+  /* grid lines */
+  .chart-grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* ── LEGEND ─────────────────────────────────────────── */
+  .legend {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .legend-line {
+    width: 16px; height: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── ANNOTATION LAYER ─────────────────────────────────────────── */
+  .annotation {
+    background: rgba(245,166,35,0.10);
+    border: 1px solid var(--amber-dim);
+    border-left: 3px solid var(--amber);
+    padding: 8px 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--amber);
+    line-height: 1.5;
+  }
+  .annotation strong { color: var(--amber); font-weight: 600; }
+  .annotation.teal {
+    background: rgba(45,212,191,0.06);
+    border-color: var(--teal-dim);
+    border-left-color: var(--teal);
+    color: var(--teal);
+  }
+  .annotation.teal strong { color: var(--teal); }
+
+  /* ── SLICER BAR ─────────────────────────────────────────── */
+  .slicer-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .slicer-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+  .slicer-chips {
+    display: flex;
+    gap: 4px;
+  }
+  .slicer-chip {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 10px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+  .slicer-chip.active {
+    background: var(--amber);
+    color: var(--bg);
+    border-color: var(--amber);
+    font-weight: 600;
+  }
+  .slicer-sep { width: 1px; height: 20px; background: var(--border2); }
+  .param-slicer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .param-slicer-val {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--amber);
+    min-width: 24px;
+    text-align: center;
+  }
+  .param-track {
+    width: 80px;
+    height: 2px;
+    background: var(--border2);
+    position: relative;
+  }
+  .param-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--amber);
+    border-radius: 2px;
+  }
+  .param-thumb {
+    position: absolute;
+    top: -4px;
+    width: 10px; height: 10px;
+    background: var(--amber);
+    border: 2px solid var(--bg);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+  }
+
+  /* ── WIREFRAME SPECIFIC SHAPES ─────────────────────────────────────────── */
+  svg.wf { width: 100%; display: block; }
+
+  /* ── TABLE ─────────────────────────────────────────── */
+  .wf-table { width: 100%; border-collapse: collapse; }
+  .wf-table th {
+    font-family: var(--mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border2);
+    text-align: left;
+    background: rgba(255,255,255,0.02);
+  }
+  .wf-table td {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text);
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .wf-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .td-bar-wrap { width: 80px; height: 6px; background: var(--border2); border-radius: 1px; }
+  .td-bar { height: 100%; border-radius: 1px; }
+  .pill {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+  .pill.red   { background: rgba(248,113,113,0.15); color: var(--red); }
+  .pill.green { background: rgba(74,222,128,0.12); color: var(--green); }
+  .pill.amber { background: rgba(245,166,35,0.12); color: var(--amber); }
+
+  /* ── COHORT MATRIX ─────────────────────────────────────────── */
+  .cohort-grid {
+    display: grid;
+    gap: 2px;
+  }
+  .cohort-row { display: flex; gap: 2px; align-items: center; }
+  .cohort-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    width: 46px;
+    flex-shrink: 0;
+  }
+  .cohort-cell {
+    width: 36px; height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 500;
+    border-radius: 1px;
+  }
+
+  /* ── HEATMAP ─────────────────────────────────────────── */
+  .heatmap-grid { display: grid; gap: 3px; }
+  .heatmap-row { display: flex; gap: 3px; align-items: center; }
+  .heatmap-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    width: 28px;
+    flex-shrink: 0;
+    text-align: right;
+  }
+  .heatmap-cell {
+    flex: 1;
+    height: 28px;
+    border-radius: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 8px;
+  }
+
+  /* ── TREEMAP ─────────────────────────────────────────── */
+  .treemap {
+    display: grid;
+    gap: 3px;
+    height: 180px;
+    grid-template-columns: 5fr 3fr 2fr;
+    grid-template-rows: 3fr 2fr;
+  }
+  .treemap-cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+    border-radius: 1px;
+  }
+  .treemap-cell .tc-pct {
+    font-size: 8px;
+    color: rgba(0,0,0,0.6);
+    margin-top: 2px;
+  }
+
+  /* ── SMALL MULTIPLES ─────────────────────────────────────────── */
+  .sm-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .sm-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    padding: 10px;
+  }
+  .sm-title {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── MAP PLACEHOLDER ─────────────────────────────────────────── */
+  .map-placeholder {
+    width: 100%;
+    background: #0f1215;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .map-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .map-dot {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--amber);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.9; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.3); }
+  }
+
+  /* ── PAGE VISIBILITY ─────────────────────────────────────────── */
+  .page { display: none; }
+  .page.active { display: contents; }
+
+  /* ── STORYTELLING PANEL ─────────────────────────────────────────── */
+  .story-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .story-title {
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .story-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .story-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--amber);
+    width: 18px;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .story-text {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .story-text strong { color: var(--text); }
+
+  /* ── SCROLLBAR ─────────────────────────────────────────── */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  /* ── TOOLTIP ─────────────────────────────────────────── */
+  .tooltip-mock {
+    position: absolute;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    padding: 8px 10px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text);
+    pointer-events: none;
+    z-index: 10;
+    line-height: 1.7;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .tooltip-mock::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px; height: 8px;
+    background: var(--surface);
+    border-right: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border2);
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  /* ── BREADCRUMB ─────────────────────────────────────────── */
+  .breadcrumb {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .breadcrumb span { color: var(--border2); }
+
+  /* ── SVG CANVAS BACKGROUNDS ──────────────────────────────────────── */
+  #page0 { background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0NDAgOTAwIj4KICA8ZGVmcz4KICAgIDwhLS0gQW1iZXIgcmFkaWFsIGdsb3cgdG9wLXJpZ2h0IC0tPgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJwMV9nbG93X3RyIiBjeD0iMTAwJSIgY3k9IjAlIiByPSIzMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZjVhNjIzIiBzdG9wLW9wYWNpdHk9IjAuMTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI2MCUiIHN0b3AtY29sb3I9IiNmNWE2MjMiIHN0b3Atb3BhY2l0eT0iMC4wNCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmNWE2MjMiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDwhLS0gVGVhbCByYWRpYWwgZ2xvdyBib3R0b20tbGVmdCAtLT4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0icDFfZ2xvd19ibCIgY3g9IjE0JSIgY3k9IjEwMCUiIHI9IjIyJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMyZGQ0YmYiIHN0b3Atb3BhY2l0eT0iMC4xMiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyZGQ0YmYiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDwhLS0gQXJlYSBjaGFydCBmaWxsIGdyYWRpZW50IC0tPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJwMV9hcmVhIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmNWE2MjMiIHN0b3Atb3BhY2l0eT0iMC4xOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmNWE2MjMiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDwhLS0gVG9wIGJhciBncmFkaWVudCAtLT4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icDFfdG9wYmFyIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMCI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxMTE0MTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMGYxMjE1Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPCEtLSBTaWRlYmFyIGdyYWRpZW50IC0tPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJwMV9zaWRlYmFyIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMCI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxMTE0MTgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMGQxMDE0Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KCiAgPCEtLSBCYXNlIGJhY2tncm91bmQgLS0+CiAgPHJlY3Qgd2lkdGg9IjE0NDAiIGhlaWdodD0iOTAwIiBmaWxsPSIjMGIwZDBmIi8+CgogIDwhLS0gR2xvdyBvdmVybGF5cyAtLT4KICA8cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjcDFfZ2xvd190cikiLz4KICA8cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjcDFfZ2xvd19ibCkiLz4KCiAgPCEtLSDilIDilIAgRE9UIEdSSUQgKG1haW4gY2FudmFzIGFyZWEsIDQwcHggc3BhY2luZykg4pSA4pSAIC0tPgogIDxnIG9wYWNpdHk9IjAuMjIiPgogICAgPCEtLSBSb3cgMSB5PTEyMCAtLT4KICAgIDxnIGZpbGw9IiMyYTMwMzgiPgogICAgICA8IS0tIEdlbmVyYXRlIGRvdHMgYWNyb3NzIGZ1bGwgMTQ0MMOXOTAwIGF0IDQwcHggaW50ZXJ2YWxzIC0tPgogICAgICA8Y2lyY2xlIGN4PSI0MCIgIGN5PSIxMjAiIHI9IjEiLz48Y2lyY2xlIGN4PSI4MCIgIGN5PSIxMjAiIHI9IjEiLz48Y2lyY2xlIGN4PSIxMjAiIGN5PSIxMjAiIHI9IjEiLz4KICAgICAgPGNpcmNsZSBjeD0iMTYwIiBjeT0iMTIwIiByPSIxIi8+PGNpcmNsZSBjeD0iMjAwIiBjeT0iMTIwIiByPSIxIi8+PGNpcmNsZSBjeD0iMjQwIiBjeT0iMTIwIiByPSIxIi8+CiAgICAgIDxjaXJjbGUgY3g9IjI4MCIgY3k9IjEyMCIgcj0iMSIvPjxjaXJjbGUgY3g9IjMyMCIgY3k9IjEyMCIgcj0iMSIvPjxjaXJjbGUgY3g9IjM2MCIgY3k9IjEyMCIgcj0iMSIvPgogICAgICA8Y2lyY2xlIGN4PSI0MDAiIGN5PSIxMjAiIHI9IjEiLz48Y2lyY2xlIGN4PSI0NDAiIGN5PSIxMjAiIHI9IjEiLz48Y2lyY2xlIGN4PSI0ODAiIGN5PSIxMjAiIHI9IjEiLz4KICAgICAgPGNpcmNsZSBjeD0iNTIwIiBjeT0iMTIwIiByPSIxIi8+PGNpcmNsZSBjeD0iNTYwIiBjeT0iMTIwIiByPSIxIi8+PGNpcmNsZSBjeD0iNjAwIiBjeT0iMTIwIiByPSIxIi8+CiAgICAgIDxjaXJjbGUgY3g9IjY0MCIgY3k9IjEyMCIgcj0iMSIvPjxjaXJjbGUgY3g9IjY4MCIgY3k9IjEyMCIgcj0iMSIvPjxjaXJjbGUgY3g9IjcyMCIgY3k9IjEyMCIgcj0iMSIvPgogICAgICA8Y2lyY2xlIGN4PSI3NjAiIGN5PSIxMjAiIHI9IjEiLz48Y2lyY2xlIGN4PSI4MDAiIGN5PSIxMjAiIHI9IjEiLz48Y2lyY2xlIGN4PSI4NDAiIGN5PSIxMjAiIHI9IjEiLz4KICAgICAgPGNpcmNsZSBjeD0iODgwIiBjeT0iMTIwIiByPSIxIi8+PGNpcmNsZSBjeD0iOTIwIiBjeT0iMTIwIiByPSIxIi8+PGNpcmNsZSBjeD0iOTYwIiBjeT0iMTIwIiByPSIxIi8+CiAgICAgIDxjaXJjbGUgY3g9IjEwMDAiIGN5PSIxMjAiIHI9IjEiLz48Y2lyY2xlIGN4PSIxMDQwIiBjeT0iMTIwIiByPSIxIi8+PGNpcmNsZSBjeD0iMTA4MCIgY3k9IjEyMCIgcj0iMSIvPgogICAgICA8Y2lyY2xlIGN4PSIxMTIwIiBjeT0iMTIwIiByPSIxIi8+PGNpcmNsZSBjeD0iMTE2MCIgY3k9IjEyMCIgcj0iMSIvPjxjaXJjbGUgY3g9IjEyMDAiIGN5PSIxMjAiIHI9IjEiLz4KICAgICAgPGNpcmNsZSBjeD0iMTI0MCIgY3k9IjEyMCIgcj0iMSIvPjxjaXJjbGUgY3g9IjEyODAiIGN5PSIxMjAiIHI9IjEiLz48Y2lyY2xlIGN4PSIxMzIwIiBjeT0iMTIwIiByPSIxIi8+CiAgICAgIDxjaXJjbGUgY3g9IjEzNjAiIGN5PSIxMjAiIHI9IjEiLz48Y2lyY2xlIGN4PSIxNDAwIiBjeT0iMTIwIiByPSIxIi8+PGNpcmNsZSBjeD0iMTQ0MCIgY3k9IjEyMCIgcj0iMSIvPgogICAgPC9nPgogICAgPCEtLSBSZXBlYXQgcGF0dGVybiBmb3IgYWxsIHJvd3MgdXNpbmcgYSB0cmFuc2Zvcm0gdHJpY2sgLS0+CiAgICA8dXNlIGhyZWY9IiNwMV9kb3Rfcm93IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDQwKSIvPgogIDwvZz4KCiAgPCEtLSBEb3QgZ3JpZCB2aWEgcGF0dGVybiAtLT4KICA8ZGVmcz4KICAgIDxwYXR0ZXJuIGlkPSJwMV9kb3RncmlkIiB4PSIwIiB5PSIwIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIxIiBmaWxsPSIjMmEzMDM4IiBvcGFjaXR5PSIwLjUiLz4KICAgIDwvcGF0dGVybj4KICA8L2RlZnM+CiAgPHJlY3QgeD0iMjAwIiB5PSI4NCIgd2lkdGg9IjEyNDAiIGhlaWdodD0iODE2IiBmaWxsPSJ1cmwoI3AxX2RvdGdyaWQpIi8+CgogIDwhLS0g4pSA4pSAIEhPUklaT05UQUwgUlVMRSBMSU5FUyAoY2hhcnQgZ3JpZCBnaG9zdCkg4pSA4pSAIC0tPgogIDxnIHN0cm9rZT0iIzFlMjMyOCIgc3Ryb2tlLXdpZHRoPSIxIiBvcGFjaXR5PSIwLjUiPgogICAgPGxpbmUgeDE9IjIwMCIgeTE9IjIwMCIgeDI9IjE0NDAiIHkyPSIyMDAiLz4KICAgIDxsaW5lIHgxPSIyMDAiIHkxPSIyOTAiIHgyPSIxNDQwIiB5Mj0iMjkwIi8+CiAgICA8bGluZSB4MT0iMjAwIiB5MT0iMzgwIiB4Mj0iMTQ0MCIgeTI9IjM4MCIvPgogICAgPGxpbmUgeDE9IjIwMCIgeTE9IjQ3MCIgeDI9IjE0NDAiIHkyPSI0NzAiLz4KICAgIDxsaW5lIHgxPSIyMDAiIHkxPSI1NjAiIHgyPSIxNDQwIiB5Mj0iNTYwIi8+CiAgICA8bGluZSB4MT0iMjAwIiB5MT0iNjUwIiB4Mj0iMTQ0MCIgeTI9IjY1MCIvPgogICAgPGxpbmUgeDE9IjIwMCIgeTE9Ijc0MCIgeDI9IjE0NDAiIHkyPSI3NDAiLz4KICAgIDxsaW5lIHgxPSIyMDAiIHkxPSI4MzAiIHgyPSIxNDQwIiB5Mj0iODMwIi8+CiAgPC9nPgoKICA8IS0tIOKUgOKUgCBHSE9TVCBBUkVBIENIQVJUIOKAlCBib3R0b20tcmlnaHQgcXVhZHJhbnQg4pSA4pSAIC0tPgogIDxwYXRoIGQ9Ik03MjAsODIwIEM4MDAsNzkwIDg4MCw3NjAgOTYwLDcxMCBDMTA0MCw2NjAgMTEyMCw2MzAgMTIwMCw1OTAgQzEyODAsNTUwIDEzNjAsNTEwIDE0NDAsNDcwIEwxNDQwLDkwMCBMNzIwLDkwMCBaIgogICAgICAgIGZpbGw9InVybCgjcDFfYXJlYSkiLz4KICA8cGF0aCBkPSJNNzIwLDgyMCBDODAwLDc5MCA4ODAsNzYwIDk2MCw3MTAgQzEwNDAsNjYwIDExMjAsNjMwIDEyMDAsNTkwIEMxMjgwLDU1MCAxMzYwLDUxMCAxNDQwLDQ3MCIKICAgICAgICBmaWxsPSJub25lIiBzdHJva2U9IiNmNWE2MjMiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLW9wYWNpdHk9IjAuMjUiLz4KCiAgPCEtLSBHaG9zdCBkYXRhIHBvaW50cyBvbiBhcmVhIGNoYXJ0IC0tPgogIDxnIGZpbGw9IiNmNWE2MjMiIGZpbGwtb3BhY2l0eT0iMC40Ij4KICAgIDxjaXJjbGUgY3g9IjcyMCIgIGN5PSI4MjAiIHI9IjQiLz4KICAgIDxjaXJjbGUgY3g9Ijg0MCIgIGN5PSI3ODAiIHI9IjQiLz4KICAgIDxjaXJjbGUgY3g9Ijk2MCIgIGN5PSI3MTAiIHI9IjQiLz4KICAgIDxjaXJjbGUgY3g9IjEwODAiIGN5PSI2NjAiIHI9IjUiLz4KICAgIDxjaXJjbGUgY3g9IjEyMDAiIGN5PSI1OTAiIHI9IjQiLz4KICAgIDxjaXJjbGUgY3g9IjEzMjAiIGN5PSI1MjAiIHI9IjQiLz4KICAgIDxjaXJjbGUgY3g9IjE0NDAiIGN5PSI0NzAiIHI9IjQiLz4KICA8L2c+CgogIDwhLS0gU2Vjb25kYXJ5IGdob3N0IGxpbmUgKEFPVikgLS0+CiAgPHBhdGggZD0iTTcyMCw4MDAgQzg0MCw3ODUgOTYwLDc3NSAxMDgwLDc2MCBDMTIwMCw3NDggMTMyMCw3NDUgMTQ0MCw3NDIiCiAgICAgICAgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMmRkNGJmIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLW9wYWNpdHk9IjAuMTUiIHN0cm9rZS1kYXNoYXJyYXk9IjUsNCIvPgoKICA8IS0tIOKUgOKUgCBUT1AtUklHSFQgQUNDRU5UIENPUk5FUiBUUklBTkdMRSDilIDilIAgLS0+CiAgPHBvbHlnb24gcG9pbnRzPSIxMTYwLDAgMTQ0MCwwIDE0NDAsMjgwIiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KICA8bGluZSB4MT0iMTE2MCIgeTE9IjAiIHgyPSIxNDQwIiB5Mj0iMjgwIiBzdHJva2U9IiNmNWE2MjMiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLW9wYWNpdHk9IjAuMzUiLz4KICA8IS0tIElubmVyIHRyaWFuZ2xlIGRldGFpbCAtLT4KICA8cG9seWdvbiBwb2ludHM9IjEyODAsMCAxNDQwLDAgMTQ0MCwxNDAiIGZpbGw9IiNmNWE2MjMiIGZpbGwtb3BhY2l0eT0iMC4wNCIvPgogIDxsaW5lIHgxPSIxMjgwIiB5MT0iMCIgeDI9IjE0NDAiIHkyPSIxNDAiIHN0cm9rZT0iI2Y1YTYyMyIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMC4yIi8+CgogIDwhLS0g4pSA4pSAIEJPVFRPTS1MRUZUIEFDQ0VOVCBDT1JORVIg4pSA4pSAIC0tPgogIDxwb2x5Z29uIHBvaW50cz0iMjAwLDkwMCA0MjAsOTAwIDIwMCw3MjAiIGZpbGw9IiMyZGQ0YmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPgogIDxsaW5lIHgxPSIyMDAiIHkxPSI3MjAiIHgyPSI0MjAiIHkyPSI5MDAiIHN0cm9rZT0iIzJkZDRiZiIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMC4zIi8+CgogIDwhLS0g4pSA4pSAIEFNQkVSIFJJR0hUIEVER0UgQUNDRU5UIOKUgOKUgCAtLT4KICA8cmVjdCB4PSIxNDM3IiB5PSI4NCIgd2lkdGg9IjMiIGhlaWdodD0iODE2IiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMTgiLz4KICA8cmVjdCB4PSIxNDM0IiB5PSI4NCIgd2lkdGg9IjEiIGhlaWdodD0iODE2IiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMDciLz4KCiAgPCEtLSDilIDilIAgU1RSVUNUVVJBTCBMSU5FUyDilIDilIAgLS0+CiAgPCEtLSBTaWRlYmFyIHNlcGFyYXRvciAtLT4KICA8bGluZSB4MT0iMjAwIiB5MT0iMCIgeDI9IjIwMCIgeTI9IjkwMCIgc3Ryb2tlPSIjMmEzMDM4IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1vcGFjaXR5PSIwLjkiLz4KICA8IS0tIFRvcCBiYXIgYm90dG9tIC0tPgogIDxsaW5lIHgxPSIwIiB5MT0iNDgiIHgyPSIxNDQwIiB5Mj0iNDgiIHN0cm9rZT0iIzFlMjMyOCIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMSIvPgogIDwhLS0gVGFiIGJhciBib3R0b20gLS0+CiAgPGxpbmUgeDE9IjAiIHkxPSI4NCIgeDI9IjE0NDAiIHkyPSI4NCIgc3Ryb2tlPSIjMmEzMDM4IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1vcGFjaXR5PSIwLjkiLz4KCiAgPCEtLSBUb3AgYmFyIHN1cmZhY2UgLS0+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjE0NDAiIGhlaWdodD0iNDgiIGZpbGw9IiMxMTE0MTgiIGZpbGwtb3BhY2l0eT0iMC45NSIvPgogIDwhLS0gVGFiIGJhciBzdXJmYWNlIC0tPgogIDxyZWN0IHg9IjAiIHk9IjQ4IiB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSIzNiIgZmlsbD0iIzExMTQxOCIgZmlsbC1vcGFjaXR5PSIwLjkwIi8+CiAgPCEtLSBTaWRlYmFyIHN1cmZhY2UgLS0+CiAgPHJlY3QgeD0iMCIgeT0iODQiIHdpZHRoPSIyMDAiIGhlaWdodD0iODE2IiBmaWxsPSIjMTExNDE4IiBmaWxsLW9wYWNpdHk9IjAuODUiLz4KCiAgPCEtLSBUb3AgYmFyIGFtYmVyIGxlZnQgYWNjZW50IC0tPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIzIiBoZWlnaHQ9IjQ4IiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuOCIvPgoKICA8IS0tIOKUgOKUgCBBTUJFUiBDT1JORVIgR0xPVyAoc21hbGwsIHJlZmluZWQpIOKUgOKUgCAtLT4KICA8Y2lyY2xlIGN4PSIxNDQwIiBjeT0iMCIgcj0iMjgwIiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMDQiLz4KICA8Y2lyY2xlIGN4PSIxNDQwIiBjeT0iMCIgcj0iMTgwIiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KICA8Y2lyY2xlIGN4PSIxNDQwIiBjeT0iMCIgcj0iODAiICBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMDYiLz4KPC9zdmc+Cg=='); background-size: cover; background-position: top left; background-repeat: no-repeat; }
+  #page1 { background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0NDAgOTAwIj4KICA8ZGVmcz4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0icDJfZ2xvd190ciIgY3g9IjkyJSIgY3k9IjglIiByPSIyOCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMmRkNGJmIiBzdG9wLW9wYWNpdHk9IjAuMTYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMmRkNGJmIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9InAyX2dsb3dfYnIiIGN4PSIxMDAlIiBjeT0iMTAwJSIgcj0iMzAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzJkZDRiZiIgc3RvcC1vcGFjaXR5PSIwLjEwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzJkZDRiZiIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJwMl9nbG93X3JlZCIgY3g9IjIwJSIgY3k9IjU1JSIgcj0iMTglIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y4NzE3MSIgc3RvcC1vcGFjaXR5PSIwLjA4Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y4NzE3MSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJwMl9wcm9ncmVzcyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjAiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiAgICBzdG9wLWNvbG9yPSIjMmRkNGJmIiBzdG9wLW9wYWNpdHk9IjAuNSIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ijg0LjglIiBzdG9wLWNvbG9yPSIjMmRkNGJmIiBzdG9wLW9wYWNpdHk9IjAuMyIvPgogICAgICA8c3RvcCBvZmZzZXQ9Ijg0LjglIiBzdG9wLWNvbG9yPSIjZjg3MTcxIiBzdG9wLW9wYWNpdHk9IjAuMiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiICBzdG9wLWNvbG9yPSIjZjg3MTcxIiBzdG9wLW9wYWNpdHk9IjAuMSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxwYXR0ZXJuIGlkPSJwMl9kb3RncmlkIiB4PSIwIiB5PSIwIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIxIiBmaWxsPSIjMmEzMDM4IiBvcGFjaXR5PSIwLjM1Ii8+CiAgICA8L3BhdHRlcm4+CiAgICA8IS0tIERpYWdvbmFsIHN0cmlwZSBwYXR0ZXJuIC0tPgogICAgPHBhdHRlcm4gaWQ9InAyX2RpYWciIHg9IjAiIHk9IjAiIHdpZHRoPSI3MCIgaGVpZ2h0PSI3MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CiAgICAgIDxsaW5lIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSI3MCIgc3Ryb2tlPSIjMWUyMzI4IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1vcGFjaXR5PSIwLjYiLz4KICAgIDwvcGF0dGVybj4KICA8L2RlZnM+CgogIDwhLS0gQmFzZSAtLT4KICA8cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI5MDAiIGZpbGw9IiMwYjBkMGYiLz4KCiAgPCEtLSBHbG93IGxheWVycyAtLT4KICA8cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjcDJfZ2xvd190cikiLz4KICA8cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjcDJfZ2xvd19icikiLz4KICA8cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjcDJfZ2xvd19yZWQpIi8+CgogIDwhLS0gRG90IGdyaWQgYmFzZSAtLT4KICA8cmVjdCB4PSIyMDAiIHk9Ijg0IiB3aWR0aD0iMTI0MCIgaGVpZ2h0PSI4MTYiIGZpbGw9InVybCgjcDJfZG90Z3JpZCkiLz4KCiAgPCEtLSDilIDilIAgRElBR09OQUwgRkxPVyBMSU5FUyAobG9naXN0aWNzIG1vdmVtZW50KSDilIDilIAgLS0+CiAgPCEtLSBQcmltYXJ5IGRpYWdvbmFscyDigJQgdGVhbCBldmVyeSA1dGggLS0+CiAgPGcgc3Ryb2tlLXdpZHRoPSIxIj4KICAgIDxsaW5lIHgxPSItNzAwIiB5MT0iMCIgICB4Mj0iMjAwIiAgeTI9IjkwMCIgc3Ryb2tlPSIjMWUyMzI4IiBzdHJva2Utb3BhY2l0eT0iMC41Ii8+CiAgICA8bGluZSB4MT0iLTU2MCIgeTE9IjAiICAgeDI9IjM0MCIgIHkyPSI5MDAiIHN0cm9rZT0iIzFlMjMyOCIgc3Ryb2tlLW9wYWNpdHk9IjAuNCIvPgogICAgPGxpbmUgeDE9Ii00MjAiIHkxPSIwIiAgIHgyPSI0ODAiICB5Mj0iOTAwIiBzdHJva2U9IiMxZTIzMjgiIHN0cm9rZS1vcGFjaXR5PSIwLjQiLz4KICAgIDxsaW5lIHgxPSItMjgwIiB5MT0iMCIgICB4Mj0iNjIwIiAgeTI9IjkwMCIgc3Ryb2tlPSIjMWUyMzI4IiBzdHJva2Utb3BhY2l0eT0iMC41Ii8+CiAgICA8bGluZSB4MT0iLTE0MCIgeTE9IjAiICAgeDI9Ijc2MCIgIHkyPSI5MDAiIHN0cm9rZT0iIzJkZDRiZiIgc3Ryb2tlLW9wYWNpdHk9IjAuMTIiLz4KICAgIDxsaW5lIHgxPSIwIiAgICB5MT0iMCIgICB4Mj0iOTAwIiAgeTI9IjkwMCIgc3Ryb2tlPSIjMWUyMzI4IiBzdHJva2Utb3BhY2l0eT0iMC40Ii8+CiAgICA8bGluZSB4MT0iMTQwIiAgeTE9IjAiICAgeDI9IjEwNDAiIHkyPSI5MDAiIHN0cm9rZT0iIzFlMjMyOCIgc3Ryb2tlLW9wYWNpdHk9IjAuNCIvPgogICAgPGxpbmUgeDE9IjI4MCIgIHkxPSIwIiAgIHgyPSIxMTgwIiB5Mj0iOTAwIiBzdHJva2U9IiMxZTIzMjgiIHN0cm9rZS1vcGFjaXR5PSIwLjUiLz4KICAgIDxsaW5lIHgxPSI0MjAiICB5MT0iMCIgICB4Mj0iMTMyMCIgeTI9IjkwMCIgc3Ryb2tlPSIjMmRkNGJmIiBzdHJva2Utb3BhY2l0eT0iMC4xMCIvPgogICAgPGxpbmUgeDE9IjU2MCIgIHkxPSIwIiAgIHgyPSIxNDYwIiB5Mj0iOTAwIiBzdHJva2U9IiMxZTIzMjgiIHN0cm9rZS1vcGFjaXR5PSIwLjQiLz4KICAgIDxsaW5lIHgxPSI3MDAiICB5MT0iMCIgICB4Mj0iMTYwMCIgeTI9IjkwMCIgc3Ryb2tlPSIjMWUyMzI4IiBzdHJva2Utb3BhY2l0eT0iMC4zIi8+CiAgICA8bGluZSB4MT0iODQwIiAgeTE9IjAiICAgeDI9IjE3NDAiIHkyPSI5MDAiIHN0cm9rZT0iIzJkZDRiZiIgc3Ryb2tlLW9wYWNpdHk9IjAuMDkiLz4KICAgIDxsaW5lIHgxPSI5ODAiICB5MT0iMCIgICB4Mj0iMTg4MCIgeTI9IjkwMCIgc3Ryb2tlPSIjMWUyMzI4IiBzdHJva2Utb3BhY2l0eT0iMC4zIi8+CiAgPC9nPgoKICA8IS0tIENvdW50ZXIgZGlhZ29uYWxzIOKAlCB2ZXJ5IGZhaW50IC0tPgogIDxnIHN0cm9rZT0iIzFlMjMyOCIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMC4yIj4KICAgIDxsaW5lIHgxPSIyMTQwIiAgeTE9IjAiIHgyPSIxMjQwIiB5Mj0iOTAwIi8+CiAgICA8bGluZSB4MT0iMjAwMCIgIHkxPSIwIiB4Mj0iMTEwMCIgeTI9IjkwMCIvPgogICAgPGxpbmUgeDE9IjE4NjAiICB5MT0iMCIgeDI9Ijk2MCIgIHkyPSI5MDAiLz4KICAgIDxsaW5lIHgxPSIxNzIwIiAgeTE9IjAiIHgyPSI4MjAiICB5Mj0iOTAwIi8+CiAgICA8bGluZSB4MT0iMTU4MCIgIHkxPSIwIiB4Mj0iNjgwIiAgeTI9IjkwMCIvPgogICAgPGxpbmUgeDE9IjE0NDAiICB5MT0iMCIgeDI9IjU0MCIgIHkyPSI5MDAiLz4KICA8L2c+CgogIDwhLS0g4pSA4pSAIEdIT1NUIEhFQVRNQVAgR1JJRCAoZGVsaXZlcnkgcGF0dGVybiBwcmV2aWV3KSDilIDilIAgLS0+CiAgPCEtLSA1IHJvd3Mgw5cgNCBjb2xzLCBzaXRzIGluIFAyIGNhbnZhcyBsb3dlciBhcmVhIC0tPgogIDxnIG9wYWNpdHk9IjAuNTUiPgogICAgPCEtLSBSb3cgbGFiZWxzIGJhY2tncm91bmQgLS0+CiAgICA8IS0tIENlbGxzIHdpdGggdmFyeWluZyB0ZWFsL2FtYmVyIGludGVuc2l0eSAtLT4KICAgIDwhLS0gTW9uIHJvdyAtLT4KICAgIDxyZWN0IHg9IjI0OCIgeT0iNDYyIiB3aWR0aD0iMjcyIiBoZWlnaHQ9IjUwIiByeD0iMSIgZmlsbD0iIzRhZGU4MCIgZmlsbC1vcGFjaXR5PSIwLjA3Ii8+CiAgICA8cmVjdCB4PSI1MjgiIHk9IjQ2MiIgd2lkdGg9IjI3MiIgaGVpZ2h0PSI1MCIgcng9IjEiIGZpbGw9IiM0YWRlODAiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPgogICAgPHJlY3QgeD0iODA4IiB5PSI0NjIiIHdpZHRoPSIyNzIiIGhlaWdodD0iNTAiIHJ4PSIxIiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMDciLz4KICAgIDxyZWN0IHg9IjEwODgiIHk9IjQ2MiIgd2lkdGg9IjI3MiIgaGVpZ2h0PSI1MCIgcng9IjEiIGZpbGw9IiM0YWRlODAiIGZpbGwtb3BhY2l0eT0iMC4wNiIvPgogICAgPCEtLSBUdWUgcm93IC0tPgogICAgPHJlY3QgeD0iMjQ4IiB5PSI1MTgiIHdpZHRoPSIyNzIiIGhlaWdodD0iNTAiIHJ4PSIxIiBmaWxsPSIjNGFkZTgwIiBmaWxsLW9wYWNpdHk9IjAuMDYiLz4KICAgIDxyZWN0IHg9IjUyOCIgeT0iNTE4IiB3aWR0aD0iMjcyIiBoZWlnaHQ9IjUwIiByeD0iMSIgZmlsbD0iIzRhZGU4MCIgZmlsbC1vcGFjaXR5PSIwLjA3Ii8+CiAgICA8cmVjdCB4PSI4MDgiIHk9IjUxOCIgd2lkdGg9IjI3MiIgaGVpZ2h0PSI1MCIgcng9IjEiIGZpbGw9IiM0YWRlODAiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPgogICAgPHJlY3QgeD0iMTA4OCIgeT0iNTE4IiB3aWR0aD0iMjcyIiBoZWlnaHQ9IjUwIiByeD0iMSIgZmlsbD0iI2Y1YTYyMyIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+CiAgICA8IS0tIFdlZCByb3cg4oCUIHdhcm0sIGhpZ2ggZGVsaXZlcnkgdGltZXMgLS0+CiAgICA8cmVjdCB4PSIyNDgiIHk9IjU3NCIgd2lkdGg9IjI3MiIgaGVpZ2h0PSI1MCIgcng9IjEiIGZpbGw9IiNmNWE2MjMiIGZpbGwtb3BhY2l0eT0iMC4wOCIvPgogICAgPHJlY3QgeD0iNTI4IiB5PSI1NzQiIHdpZHRoPSIyNzIiIGhlaWdodD0iNTAiIHJ4PSIxIiBmaWxsPSIjZjg3MTcxIiBmaWxsLW9wYWNpdHk9IjAuMDkiLz4KICAgIDxyZWN0IHg9IjgwOCIgeT0iNTc0IiB3aWR0aD0iMjcyIiBoZWlnaHQ9IjUwIiByeD0iMSIgZmlsbD0iI2Y4NzE3MSIgZmlsbC1vcGFjaXR5PSIwLjEwIi8+CiAgICA8cmVjdCB4PSIxMDg4IiB5PSI1NzQiIHdpZHRoPSIyNzIiIGhlaWdodD0iNTAiIHJ4PSIxIiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMDgiLz4KICAgIDwhLS0gVGh1IHJvdyAtLT4KICAgIDxyZWN0IHg9IjI0OCIgeT0iNjMwIiB3aWR0aD0iMjcyIiBoZWlnaHQ9IjUwIiByeD0iMSIgZmlsbD0iIzRhZGU4MCIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+CiAgICA8cmVjdCB4PSI1MjgiIHk9IjYzMCIgd2lkdGg9IjI3MiIgaGVpZ2h0PSI1MCIgcng9IjEiIGZpbGw9IiM0YWRlODAiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPgogICAgPHJlY3QgeD0iODA4IiB5PSI2MzAiIHdpZHRoPSIyNzIiIGhlaWdodD0iNTAiIHJ4PSIxIiBmaWxsPSIjNGFkZTgwIiBmaWxsLW9wYWNpdHk9IjAuMDYiLz4KICAgIDxyZWN0IHg9IjEwODgiIHk9IjYzMCIgd2lkdGg9IjI3MiIgaGVpZ2h0PSI1MCIgcng9IjEiIGZpbGw9IiM0YWRlODAiIGZpbGwtb3BhY2l0eT0iMC4wNyIvPgogICAgPCEtLSBGcmkgcm93IOKAlCB3b3JzdCBkYXkgLS0+CiAgICA8cmVjdCB4PSIyNDgiIHk9IjY4NiIgd2lkdGg9IjI3MiIgaGVpZ2h0PSI1MCIgcng9IjEiIGZpbGw9IiNmODcxNzEiIGZpbGwtb3BhY2l0eT0iMC4wOCIvPgogICAgPHJlY3QgeD0iNTI4IiB5PSI2ODYiIHdpZHRoPSIyNzIiIGhlaWdodD0iNTAiIHJ4PSIxIiBmaWxsPSIjZjg3MTcxIiBmaWxsLW9wYWNpdHk9IjAuMDkiLz4KICAgIDxyZWN0IHg9IjgwOCIgeT0iNjg2IiB3aWR0aD0iMjcyIiBoZWlnaHQ9IjUwIiByeD0iMSIgZmlsbD0iI2Y4NzE3MSIgZmlsbC1vcGFjaXR5PSIwLjExIi8+CiAgICA8cmVjdCB4PSIxMDg4IiB5PSI2ODYiIHdpZHRoPSIyNzIiIGhlaWdodD0iNTAiIHJ4PSIxIiBmaWxsPSIjZjg3MTcxIiBmaWxsLW9wYWNpdHk9IjAuMDciLz4KICA8L2c+CgogIDwhLS0gQ2VsbCBncmlkIGxpbmVzIC0tPgogIDxnIHN0cm9rZT0iIzFlMjMyOCIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMC40Ij4KICAgIDxsaW5lIHgxPSIyNDQiICB5MT0iNDU4IiB4Mj0iMTM2NCIgeTI9IjQ1OCIvPgogICAgPGxpbmUgeDE9IjI0NCIgIHkxPSI1MTQiIHgyPSIxMzY0IiB5Mj0iNTE0Ii8+CiAgICA8bGluZSB4MT0iMjQ0IiAgeTE9IjU3MCIgeDI9IjEzNjQiIHkyPSI1NzAiLz4KICAgIDxsaW5lIHgxPSIyNDQiICB5MT0iNjI2IiB4Mj0iMTM2NCIgeTI9IjYyNiIvPgogICAgPGxpbmUgeDE9IjI0NCIgIHkxPSI2ODIiIHgyPSIxMzY0IiB5Mj0iNjgyIi8+CiAgICA8bGluZSB4MT0iMjQ0IiAgeTE9IjczOCIgeDI9IjEzNjQiIHkyPSI3MzgiLz4KICAgIDxsaW5lIHgxPSIyNDQiICB5MT0iNDU4IiB4Mj0iMjQ0IiAgeTI9Ijc0MCIvPgogICAgPGxpbmUgeDE9IjUyMCIgIHkxPSI0NTgiIHgyPSI1MjAiICB5Mj0iNzQwIi8+CiAgICA8bGluZSB4MT0iODAwIiAgeTE9IjQ1OCIgeDI9IjgwMCIgIHkyPSI3NDAiLz4KICAgIDxsaW5lIHgxPSIxMDgwIiB5MT0iNDU4IiB4Mj0iMTA4MCIgeTI9Ijc0MCIvPgogICAgPGxpbmUgeDE9IjEzNjQiIHkxPSI0NTgiIHgyPSIxMzY0IiB5Mj0iNzQwIi8+CiAgPC9nPgoKICA8IS0tIOKUgOKUgCBTTEEgQVJDIFRPUC1SSUdIVCDilIDilIAgLS0+CiAgPCEtLSBGdWxsIGNpcmNsZSBvdXRsaW5lIC0tPgogIDxjaXJjbGUgY3g9IjEzNDAiIGN5PSI4MCIgcj0iMTgwIiBmaWxsPSJub25lIiBzdHJva2U9IiMyZGQ0YmYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLW9wYWNpdHk9IjAuMDgiLz4KICA8Y2lyY2xlIGN4PSIxMzQwIiBjeT0iODAiIHI9IjE0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMmRkNGJmIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1vcGFjaXR5PSIwLjA2Ii8+CiAgPGNpcmNsZSBjeD0iMTM0MCIgY3k9IjgwIiByPSIxMDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJkZDRiZiIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMC4wNSIvPgogIDwhLS0gU0xBIGFyYyDigJQgODQuOCUgb2YgMTgwwrAgYm90dG9tIHNlbWljaXJjbGUgLS0+CiAgPHBhdGggZD0iTTExNjAsODAgQTE4MCwxODAgMCAwLDEgMTM0MCwtMTAwIiBmaWxsPSJub25lIiBzdHJva2U9IiMyZGQ0YmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLW9wYWNpdHk9IjAuMjAiLz4KICA8IS0tIERvbnV0IGZpbGwgZ2hvc3QgLS0+CiAgPGNpcmNsZSBjeD0iMTM0MCIgY3k9IjgwIiByPSIxMjAiIGZpbGw9IiMyZGQ0YmYiIGZpbGwtb3BhY2l0eT0iMC4wMyIvPgoKICA8IS0tIOKUgOKUgCBTTEEgUFJPR1JFU1MgQkFSIEdIT1NUIOKUgOKUgCAtLT4KICA8cmVjdCB4PSIyMjAiIHk9IjkyIiB3aWR0aD0iMTIxMCIgaGVpZ2h0PSIzIiByeD0iMSIgZmlsbD0iIzFlMjMyOCIvPgogIDxyZWN0IHg9IjIyMCIgeT0iOTIiIHdpZHRoPSIxMDI2IiBoZWlnaHQ9IjMiIHJ4PSIxIiBmaWxsPSJ1cmwoI3AyX3Byb2dyZXNzKSIvPgoKICA8IS0tIOKUgOKUgCBTVFJVQ1RVUkFMIExJTkVTIOKUgOKUgCAtLT4KICA8bGluZSB4MT0iMjAwIiAgeTE9IjAiICAgIHgyPSIyMDAiICB5Mj0iOTAwIiBzdHJva2U9IiMyYTMwMzgiIHN0cm9rZS13aWR0aD0iMSIvPgogIDxsaW5lIHgxPSIwIiAgICB5MT0iNDgiICAgeDI9IjE0NDAiIHkyPSI0OCIgIHN0cm9rZT0iIzFlMjMyOCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgPGxpbmUgeDE9IjAiICAgIHkxPSI4NCIgICB4Mj0iMTQ0MCIgeTI9Ijg0IiAgc3Ryb2tlPSIjMmEzMDM4IiBzdHJva2Utd2lkdGg9IjEiLz4KCiAgPCEtLSBTdXJmYWNlcyAtLT4KICA8cmVjdCB4PSIwIiAgIHk9IjAiICB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI0OCIgIGZpbGw9IiMxMTE0MTgiIGZpbGwtb3BhY2l0eT0iMC45NSIvPgogIDxyZWN0IHg9IjAiICAgeT0iNDgiIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjM2IiAgZmlsbD0iIzExMTQxOCIgZmlsbC1vcGFjaXR5PSIwLjkwIi8+CiAgPHJlY3QgeD0iMCIgICB5PSI4NCIgd2lkdGg9IjIwMCIgIGhlaWdodD0iODE2IiBmaWxsPSIjMTExNDE4IiBmaWxsLW9wYWNpdHk9IjAuODUiLz4KCiAgPCEtLSBUZWFsIGxlZnQgYWNjZW50IG9uIHRvcCBiYXIgLS0+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjMiIGhlaWdodD0iNDgiIGZpbGw9IiMyZGQ0YmYiIGZpbGwtb3BhY2l0eT0iMC43Ii8+Cjwvc3ZnPgo='); background-size: cover; background-position: top left; background-repeat: no-repeat; }
+  #page2 { background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0NDAgOTAwIj4KICA8ZGVmcz4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0icDNfZ2xvd19jZW50ZXIiIGN4PSI1MCUiIGN5PSI1MCUiIHI9IjUwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNhNzhiZmEiIHN0b3Atb3BhY2l0eT0iMC4wNiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNhNzhiZmEiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0icDNfZ2xvd190bCIgY3g9IjE0JSIgY3k9IjEwJSIgcj0iMjUlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2E3OGJmYSIgc3RvcC1vcGFjaXR5PSIwLjE0Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2E3OGJmYSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJwM19nbG93X2JyIiBjeD0iODglIiBjeT0iOTIlIiByPSIyMiUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMmRkNGJmIiBzdG9wLW9wYWNpdHk9IjAuMTAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMmRkNGJmIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgICA8cGF0dGVybiBpZD0icDNfZG90Z3JpZCIgeD0iMCIgeT0iMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0iIzJhMzAzOCIgb3BhY2l0eT0iMC4zMCIvPgogICAgPC9wYXR0ZXJuPgogIDwvZGVmcz4KCiAgPCEtLSBCYXNlIC0tPgogIDxyZWN0IHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjkwMCIgZmlsbD0iIzBiMGQwZiIvPgogIDxyZWN0IHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjkwMCIgZmlsbD0idXJsKCNwM19nbG93X2NlbnRlcikiLz4KICA8cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjcDNfZ2xvd190bCkiLz4KICA8cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjcDNfZ2xvd19icikiLz4KCiAgPCEtLSBEb3QgZ3JpZCAtLT4KICA8cmVjdCB4PSIyMDAiIHk9Ijg0IiB3aWR0aD0iMTI0MCIgaGVpZ2h0PSI4MTYiIGZpbGw9InVybCgjcDNfZG90Z3JpZCkiLz4KCiAgPCEtLSDilIDilIAgTkVUV09SSyBHUkFQSCDigJQgTk9ERSBFREdFUyDilIDilIAgLS0+CiAgPGcgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIj4KICAgIDwhLS0gQ2x1c3RlciAxIOKAlCB0b3AtbGVmdCBhcmVhIChDYWlybyBjaHVybmVkIHJldGFpbGVycykgLS0+CiAgICA8bGluZSB4MT0iMzIwIiB5MT0iMTgwIiB4Mj0iNDIwIiB5Mj0iMjQwIiBzdHJva2U9IiNhNzhiZmEiIHN0cm9rZS1vcGFjaXR5PSIwLjE4Ii8+CiAgICA8bGluZSB4MT0iMzIwIiB5MT0iMTgwIiB4Mj0iMzgwIiB5Mj0iMzAwIiBzdHJva2U9IiNhNzhiZmEiIHN0cm9rZS1vcGFjaXR5PSIwLjEyIi8+CiAgICA8bGluZSB4MT0iMzIwIiB5MT0iMTgwIiB4Mj0iMjYwIiB5Mj0iMjgwIiBzdHJva2U9IiMyYTMwMzgiIHN0cm9rZS1vcGFjaXR5PSIwLjUiLz4KICAgIDxsaW5lIHgxPSI0MjAiIHkxPSIyNDAiIHgyPSIzODAiIHkyPSIzMDAiIHN0cm9rZT0iI2E3OGJmYSIgc3Ryb2tlLW9wYWNpdHk9IjAuMTQiLz4KICAgIDxsaW5lIHgxPSI0MjAiIHkxPSIyNDAiIHgyPSI1MDAiIHkyPSIyMDAiIHN0cm9rZT0iIzJhMzAzOCIgc3Ryb2tlLW9wYWNpdHk9IjAuNCIvPgogICAgPGxpbmUgeDE9IjUwMCIgeTE9IjIwMCIgeDI9IjU2MCIgeTI9IjI4MCIgc3Ryb2tlPSIjMmRkNGJmIiBzdHJva2Utb3BhY2l0eT0iMC4xNSIvPgogICAgPGxpbmUgeDE9IjU2MCIgeTE9IjI4MCIgeDI9IjQ4MCIgeTI9IjM0MCIgc3Ryb2tlPSIjMmEzMDM4IiBzdHJva2Utb3BhY2l0eT0iMC40Ii8+CiAgICA8bGluZSB4MT0iMzgwIiB5MT0iMzAwIiB4Mj0iNDgwIiB5Mj0iMzQwIiBzdHJva2U9IiNhNzhiZmEiIHN0cm9rZS1vcGFjaXR5PSIwLjEwIi8+CiAgICA8bGluZSB4MT0iMjYwIiB5MT0iMjgwIiB4Mj0iMzAwIiB5Mj0iMzgwIiBzdHJva2U9IiMyYTMwMzgiIHN0cm9rZS1vcGFjaXR5PSIwLjM1Ii8+CiAgICA8bGluZSB4MT0iMzAwIiB5MT0iMzgwIiB4Mj0iNDAwIiB5Mj0iNDIwIiBzdHJva2U9IiMyZGQ0YmYiIHN0cm9rZS1vcGFjaXR5PSIwLjEyIi8+CiAgICA8bGluZSB4MT0iNDgwIiB5MT0iMzQwIiB4Mj0iNDAwIiB5Mj0iNDIwIiBzdHJva2U9IiNhNzhiZmEiIHN0cm9rZS1vcGFjaXR5PSIwLjEyIi8+CiAgICA8bGluZSB4MT0iNDgwIiB5MT0iMzQwIiB4Mj0iNTgwIiB5Mj0iMzYwIiBzdHJva2U9IiMyYTMwMzgiIHN0cm9rZS1vcGFjaXR5PSIwLjQiLz4KCiAgICA8IS0tIENsdXN0ZXIgMiDigJQgY2VudGVyIChhY3RpdmUgcmV0YWlsZXJzKSAtLT4KICAgIDxsaW5lIHgxPSI3MDAiIHkxPSIyNDAiIHgyPSI3ODAiIHkyPSIyMDAiIHN0cm9rZT0iIzJkZDRiZiIgc3Ryb2tlLW9wYWNpdHk9IjAuMTgiLz4KICAgIDxsaW5lIHgxPSI3MDAiIHkxPSIyNDAiIHgyPSI2NDAiIHkyPSIzMTAiIHN0cm9rZT0iI2E3OGJmYSIgc3Ryb2tlLW9wYWNpdHk9IjAuMTQiLz4KICAgIDxsaW5lIHgxPSI3MDAiIHkxPSIyNDAiIHgyPSI3NjAiIHkyPSIzMjAiIHN0cm9rZT0iIzJkZDRiZiIgc3Ryb2tlLW9wYWNpdHk9IjAuMTYiLz4KICAgIDxsaW5lIHgxPSI3ODAiIHkxPSIyMDAiIHgyPSI4NjAiIHkyPSIyNTAiIHN0cm9rZT0iIzJkZDRiZiIgc3Ryb2tlLW9wYWNpdHk9IjAuMTUiLz4KICAgIDxsaW5lIHgxPSI4NjAiIHkxPSIyNTAiIHgyPSI4MjAiIHkyPSIzNDAiIHN0cm9rZT0iIzJhMzAzOCIgc3Ryb2tlLW9wYWNpdHk9IjAuNCIvPgogICAgPGxpbmUgeDE9Ijc2MCIgeTE9IjMyMCIgeDI9IjgyMCIgeTI9IjM0MCIgc3Ryb2tlPSIjMmRkNGJmIiBzdHJva2Utb3BhY2l0eT0iMC4xMyIvPgogICAgPGxpbmUgeDE9IjY0MCIgeTE9IjMxMCIgeDI9IjYyMCIgeTI9IjQwMCIgc3Ryb2tlPSIjYTc4YmZhIiBzdHJva2Utb3BhY2l0eT0iMC4xMiIvPgogICAgPGxpbmUgeDE9Ijc2MCIgeTE9IjMyMCIgeDI9IjcwMCIgeTI9IjQwMCIgc3Ryb2tlPSIjMmEzMDM4IiBzdHJva2Utb3BhY2l0eT0iMC4zNSIvPgogICAgPGxpbmUgeDE9IjgyMCIgeTE9IjM0MCIgeDI9IjkwMCIgeTI9IjQwMCIgc3Ryb2tlPSIjMmRkNGJmIiBzdHJva2Utb3BhY2l0eT0iMC4xNCIvPgogICAgPGxpbmUgeDE9IjcwMCIgeTE9IjQwMCIgeDI9Ijc4MCIgeTI9IjQ2MCIgc3Ryb2tlPSIjYTc4YmZhIiBzdHJva2Utb3BhY2l0eT0iMC4xMiIvPgogICAgPGxpbmUgeDE9IjkwMCIgeTE9IjQwMCIgeDI9Ijg2MCIgeTI9IjQ4MCIgc3Ryb2tlPSIjMmRkNGJmIiBzdHJva2Utb3BhY2l0eT0iMC4xMyIvPgogICAgPGxpbmUgeDE9Ijc4MCIgeTE9IjQ2MCIgeDI9Ijg2MCIgeTI9IjQ4MCIgc3Ryb2tlPSIjMmEzMDM4IiBzdHJva2Utb3BhY2l0eT0iMC4zNSIvPgoKICAgIDwhLS0gQ2x1c3RlciAzIOKAlCByaWdodCBhcmVhIC0tPgogICAgPGxpbmUgeDE9IjEwNjAiIHkxPSIyMDAiIHgyPSIxMTQwIiB5Mj0iMTcwIiBzdHJva2U9IiMyZGQ0YmYiIHN0cm9rZS1vcGFjaXR5PSIwLjE2Ii8+CiAgICA8bGluZSB4MT0iMTA2MCIgeTE9IjIwMCIgeDI9IjExMDAiIHkyPSIyODAiIHN0cm9rZT0iI2E3OGJmYSIgc3Ryb2tlLW9wYWNpdHk9IjAuMTQiLz4KICAgIDxsaW5lIHgxPSIxMTQwIiB5MT0iMTcwIiB4Mj0iMTIwMCIgeTI9IjI0MCIgc3Ryb2tlPSIjMmRkNGJmIiBzdHJva2Utb3BhY2l0eT0iMC4xNSIvPgogICAgPGxpbmUgeDE9IjEyMDAiIHkxPSIyNDAiIHgyPSIxMTYwIiB5Mj0iMzIwIiBzdHJva2U9IiMyYTMwMzgiIHN0cm9rZS1vcGFjaXR5PSIwLjQiLz4KICAgIDxsaW5lIHgxPSIxMTAwIiB5MT0iMjgwIiB4Mj0iMTE2MCIgeTI9IjMyMCIgc3Ryb2tlPSIjYTc4YmZhIiBzdHJva2Utb3BhY2l0eT0iMC4xMiIvPgogICAgPGxpbmUgeDE9IjExNjAiIHkxPSIzMjAiIHgyPSIxMjQwIiB5Mj0iMzYwIiBzdHJva2U9IiMyZGQ0YmYiIHN0cm9rZS1vcGFjaXR5PSIwLjE0Ii8+CiAgICA8bGluZSB4MT0iMTI0MCIgeTE9IjM2MCIgeDI9IjEzMDAiIHkyPSIzMDAiIHN0cm9rZT0iIzJhMzAzOCIgc3Ryb2tlLW9wYWNpdHk9IjAuMzUiLz4KICAgIDxsaW5lIHgxPSIxMzAwIiB5MT0iMzAwIiB4Mj0iMTM2MCIgeTI9IjM4MCIgc3Ryb2tlPSIjYTc4YmZhIiBzdHJva2Utb3BhY2l0eT0iMC4xMSIvPgogICAgPGxpbmUgeDE9IjExMDAiIHkxPSIyODAiIHgyPSIxMDYwIiB5Mj0iMzgwIiBzdHJva2U9IiMyYTMwMzgiIHN0cm9rZS1vcGFjaXR5PSIwLjQiLz4KICAgIDxsaW5lIHgxPSIxMDYwIiB5MT0iMzgwIiB4Mj0iMTEyMCIgeTI9IjQ0MCIgc3Ryb2tlPSIjMmRkNGJmIiBzdHJva2Utb3BhY2l0eT0iMC4xMiIvPgogICAgPGxpbmUgeDE9IjEyNDAiIHkxPSIzNjAiIHgyPSIxMjAwIiB5Mj0iNDQwIiBzdHJva2U9IiNhNzhiZmEiIHN0cm9rZS1vcGFjaXR5PSIwLjEwIi8+CgogICAgPCEtLSBMb3dlciBjb25uZWN0aW9ucyAtLT4KICAgIDxsaW5lIHgxPSI1ODAiIHkxPSIzNjAiIHgyPSI2MjAiIHkyPSI0MDAiIHN0cm9rZT0iIzJhMzAzOCIgc3Ryb2tlLW9wYWNpdHk9IjAuMzUiLz4KICAgIDxsaW5lIHgxPSI0MDAiIHkxPSI0MjAiIHgyPSI1MDAiIHkyPSI0ODAiIHN0cm9rZT0iI2E3OGJmYSIgc3Ryb2tlLW9wYWNpdHk9IjAuMTAiLz4KICAgIDxsaW5lIHgxPSI1MDAiIHkxPSI0ODAiIHgyPSI2MjAiIHkyPSI0MDAiIHN0cm9rZT0iIzJhMzAzOCIgc3Ryb2tlLW9wYWNpdHk9IjAuMyIvPgogICAgPGxpbmUgeDE9IjYyMCIgeTE9IjQwMCIgeDI9IjcwMCIgeTI9IjQwMCIgc3Ryb2tlPSIjMmRkNGJmIiBzdHJva2Utb3BhY2l0eT0iMC4xNCIvPgogICAgPGxpbmUgeDE9Ijg2MCIgeTE9IjQ4MCIgeDI9Ijk2MCIgeTI9IjQ0MCIgc3Ryb2tlPSIjMmEzMDM4IiBzdHJva2Utb3BhY2l0eT0iMC4zIi8+CiAgICA8bGluZSB4MT0iOTYwIiB5MT0iNDQwIiB4Mj0iMTA2MCIgeTI9IjM4MCIgc3Ryb2tlPSIjYTc4YmZhIiBzdHJva2Utb3BhY2l0eT0iMC4xMCIvPgoKICAgIDwhLS0gRmFpbnQgb3V0ZXIgY29ubmVjdGlvbnMgLS0+CiAgICA8bGluZSB4MT0iMzAwIiB5MT0iNTIwIiB4Mj0iNDAwIiB5Mj0iNTgwIiBzdHJva2U9IiMyYTMwMzgiIHN0cm9rZS1vcGFjaXR5PSIwLjI1Ii8+CiAgICA8bGluZSB4MT0iNDAwIiB5MT0iNTgwIiB4Mj0iNTIwIiB5Mj0iNTYwIiBzdHJva2U9IiNhNzhiZmEiIHN0cm9rZS1vcGFjaXR5PSIwLjA4Ii8+CiAgICA8bGluZSB4MT0iNTIwIiB5MT0iNTYwIiB4Mj0iNjIwIiB5Mj0iNTIwIiBzdHJva2U9IiMyYTMwMzgiIHN0cm9rZS1vcGFjaXR5PSIwLjI1Ii8+CiAgICA8bGluZSB4MT0iODAwIiB5MT0iNTQwIiB4Mj0iOTIwIiB5Mj0iNTgwIiBzdHJva2U9IiMyZGQ0YmYiIHN0cm9rZS1vcGFjaXR5PSIwLjA5Ii8+CiAgICA8bGluZSB4MT0iMTEwMCIgeTE9IjUwMCIgeDI9IjEyMDAiIHkyPSI1NDAiIHN0cm9rZT0iI2E3OGJmYSIgc3Ryb2tlLW9wYWNpdHk9IjAuMDgiLz4KICAgIDxsaW5lIHgxPSIxMjAwIiB5MT0iNTQwIiB4Mj0iMTMwMCIgeTI9IjUwMCIgc3Ryb2tlPSIjMmEzMDM4IiBzdHJva2Utb3BhY2l0eT0iMC4yNSIvPgogIDwvZz4KCiAgPCEtLSDilIDilIAgTk9ERSBET1RTIOKUgOKUgCAtLT4KICA8Zz4KICAgIDwhLS0gQ2x1c3RlciAxIG5vZGVzIOKAlCBwdXJwbGUgKGNodXJuZWQpIC0tPgogICAgPGNpcmNsZSBjeD0iMzIwIiAgY3k9IjE4MCIgcj0iNSIgZmlsbD0iI2E3OGJmYSIgZmlsbC1vcGFjaXR5PSIwLjU1Ii8+CiAgICA8Y2lyY2xlIGN4PSI0MjAiICBjeT0iMjQwIiByPSIzIiBmaWxsPSIjYTc4YmZhIiBmaWxsLW9wYWNpdHk9IjAuNDAiLz4KICAgIDxjaXJjbGUgY3g9IjM4MCIgIGN5PSIzMDAiIHI9IjMiIGZpbGw9IiNhNzhiZmEiIGZpbGwtb3BhY2l0eT0iMC4zOCIvPgogICAgPGNpcmNsZSBjeD0iMjYwIiAgY3k9IjI4MCIgcj0iMiIgZmlsbD0iIzJhMzAzOCIgZmlsbC1vcGFjaXR5PSIwLjgiLz4KICAgIDxjaXJjbGUgY3g9IjUwMCIgIGN5PSIyMDAiIHI9IjMiIGZpbGw9IiMyYTMwMzgiIGZpbGwtb3BhY2l0eT0iMC43Ii8+CiAgICA8Y2lyY2xlIGN4PSI1NjAiICBjeT0iMjgwIiByPSI0IiBmaWxsPSIjMmRkNGJmIiBmaWxsLW9wYWNpdHk9IjAuNDAiLz4KICAgIDxjaXJjbGUgY3g9IjQ4MCIgIGN5PSIzNDAiIHI9IjMiIGZpbGw9IiNhNzhiZmEiIGZpbGwtb3BhY2l0eT0iMC4zNSIvPgogICAgPGNpcmNsZSBjeD0iMzAwIiAgY3k9IjM4MCIgcj0iMiIgZmlsbD0iIzJhMzAzOCIgZmlsbC1vcGFjaXR5PSIwLjciLz4KICAgIDxjaXJjbGUgY3g9IjQwMCIgIGN5PSI0MjAiIHI9IjMiIGZpbGw9IiMyZGQ0YmYiIGZpbGwtb3BhY2l0eT0iMC4zNSIvPgogICAgPGNpcmNsZSBjeD0iNTgwIiAgY3k9IjM2MCIgcj0iMiIgZmlsbD0iIzJhMzAzOCIgZmlsbC1vcGFjaXR5PSIwLjYiLz4KCiAgICA8IS0tIENsdXN0ZXIgMiBub2RlcyDigJQgdGVhbCAoYWN0aXZlKSAtLT4KICAgIDxjaXJjbGUgY3g9IjcwMCIgIGN5PSIyNDAiIHI9IjYiIGZpbGw9IiMyZGQ0YmYiIGZpbGwtb3BhY2l0eT0iMC41NSIvPgogICAgPGNpcmNsZSBjeD0iNzgwIiAgY3k9IjIwMCIgcj0iNCIgZmlsbD0iIzJkZDRiZiIgZmlsbC1vcGFjaXR5PSIwLjQ1Ii8+CiAgICA8Y2lyY2xlIGN4PSI2NDAiICBjeT0iMzEwIiByPSIzIiBmaWxsPSIjYTc4YmZhIiBmaWxsLW9wYWNpdHk9IjAuMzgiLz4KICAgIDxjaXJjbGUgY3g9Ijc2MCIgIGN5PSIzMjAiIHI9IjQiIGZpbGw9IiMyZGQ0YmYiIGZpbGwtb3BhY2l0eT0iMC40MiIvPgogICAgPGNpcmNsZSBjeD0iODYwIiAgY3k9IjI1MCIgcj0iMyIgZmlsbD0iIzJkZDRiZiIgZmlsbC1vcGFjaXR5PSIwLjQwIi8+CiAgICA8Y2lyY2xlIGN4PSI4MjAiICBjeT0iMzQwIiByPSIzIiBmaWxsPSIjMmEzMDM4IiBmaWxsLW9wYWNpdHk9IjAuNyIvPgogICAgPGNpcmNsZSBjeD0iNjIwIiAgY3k9IjQwMCIgcj0iMiIgZmlsbD0iI2E3OGJmYSIgZmlsbC1vcGFjaXR5PSIwLjM1Ii8+CiAgICA8Y2lyY2xlIGN4PSI3MDAiICBjeT0iNDAwIiByPSIzIiBmaWxsPSIjMmRkNGJmIiBmaWxsLW9wYWNpdHk9IjAuMzgiLz4KICAgIDxjaXJjbGUgY3g9IjkwMCIgIGN5PSI0MDAiIHI9IjQiIGZpbGw9IiMyZGQ0YmYiIGZpbGwtb3BhY2l0eT0iMC40NSIvPgogICAgPGNpcmNsZSBjeD0iNzgwIiAgY3k9IjQ2MCIgcj0iMyIgZmlsbD0iI2E3OGJmYSIgZmlsbC1vcGFjaXR5PSIwLjM1Ii8+CiAgICA8Y2lyY2xlIGN4PSI4NjAiICBjeT0iNDgwIiByPSIzIiBmaWxsPSIjMmRkNGJmIiBmaWxsLW9wYWNpdHk9IjAuMzgiLz4KCiAgICA8IS0tIENsdXN0ZXIgMyBub2RlcyAtLT4KICAgIDxjaXJjbGUgY3g9IjEwNjAiIGN5PSIyMDAiIHI9IjUiIGZpbGw9IiMyZGQ0YmYiIGZpbGwtb3BhY2l0eT0iMC40OCIvPgogICAgPGNpcmNsZSBjeD0iMTE0MCIgY3k9IjE3MCIgcj0iMyIgZmlsbD0iIzJkZDRiZiIgZmlsbC1vcGFjaXR5PSIwLjQyIi8+CiAgICA8Y2lyY2xlIGN4PSIxMjAwIiBjeT0iMjQwIiByPSI0IiBmaWxsPSIjYTc4YmZhIiBmaWxsLW9wYWNpdHk9IjAuNDAiLz4KICAgIDxjaXJjbGUgY3g9IjExMDAiIGN5PSIyODAiIHI9IjMiIGZpbGw9IiNhNzhiZmEiIGZpbGwtb3BhY2l0eT0iMC4zOCIvPgogICAgPGNpcmNsZSBjeD0iMTE2MCIgY3k9IjMyMCIgcj0iMyIgZmlsbD0iIzJhMzAzOCIgZmlsbC1vcGFjaXR5PSIwLjciLz4KICAgIDxjaXJjbGUgY3g9IjEyNDAiIGN5PSIzNjAiIHI9IjQiIGZpbGw9IiMyZGQ0YmYiIGZpbGwtb3BhY2l0eT0iMC40MiIvPgogICAgPGNpcmNsZSBjeD0iMTMwMCIgY3k9IjMwMCIgcj0iMiIgZmlsbD0iIzJhMzAzOCIgZmlsbC1vcGFjaXR5PSIwLjYiLz4KICAgIDxjaXJjbGUgY3g9IjEzNjAiIGN5PSIzODAiIHI9IjMiIGZpbGw9IiNhNzhiZmEiIGZpbGwtb3BhY2l0eT0iMC4zNSIvPgogICAgPGNpcmNsZSBjeD0iMTA2MCIgY3k9IjM4MCIgcj0iMyIgZmlsbD0iIzJkZDRiZiIgZmlsbC1vcGFjaXR5PSIwLjM4Ii8+CiAgICA8Y2lyY2xlIGN4PSIxMTIwIiBjeT0iNDQwIiByPSIzIiBmaWxsPSIjYTc4YmZhIiBmaWxsLW9wYWNpdHk9IjAuMzUiLz4KICAgIDxjaXJjbGUgY3g9IjEyMDAiIGN5PSI0NDAiIHI9IjIiIGZpbGw9IiMyYTMwMzgiIGZpbGwtb3BhY2l0eT0iMC42Ii8+CgogICAgPCEtLSBMb3dlciBub2RlcyAtLT4KICAgIDxjaXJjbGUgY3g9IjUwMCIgIGN5PSI0ODAiIHI9IjMiIGZpbGw9IiNhNzhiZmEiIGZpbGwtb3BhY2l0eT0iMC4zMiIvPgogICAgPGNpcmNsZSBjeD0iOTYwIiAgY3k9IjQ0MCIgcj0iMyIgZmlsbD0iIzJhMzAzOCIgZmlsbC1vcGFjaXR5PSIwLjYiLz4KICAgIDxjaXJjbGUgY3g9IjMwMCIgIGN5PSI1MjAiIHI9IjIiIGZpbGw9IiMyYTMwMzgiIGZpbGwtb3BhY2l0eT0iMC41Ii8+CiAgICA8Y2lyY2xlIGN4PSI0MDAiICBjeT0iNTgwIiByPSIzIiBmaWxsPSIjYTc4YmZhIiBmaWxsLW9wYWNpdHk9IjAuMjgiLz4KICAgIDxjaXJjbGUgY3g9IjUyMCIgIGN5PSI1NjAiIHI9IjIiIGZpbGw9IiMyYTMwMzgiIGZpbGwtb3BhY2l0eT0iMC41Ii8+CiAgICA8Y2lyY2xlIGN4PSI4MDAiICBjeT0iNTQwIiByPSIzIiBmaWxsPSIjMmRkNGJmIiBmaWxsLW9wYWNpdHk9IjAuMzAiLz4KICAgIDxjaXJjbGUgY3g9IjkyMCIgIGN5PSI1ODAiIHI9IjIiIGZpbGw9IiMyYTMwMzgiIGZpbGwtb3BhY2l0eT0iMC41Ii8+CiAgICA8Y2lyY2xlIGN4PSIxMTAwIiBjeT0iNTAwIiByPSIzIiBmaWxsPSIjYTc4YmZhIiBmaWxsLW9wYWNpdHk9IjAuMjgiLz4KICAgIDxjaXJjbGUgY3g9IjEyMDAiIGN5PSI1NDAiIHI9IjIiIGZpbGw9IiMyYTMwMzgiIGZpbGwtb3BhY2l0eT0iMC41Ii8+CiAgICA8Y2lyY2xlIGN4PSIxMzAwIiBjeT0iNTAwIiByPSIzIiBmaWxsPSIjMmRkNGJmIiBmaWxsLW9wYWNpdHk9IjAuMjgiLz4KICA8L2c+CgogIDwhLS0g4pSA4pSAIENPSE9SVCBNQVRSSVggR0hPU1Qg4pSA4pSAIC0tPgogIDwhLS0gNSByb3dzIMOXIDUgY29scyBkaWFnb25hbCBmYWRlIC0tPgogIDxnIG9wYWNpdHk9IjAuNSI+CiAgICA8cmVjdCB4PSIyMjAiIHk9IjIwNSIgd2lkdGg9IjE4NSIgaGVpZ2h0PSI0NSIgcng9IjEiIGZpbGw9IiMyZGQ0YmYiICBmaWxsLW9wYWNpdHk9IjAuMTAiLz4KICAgIDxyZWN0IHg9IjQxMSIgeT0iMjA1IiB3aWR0aD0iMTg1IiBoZWlnaHQ9IjQ1IiByeD0iMSIgZmlsbD0iIzJkZDRiZiIgIGZpbGwtb3BhY2l0eT0iMC4wNyIvPgogICAgPHJlY3QgeD0iNjAyIiB5PSIyMDUiIHdpZHRoPSIxODUiIGhlaWdodD0iNDUiIHJ4PSIxIiBmaWxsPSIjZjVhNjIzIiAgZmlsbC1vcGFjaXR5PSIwLjA2Ii8+CiAgICA8cmVjdCB4PSI3OTMiIHk9IjIwNSIgd2lkdGg9IjE4NSIgaGVpZ2h0PSI0NSIgcng9IjEiIGZpbGw9IiNmNWE2MjMiICBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KICAgIDxyZWN0IHg9Ijk4NCIgeT0iMjA1IiB3aWR0aD0iMTg1IiBoZWlnaHQ9IjQ1IiByeD0iMSIgZmlsbD0iI2Y4NzE3MSIgIGZpbGwtb3BhY2l0eT0iMC4wNSIvPgoKICAgIDxyZWN0IHg9IjIyMCIgeT0iMjU2IiB3aWR0aD0iMTg1IiBoZWlnaHQ9IjQ1IiByeD0iMSIgZmlsbD0iIzJkZDRiZiIgIGZpbGwtb3BhY2l0eT0iMC4xMCIvPgogICAgPHJlY3QgeD0iNDExIiB5PSIyNTYiIHdpZHRoPSIxODUiIGhlaWdodD0iNDUiIHJ4PSIxIiBmaWxsPSIjMmRkNGJmIiAgZmlsbC1vcGFjaXR5PSIwLjA4Ii8+CiAgICA8cmVjdCB4PSI2MDIiIHk9IjI1NiIgd2lkdGg9IjE4NSIgaGVpZ2h0PSI0NSIgcng9IjEiIGZpbGw9IiMyZGQ0YmYiICBmaWxsLW9wYWNpdHk9IjAuMDYiLz4KICAgIDxyZWN0IHg9Ijc5MyIgeT0iMjU2IiB3aWR0aD0iMTg1IiBoZWlnaHQ9IjQ1IiByeD0iMSIgZmlsbD0iI2Y1YTYyMyIgIGZpbGwtb3BhY2l0eT0iMC4wNCIvPgogICAgPHJlY3QgeD0iOTg0IiB5PSIyNTYiIHdpZHRoPSIxIiAgIGhlaWdodD0iNDUiIHJ4PSIxIiBmaWxsPSJub25lIi8+CgogICAgPHJlY3QgeD0iMjIwIiB5PSIzMDciIHdpZHRoPSIxODUiIGhlaWdodD0iNDUiIHJ4PSIxIiBmaWxsPSIjMmRkNGJmIiAgZmlsbC1vcGFjaXR5PSIwLjEwIi8+CiAgICA8cmVjdCB4PSI0MTEiIHk9IjMwNyIgd2lkdGg9IjE4NSIgaGVpZ2h0PSI0NSIgcng9IjEiIGZpbGw9IiMyZGQ0YmYiICBmaWxsLW9wYWNpdHk9IjAuMDYiLz4KICAgIDxyZWN0IHg9IjYwMiIgeT0iMzA3IiB3aWR0aD0iMTg1IiBoZWlnaHQ9IjQ1IiByeD0iMSIgZmlsbD0iI2Y4NzE3MSIgIGZpbGwtb3BhY2l0eT0iMC4wNiIvPgogIDwvZz4KCiAgPCEtLSDilIDilIAgUkVURU5USU9OIEFSQyAobGFyZ2UgZ2hvc3QpIOKUgOKUgCAtLT4KICA8cGF0aCBkPSJNMjIwLDYwMCBBNDAwLDQwMCAwIDAsMSA2MjAsMjAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNhNzhiZmEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLW9wYWNpdHk9IjAuMDgiLz4KICA8cGF0aCBkPSJNMjIwLDYyMCBBMzgwLDM4MCAwIDAsMSA2MDAsMjQyIiBmaWxsPSJub25lIiBzdHJva2U9IiNhNzhiZmEiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLW9wYWNpdHk9IjAuMDUiLz4KICA8cGF0aCBkPSJNMjIwLDY2MCBBMzQwLDM0MCAwIDAsMSA1NjAsMzIyIiBmaWxsPSJub25lIiBzdHJva2U9IiMyZGQ0YmYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLW9wYWNpdHk9IjAuMDYiLz4KCiAgPCEtLSBQdXJwbGUgZ2xvdyB0b3AtbGVmdCAtLT4KICA8Y2lyY2xlIGN4PSIyMDAiIGN5PSI4NCIgcj0iMjgwIiBmaWxsPSIjYTc4YmZhIiBmaWxsLW9wYWNpdHk9IjAuMDMiLz4KICA8Y2lyY2xlIGN4PSIyMDAiIGN5PSI4NCIgcj0iMTYwIiBmaWxsPSIjYTc4YmZhIiBmaWxsLW9wYWNpdHk9IjAuMDQiLz4KICA8Y2lyY2xlIGN4PSIyMDAiIGN5PSI4NCIgcj0iODAiICBmaWxsPSIjYTc4YmZhIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KCiAgPCEtLSDilIDilIAgU1RSVUNUVVJBTCDilIDilIAgLS0+CiAgPGxpbmUgeDE9IjIwMCIgIHkxPSIwIiAgICB4Mj0iMjAwIiAgeTI9IjkwMCIgc3Ryb2tlPSIjMmEzMDM4IiBzdHJva2Utd2lkdGg9IjEiLz4KICA8bGluZSB4MT0iMCIgICAgeTE9IjQ4IiAgIHgyPSIxNDQwIiB5Mj0iNDgiICBzdHJva2U9IiMxZTIzMjgiIHN0cm9rZS13aWR0aD0iMSIvPgogIDxsaW5lIHgxPSIwIiAgICB5MT0iODQiICAgeDI9IjE0NDAiIHkyPSI4NCIgIHN0cm9rZT0iIzJhMzAzOCIgc3Ryb2tlLXdpZHRoPSIxIi8+CgogIDxyZWN0IHg9IjAiICAgeT0iMCIgIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjQ4IiAgZmlsbD0iIzExMTQxOCIgZmlsbC1vcGFjaXR5PSIwLjk1Ii8+CiAgPHJlY3QgeD0iMCIgICB5PSI0OCIgd2lkdGg9IjE0NDAiIGhlaWdodD0iMzYiICBmaWxsPSIjMTExNDE4IiBmaWxsLW9wYWNpdHk9IjAuOTAiLz4KICA8cmVjdCB4PSIwIiAgIHk9Ijg0IiB3aWR0aD0iMjAwIiAgaGVpZ2h0PSI4MTYiIGZpbGw9IiMxMTE0MTgiIGZpbGwtb3BhY2l0eT0iMC44NSIvPgoKICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMyIgaGVpZ2h0PSI0OCIgZmlsbD0iI2E3OGJmYSIgZmlsbC1vcGFjaXR5PSIwLjciLz4KPC9zdmc+Cg=='); background-size: cover; background-position: top left; background-repeat: no-repeat; }
+  #page3 { background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0NDAgOTAwIj4KICA8ZGVmcz4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0icDRfZ2xvd19kcm9wIiBjeD0iNTQlIiBjeT0iMzglIiByPSIxOCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZjg3MTcxIiBzdG9wLW9wYWNpdHk9IjAuMTYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZjg3MTcxIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9InA0X2dsb3dfYW1iZXIiIGN4PSIyMCUiIGN5PSIyMiUiIHI9IjIwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmNWE2MjMiIHN0b3Atb3BhY2l0eT0iMC4xMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmNWE2MjMiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0icDRfZ2xvd19ib3R0b20iIGN4PSI1MCUiIGN5PSIxMDAlIiByPSIzNSUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZjVhNjIzIiBzdG9wLW9wYWNpdHk9IjAuMDciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZjVhNjIzIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InA0X2FyZWFfYW1iZXIiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y1YTYyMyIgc3RvcC1vcGFjaXR5PSIwLjE0Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y1YTYyMyIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJwNF9hcmVhX3JlZCIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZjg3MTcxIiBzdG9wLW9wYWNpdHk9IjAuMTIiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZjg3MTcxIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InA0X3drM196b25lIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmODcxNzEiIHN0b3Atb3BhY2l0eT0iMC4wOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmODcxNzEiIHN0b3Atb3BhY2l0eT0iMC4wMyIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxwYXR0ZXJuIGlkPSJwNF9kb3RncmlkIiB4PSIwIiB5PSIwIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIxIiBmaWxsPSIjMmEzMDM4IiBvcGFjaXR5PSIwLjMyIi8+CiAgICA8L3BhdHRlcm4+CiAgPC9kZWZzPgoKICA8IS0tIEJhc2UgLS0+CiAgPHJlY3Qgd2lkdGg9IjE0NDAiIGhlaWdodD0iOTAwIiBmaWxsPSIjMGIwZDBmIi8+CiAgPHJlY3Qgd2lkdGg9IjE0NDAiIGhlaWdodD0iOTAwIiBmaWxsPSJ1cmwoI3A0X2dsb3dfZHJvcCkiLz4KICA8cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjcDRfZ2xvd19hbWJlcikiLz4KICA8cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjcDRfZ2xvd19ib3R0b20pIi8+CgogIDwhLS0gRG90IGdyaWQgLS0+CiAgPHJlY3QgeD0iMjAwIiB5PSI4NCIgd2lkdGg9IjEyNDAiIGhlaWdodD0iODE2IiBmaWxsPSJ1cmwoI3A0X2RvdGdyaWQpIi8+CgogIDwhLS0g4pSA4pSAIEhPUklaT05UQUwgR1JJRCBMSU5FUyDilIDilIAgLS0+CiAgPGcgc3Ryb2tlPSIjMWUyMzI4IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1vcGFjaXR5PSIwLjQ1Ij4KICAgIDxsaW5lIHgxPSIyMjAiIHkxPSIyMTAiIHgyPSIxNDMwIiB5Mj0iMjEwIi8+CiAgICA8bGluZSB4MT0iMjIwIiB5MT0iMjgwIiB4Mj0iMTQzMCIgeTI9IjI4MCIvPgogICAgPGxpbmUgeDE9IjIyMCIgeTE9IjM1MCIgeDI9IjE0MzAiIHkyPSIzNTAiLz4KICAgIDxsaW5lIHgxPSIyMjAiIHkxPSI0MjAiIHgyPSIxNDMwIiB5Mj0iNDIwIi8+CiAgICA8bGluZSB4MT0iMjIwIiB5MT0iNDkwIiB4Mj0iMTQzMCIgeTI9IjQ5MCIvPgogICAgPGxpbmUgeDE9IjIyMCIgeTE9IjU2MCIgeDI9IjE0MzAiIHkyPSI1NjAiLz4KICAgIDxsaW5lIHgxPSIyMjAiIHkxPSI2MzAiIHgyPSIxNDMwIiB5Mj0iNjMwIi8+CiAgPC9nPgoKICA8IS0tIOKUgOKUgCBXRUVLIFZFUlRJQ0FMIE1BUktFUlMg4pSA4pSAIC0tPgogIDwhLS0gV2sxIC0tPgogIDxsaW5lIHgxPSI1MDAiIHkxPSI4NCIgeDI9IjUwMCIgeTI9IjkwMCIgc3Ryb2tlPSIjMmEzMDM4IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1vcGFjaXR5PSIwLjUiLz4KICA8IS0tIFdrMiAtLT4KICA8bGluZSB4MT0iNzgwIiB5MT0iODQiIHgyPSI3ODAiIHkyPSI5MDAiIHN0cm9rZT0iIzJhMzAzOCIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMC41Ii8+CiAgPCEtLSBXazMg4oCUIFJFRCBoaWdobGlnaHQgem9uZSAtLT4KICA8cmVjdCB4PSI3ODAiIHk9Ijg0IiB3aWR0aD0iMjgwIiBoZWlnaHQ9IjgxNiIgZmlsbD0idXJsKCNwNF93azNfem9uZSkiLz4KICA8bGluZSB4MT0iNzgwIiAgeTE9Ijg0IiB4Mj0iNzgwIiAgeTI9IjkwMCIgc3Ryb2tlPSIjZjg3MTcxIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1vcGFjaXR5PSIwLjM1Ii8+CiAgPGxpbmUgeDE9IjEwNjAiIHkxPSI4NCIgeDI9IjEwNjAiIHkyPSI5MDAiIHN0cm9rZT0iI2Y4NzE3MSIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMC4yMCIvPgogIDwhLS0gV2s0IC0tPgogIDxsaW5lIHgxPSIxMDYwIiB5MT0iODQiIHgyPSIxMDYwIiB5Mj0iOTAwIiBzdHJva2U9IiMyYTMwMzgiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLW9wYWNpdHk9IjAuNSIvPgogIDxsaW5lIHgxPSIxMzQwIiB5MT0iODQiIHgyPSIxMzQwIiB5Mj0iOTAwIiBzdHJva2U9IiMyYTMwMzgiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLW9wYWNpdHk9IjAuNCIvPgoKICA8IS0tIOKUgOKUgCBHSE9TVCBBUkVBIENIQVJUIOKAlCBXRUVLTFkgU0FMRVMg4pSA4pSAIC0tPgogIDwhLS0gTm9ybWFsIHdlZWtzIGZpbGwgKGFtYmVyKSAtLT4KICA8cGF0aCBkPSJNMjIwLDQ0MCBDMzAwLDQyMCA0MjAsNDAwIDUwMCwzOTAgQzU4MCwzODAgNjYwLDM3MCA3ODAsMzY1IEw3ODAsNjIwIEwyMjAsNjIwIFoiCiAgICAgICAgZmlsbD0idXJsKCNwNF9hcmVhX2FtYmVyKSIvPgogIDwhLS0gRHJvcCB3ZWVrIGZpbGwgKHJlZCkgLS0+CiAgPHBhdGggZD0iTTc4MCwzNjUgTDkyMCw1MjAgTDEwNjAsNDgwIEwxMDYwLDYyMCBMNzgwLDYyMCBaIgogICAgICAgIGZpbGw9InVybCgjcDRfYXJlYV9yZWQpIi8+CiAgPCEtLSBSZWNvdmVyeSBmaWxsIC0tPgogIDxwYXRoIGQ9Ik0xMDYwLDQ4MCBDMTE2MCw0NTAgMTI2MCw0MzAgMTM0MCw0MDAgTDEzNDAsNjIwIEwxMDYwLDYyMCBaIgogICAgICAgIGZpbGw9InVybCgjcDRfYXJlYV9hbWJlcikiLz4KCiAgPCEtLSBHaG9zdCBsaW5lIOKAlCBzYWxlcyB0cmVuZCAtLT4KICA8IS0tIFdrMeKGkldrMiBzZWdtZW50OiBhbWJlciAtLT4KICA8cGF0aCBkPSJNMjIwLDQ0MCBDMzAwLDQyMCA0MjAsNDAwIDUwMCwzOTAgQzU4MCwzODAgNjgwLDM3MiA3ODAsMzY1IgogICAgICAgIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1YTYyMyIgc3Ryb2tlLXdpZHRoPSIyLjUiIHN0cm9rZS1vcGFjaXR5PSIwLjMwIi8+CiAgPCEtLSBXazLihpJXazMgRFJPUDogcmVkIC0tPgogIDxwYXRoIGQ9Ik03ODAsMzY1IEw5MjAsNTIwIgogICAgICAgIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y4NzE3MSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2Utb3BhY2l0eT0iMC40NSIvPgogIDwhLS0gV2sz4oaSV2s0IHJlY292ZXJ5OiBhbWJlciAtLT4KICA8cGF0aCBkPSJNOTIwLDUyMCBDOTgwLDQ5OCAxMDIwLDQ4OCAxMDYwLDQ4MCBDMTE2MCw0NTAgMTI2MCw0MzAgMTM0MCw0MDAiCiAgICAgICAgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZjVhNjIzIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1vcGFjaXR5PSIwLjI1Ii8+CgogIDwhLS0gRGF0YSBwb2ludCBtYXJrZXJzIC0tPgogIDxjaXJjbGUgY3g9IjIyMCIgIGN5PSI0NDAiIHI9IjUiIGZpbGw9IiNmNWE2MjMiIGZpbGwtb3BhY2l0eT0iMC41MCIvPgogIDxjaXJjbGUgY3g9IjUwMCIgIGN5PSIzOTAiIHI9IjUiIGZpbGw9IiNmNWE2MjMiIGZpbGwtb3BhY2l0eT0iMC41MCIvPgogIDxjaXJjbGUgY3g9Ijc4MCIgIGN5PSIzNjUiIHI9IjUiIGZpbGw9IiNmNWE2MjMiIGZpbGwtb3BhY2l0eT0iMC41MCIvPgogIDwhLS0gV2szIGRyb3AgcG9pbnQg4oCUIGxhcmdlIHJlZCBkb3QgLS0+CiAgPGNpcmNsZSBjeD0iOTIwIiAgY3k9IjUyMCIgcj0iOSIgZmlsbD0iI2Y4NzE3MSIgZmlsbC1vcGFjaXR5PSIwLjI1Ii8+CiAgPGNpcmNsZSBjeD0iOTIwIiAgY3k9IjUyMCIgcj0iNiIgZmlsbD0iI2Y4NzE3MSIgZmlsbC1vcGFjaXR5PSIwLjQ1Ii8+CiAgPGNpcmNsZSBjeD0iMTA2MCIgY3k9IjQ4MCIgcj0iNSIgZmlsbD0iI2Y4NzE3MSIgZmlsbC1vcGFjaXR5PSIwLjQwIi8+CiAgPGNpcmNsZSBjeD0iMTM0MCIgY3k9IjQwMCIgcj0iNSIgZmlsbD0iI2Y1YTYyMyIgZmlsbC1vcGFjaXR5PSIwLjQ1Ii8+CgogIDwhLS0gRHJvcCBhbm5vdGF0aW9uIGxpbmUgLS0+CiAgPGxpbmUgeDE9IjkyMCIgeTE9IjMyMCIgeDI9IjkyMCIgeTI9IjUxMyIgc3Ryb2tlPSIjZjg3MTcxIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1vcGFjaXR5PSIwLjM1IiBzdHJva2UtZGFzaGFycmF5PSI0LDMiLz4KICA8cmVjdCB4PSI4NjIiIHk9IjMwNCIgd2lkdGg9IjExNiIgaGVpZ2h0PSIxOCIgcng9IjEiIGZpbGw9IiMxZTE0MTgiIGZpbGwtb3BhY2l0eT0iMC45Ii8+CiAgPHRleHQgeD0iOTIwIiB5PSIzMTciIGZpbGw9IiNmODcxNzEiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iOSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgb3BhY2l0eT0iMC43Ij7imqAgV29XIOKIkjIyJTwvdGV4dD4KCiAgPCEtLSDilIDilIAgR0hPU1QgU0tVIEJBUiBST1dTIChib3R0b20gdGFibGUgYXJlYSkg4pSA4pSAIC0tPgogIDxnIG9wYWNpdHk9IjAuNiI+CiAgICA8cmVjdCB4PSIyMjAiIHk9IjY0MCIgd2lkdGg9IjgyMCIgaGVpZ2h0PSIyMCIgcng9IjEiIGZpbGw9IiNmODcxNzEiIGZpbGwtb3BhY2l0eT0iMC4xMCIvPgogICAgPHJlY3QgeD0iMjIwIiB5PSI2NjYiIHdpZHRoPSI2MjAiIGhlaWdodD0iMTYiIHJ4PSIxIiBmaWxsPSIjZjg3MTcxIiBmaWxsLW9wYWNpdHk9IjAuMDgiLz4KICAgIDxyZWN0IHg9IjIyMCIgeT0iNjg4IiB3aWR0aD0iNTAwIiBoZWlnaHQ9IjE2IiByeD0iMSIgZmlsbD0iI2Y1YTYyMyIgZmlsbC1vcGFjaXR5PSIwLjA4Ii8+CiAgICA8cmVjdCB4PSIyMjAiIHk9IjcxMCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSIxNiIgcng9IjEiIGZpbGw9IiNmNWE2MjMiIGZpbGwtb3BhY2l0eT0iMC4wNyIvPgogICAgPHJlY3QgeD0iMjIwIiB5PSI3MzIiIHdpZHRoPSIzMjAiIGhlaWdodD0iMTYiIHJ4PSIxIiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMDYiLz4KICAgIDxyZWN0IHg9IjIyMCIgeT0iNzU0IiB3aWR0aD0iMjUwIiBoZWlnaHQ9IjE2IiByeD0iMSIgZmlsbD0iIzRhZGU4MCIgZmlsbC1vcGFjaXR5PSIwLjA2Ii8+CiAgICA8cmVjdCB4PSIyMjAiIHk9Ijc3NiIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxNCIgcng9IjEiIGZpbGw9IiM0YWRlODAiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPgogIDwvZz4KCiAgPCEtLSBHaG9zdCB0YWJsZSBzZXBhcmF0b3IgLS0+CiAgPGxpbmUgeDE9IjIyMCIgeTE9IjYzMiIgeDI9IjE0MzAiIHkyPSI2MzIiIHN0cm9rZT0iIzJhMzAzOCIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMC41Ii8+CgogIDwhLS0g4pSA4pSAIFJFRCBHTE9XIGF0IFdrMyBkcm9wIHBvaW50IOKUgOKUgCAtLT4KICA8Y2lyY2xlIGN4PSI5MjAiIGN5PSI1MjAiIHI9IjEyMCIgZmlsbD0iI2Y4NzE3MSIgZmlsbC1vcGFjaXR5PSIwLjA0Ii8+CiAgPGNpcmNsZSBjeD0iOTIwIiBjeT0iNTIwIiByPSI3MCIgIGZpbGw9IiNmODcxNzEiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPgogIDxjaXJjbGUgY3g9IjkyMCIgY3k9IjUyMCIgcj0iMzUiICBmaWxsPSIjZjg3MTcxIiBmaWxsLW9wYWNpdHk9IjAuMDYiLz4KCiAgPCEtLSDilIDilIAgU1RSVUNUVVJBTCDilIDilIAgLS0+CiAgPGxpbmUgeDE9IjIwMCIgIHkxPSIwIiAgICB4Mj0iMjAwIiAgeTI9IjkwMCIgc3Ryb2tlPSIjMmEzMDM4IiBzdHJva2Utd2lkdGg9IjEiLz4KICA8bGluZSB4MT0iMCIgICAgeTE9IjQ4IiAgIHgyPSIxNDQwIiB5Mj0iNDgiICBzdHJva2U9IiMxZTIzMjgiIHN0cm9rZS13aWR0aD0iMSIvPgogIDxsaW5lIHgxPSIwIiAgICB5MT0iODQiICAgeDI9IjE0NDAiIHkyPSI4NCIgIHN0cm9rZT0iIzJhMzAzOCIgc3Ryb2tlLXdpZHRoPSIxIi8+CgogIDxyZWN0IHg9IjAiICAgeT0iMCIgIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjQ4IiAgZmlsbD0iIzExMTQxOCIgZmlsbC1vcGFjaXR5PSIwLjk1Ii8+CiAgPHJlY3QgeD0iMCIgICB5PSI0OCIgd2lkdGg9IjE0NDAiIGhlaWdodD0iMzYiICBmaWxsPSIjMTExNDE4IiBmaWxsLW9wYWNpdHk9IjAuOTAiLz4KICA8cmVjdCB4PSIwIiAgIHk9Ijg0IiB3aWR0aD0iMjAwIiAgaGVpZ2h0PSI4MTYiIGZpbGw9IiMxMTE0MTgiIGZpbGwtb3BhY2l0eT0iMC44NSIvPgoKICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMyIgaGVpZ2h0PSI0OCIgZmlsbD0iI2Y4NzE3MSIgZmlsbC1vcGFjaXR5PSIwLjciLz4KPC9zdmc+Cg=='); background-size: cover; background-position: top left; background-repeat: no-repeat; }
+  #page4 { background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE0NDAgOTAwIj4KICA8ZGVmcz4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0icDVfZ2xvd19hbWJlciIgY3g9IjUwJSIgY3k9IjEwMCUiIHI9IjUwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmNWE2MjMiIHN0b3Atb3BhY2l0eT0iMC4xNiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjYwJSIgc3RvcC1jb2xvcj0iI2Y1YTYyMyIgc3RvcC1vcGFjaXR5PSIwLjA1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y1YTYyMyIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJwNV9nbG93X3RyIiBjeD0iOTIlIiBjeT0iNSUiIHI9IjIyJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmNWE2MjMiIHN0b3Atb3BhY2l0eT0iMC4xMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmNWE2MjMiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0icDVfZ2xvd190ZWFsIiBjeD0iMTUlIiBjeT0iMzAlIiByPSIxOCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMmRkNGJmIiBzdG9wLW9wYWNpdHk9IjAuMDgiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMmRkNGJmIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InA1X3dhcm13YXNoIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiICAgc3RvcC1jb2xvcj0iI2Y1YTYyMyIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iNTUlIiAgc3RvcC1jb2xvcj0iI2Y1YTYyMyIgc3RvcC1vcGFjaXR5PSIwLjAyIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y1YTYyMyIgc3RvcC1vcGFjaXR5PSIwLjEwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJwNV9jb2wxIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiICAgc3RvcC1jb2xvcj0iI2Y1YTYyMyIgc3RvcC1vcGFjaXR5PSIwLjIwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Y1YTYyMyIgc3RvcC1vcGFjaXR5PSIwLjA1Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJwNV9jb2xfb3RoZXIiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgICBzdG9wLWNvbG9yPSIjMmEzMDM4IiBzdG9wLW9wYWNpdHk9IjAuNDAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMmEzMDM4IiBzdG9wLW9wYWNpdHk9IjAuMTAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8cGF0dGVybiBpZD0icDVfZG90Z3JpZCIgeD0iMCIgeT0iMCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0iIzJhMzAzOCIgb3BhY2l0eT0iMC4yOCIvPgogICAgPC9wYXR0ZXJuPgogIDwvZGVmcz4KCiAgPCEtLSBCYXNlIC0tPgogIDxyZWN0IHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjkwMCIgZmlsbD0iIzBiMGQwZiIvPgogIDxyZWN0IHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjkwMCIgZmlsbD0idXJsKCNwNV93YXJtd2FzaCkiLz4KICA8cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjcDVfZ2xvd19hbWJlcikiLz4KICA8cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjcDVfZ2xvd190cikiLz4KICA8cmVjdCB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjcDVfZ2xvd190ZWFsKSIvPgoKICA8IS0tIERvdCBncmlkIC0tPgogIDxyZWN0IHg9IjIwMCIgeT0iODQiIHdpZHRoPSIxMjQwIiBoZWlnaHQ9IjgxNiIgZmlsbD0idXJsKCNwNV9kb3RncmlkKSIvPgoKICA8IS0tIOKUgOKUgCBPUkdBTklDIEZMT1dJTkcgQ1VSVkVTIOKUgOKUgCAtLT4KICA8IS0tIFdhdmUgMSDigJQgd2lkZSBhbWJlciAtLT4KICA8cGF0aCBkPSJNMjAwLDcyMCBDMzYwLDY4MCA1MjAsNjUwIDcwMCw2MzAgQzg4MCw2MTAgMTA2MCw1OTAgMTI0MCw1NjAgQzEzNDAsNTQ1IDE0MDAsNTM1IDE0NDAsNTI4IgogICAgICAgIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1YTYyMyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2Utb3BhY2l0eT0iMC4xOCIvPgogIDwhLS0gV2F2ZSAyIOKAlCBvZmZzZXQgYW1iZXIgLS0+CiAgPHBhdGggZD0iTTIwMCw3NzAgQzQwMCw3MzAgNjAwLDcwMCA4MDAsNjc1IEMxMDAwLDY1MCAxMjAwLDYyNSAxNDQwLDYwMCIKICAgICAgICBmaWxsPSJub25lIiBzdHJva2U9IiNmNWE2MjMiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2Utb3BhY2l0eT0iMC4xMiIvPgogIDwhLS0gV2F2ZSAzIOKAlCB0ZWFsIGNvdW50ZXItY3VydmUgLS0+CiAgPHBhdGggZD0iTTIwMCw4MTAgQzM4MCw3ODAgNTgwLDc1OCA3ODAsNzQwIEM5ODAsNzIyIDExODAsNzAwIDE0NDAsNjcyIgogICAgICAgIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJkZDRiZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1vcGFjaXR5PSIwLjEzIi8+CiAgPCEtLSBXYXZlIDQg4oCUIHZlcnkgZmFpbnQgYW1iZXIgLS0+CiAgPHBhdGggZD0iTTIwMCw4NTAgQzQ1MCw4MTggNzAwLDc5MiA5NTAsNzcyIEMxMTUwLDc1NSAxMzIwLDc0MiAxNDQwLDczNSIKICAgICAgICBmaWxsPSJub25lIiBzdHJva2U9IiNmNWE2MjMiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLW9wYWNpdHk9IjAuMDgiLz4KCiAgPCEtLSBBcmVhIGZpbGwgYmVsb3cgd2F2ZSAxIC0tPgogIDxwYXRoIGQ9Ik0yMDAsNzIwIEMzNjAsNjgwIDUyMCw2NTAgNzAwLDYzMCBDODgwLDYxMCAxMDYwLDU5MCAxMjQwLDU2MCBDMTM0MCw1NDUgMTQwMCw1MzUgMTQ0MCw1MjggTDE0NDAsOTAwIEwyMDAsOTAwIFoiCiAgICAgICAgZmlsbD0iI2Y1YTYyMyIgZmlsbC1vcGFjaXR5PSIwLjA0Ii8+CgogIDwhLS0g4pSA4pSAIFNUQUNLRUQgQ09MVU1OIEdIT1NUIOKAlCBOTVYgbW9udGhseSDilIDilIAgLS0+CiAgPCEtLSBKYW4gLS0+CiAgPHJlY3QgeD0iMjQwIiB5PSI2NDAiIHdpZHRoPSI4MCIgaGVpZ2h0PSIxOTAiIHJ4PSIxIiBmaWxsPSIjMmEzMDM4IiBmaWxsLW9wYWNpdHk9IjAuMzUiLz4KICA8cmVjdCB4PSIyNDAiIHk9IjYxNiIgd2lkdGg9IjgwIiBoZWlnaHQ9IjI0IiAgcng9IjEiIGZpbGw9IiNmNWE2MjMiIGZpbGwtb3BhY2l0eT0iMC4yMCIvPgogIDwhLS0gRmViIC0tPgogIDxyZWN0IHg9IjM2MCIgeT0iNjIyIiB3aWR0aD0iODAiIGhlaWdodD0iMjA4IiByeD0iMSIgZmlsbD0iIzJhMzAzOCIgZmlsbC1vcGFjaXR5PSIwLjM1Ii8+CiAgPHJlY3QgeD0iMzYwIiB5PSI1OTUiIHdpZHRoPSI4MCIgaGVpZ2h0PSIyNyIgIHJ4PSIxIiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMjIiLz4KICA8IS0tIE1hciAtLT4KICA8cmVjdCB4PSI0ODAiIHk9IjYwMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjIzMCIgcng9IjEiIGZpbGw9IiMyYTMwMzgiIGZpbGwtb3BhY2l0eT0iMC4zNSIvPgogIDxyZWN0IHg9IjQ4MCIgeT0iNTY4IiB3aWR0aD0iODAiIGhlaWdodD0iMzIiICByeD0iMSIgZmlsbD0iI2Y1YTYyMyIgZmlsbC1vcGFjaXR5PSIwLjI0Ii8+CiAgPCEtLSBBcHIgLS0+CiAgPHJlY3QgeD0iNjAwIiB5PSI1ODAiIHdpZHRoPSI4MCIgaGVpZ2h0PSIyNTAiIHJ4PSIxIiBmaWxsPSIjMmEzMDM4IiBmaWxsLW9wYWNpdHk9IjAuMzUiLz4KICA8cmVjdCB4PSI2MDAiIHk9IjU0MiIgd2lkdGg9IjgwIiBoZWlnaHQ9IjM4IiAgcng9IjEiIGZpbGw9IiNmNWE2MjMiIGZpbGwtb3BhY2l0eT0iMC4yNiIvPgogIDwhLS0gTWF5IC0tPgogIDxyZWN0IHg9IjcyMCIgeT0iNTkwIiB3aWR0aD0iODAiIGhlaWdodD0iMjQwIiByeD0iMSIgZmlsbD0iIzJhMzAzOCIgZmlsbC1vcGFjaXR5PSIwLjM1Ii8+CiAgPHJlY3QgeD0iNzIwIiB5PSI1NTQiIHdpZHRoPSI4MCIgaGVpZ2h0PSIzNiIgIHJ4PSIxIiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMjQiLz4KCiAgPCEtLSBTZWNvbmRhcnkgbGluZSBnaG9zdCAoSnVpY2Ugc2hhcmUgJSkgLS0+CiAgPHBhdGggZD0iTTI4MCw2MTAgTDQwMCw1OTAgTDUyMCw1NjIgTDY0MCw1MzYgTDc2MCw1NDgiCiAgICAgICAgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZjVhNjIzIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLW9wYWNpdHk9IjAuMjAiIHN0cm9rZS1kYXNoYXJyYXk9IjQsMyIvPgoKICA8IS0tIOKUgOKUgCBUUkVFTUFQIEdIT1NUIChyaWdodCBjb2x1bW4pIOKUgOKUgCAtLT4KICA8IS0tIE1pbnV0ZSBNYWlkIOKAlCBsYXJnZXN0IGJsb2NrIChzcGFucyAyIHJvd3MpIC0tPgogIDxyZWN0IHg9IjEwNjAiIHk9IjIwNSIgd2lkdGg9IjM1MCIgaGVpZ2h0PSIyMTUiIHJ4PSIxIiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMDgiLz4KICA8cmVjdCB4PSIxMDYwIiB5PSIyMDUiIHdpZHRoPSIzNTAiIGhlaWdodD0iMjE1IiByeD0iMSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZjVhNjIzIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1vcGFjaXR5PSIwLjE1Ii8+CiAgPCEtLSBDYXBweSAtLT4KICA8cmVjdCB4PSIxMDYwIiB5PSI0MjYiIHdpZHRoPSIxNzUiIGhlaWdodD0iMTA1IiByeD0iMSIgZmlsbD0iIzJkZDRiZiIgZmlsbC1vcGFjaXR5PSIwLjA3Ii8+CiAgPHJlY3QgeD0iMTA2MCIgeT0iNDI2IiB3aWR0aD0iMTc1IiBoZWlnaHQ9IjEwNSIgcng9IjEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJkZDRiZiIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMC4xMiIvPgogIDwhLS0gSnVoYXluYSAtLT4KICA8cmVjdCB4PSIxMjQxIiB5PSI0MjYiIHdpZHRoPSIxNjkiIGhlaWdodD0iMTA1IiByeD0iMSIgZmlsbD0iIzYwYTVmYSIgZmlsbC1vcGFjaXR5PSIwLjA2Ii8+CiAgPHJlY3QgeD0iMTI0MSIgeT0iNDI2IiB3aWR0aD0iMTY5IiBoZWlnaHQ9IjEwNSIgcng9IjEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzYwYTVmYSIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMC4xMCIvPgogIDwhLS0gQmV5dGkgLS0+CiAgPHJlY3QgeD0iMTA2MCIgeT0iNTM3IiB3aWR0aD0iMTc1IiBoZWlnaHQ9IjkwIiAgcng9IjEiIGZpbGw9IiNhNzhiZmEiIGZpbGwtb3BhY2l0eT0iMC4wNiIvPgogIDxyZWN0IHg9IjEwNjAiIHk9IjUzNyIgd2lkdGg9IjE3NSIgaGVpZ2h0PSI5MCIgIHJ4PSIxIiBmaWxsPSJub25lIiBzdHJva2U9IiNhNzhiZmEiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLW9wYWNpdHk9IjAuMTAiLz4KICA8IS0tIE90aGVycyAtLT4KICA8cmVjdCB4PSIxMjQxIiB5PSI1MzciIHdpZHRoPSIxNjkiIGhlaWdodD0iOTAiICByeD0iMSIgZmlsbD0iIzJhMzAzOCIgZmlsbC1vcGFjaXR5PSIwLjQwIi8+CiAgPHJlY3QgeD0iMTI0MSIgeT0iNTM3IiB3aWR0aD0iMTY5IiBoZWlnaHQ9IjkwIiAgcng9IjEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJhMzAzOCIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMC41Ii8+CgogIDwhLS0g4pSA4pSAIEJSQU5EIENJUkNMRSBQUk9QT1JUSU9OUyAoc21hbGwgbXVsdGlwbGVzIGdob3N0KSDilIDilIAgLS0+CiAgPCEtLSA2IG1pbmkgc3BhcmtsaW5lIHBhbmVscyAtLT4KICA8ZyBvcGFjaXR5PSIwLjQwIj4KICAgIDwhLS0gUGFuZWwgMSAtLT4KICAgIDxyZWN0IHg9IjIyMCIgeT0iNDU1IiB3aWR0aD0iMTkwIiBoZWlnaHQ9Ijk1IiByeD0iMSIgZmlsbD0iI2Y1YTYyMyIgZmlsbC1vcGFjaXR5PSIwLjA0Ii8+CiAgICA8bGluZSB4MT0iMjIwIiB5MT0iNDU1IiB4Mj0iMjIwIiB5Mj0iNTUwIiBzdHJva2U9IiMxZTIzMjgiLz4KICAgIDxwYXRoIGQ9Ik0yMjUsNTMwIEMyNDgsNTE4IDI2OCw1MDYgMjkwLDQ5MiBDMzEyLDQ3OCAzMzIsNDY0IDQxMCw0NDgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1YTYyMyIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1vcGFjaXR5PSIwLjUiLz4KICAgIDwhLS0gUGFuZWwgMiAtLT4KICAgIDxyZWN0IHg9IjQxNiIgeT0iNDU1IiB3aWR0aD0iMTkwIiBoZWlnaHQ9Ijk1IiByeD0iMSIgZmlsbD0iIzJkZDRiZiIgZmlsbC1vcGFjaXR5PSIwLjAzIi8+CiAgICA8cGF0aCBkPSJNNDIxLDUyMCBDNDQ0LDUxMCA0NjQsNTA1IDQ4Niw0OTggQzUwOCw0OTEgNTI4LDQ4NCA2MDYsNDc2IiBmaWxsPSJub25lIiBzdHJva2U9IiMyZGQ0YmYiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2Utb3BhY2l0eT0iMC40Ii8+CiAgICA8IS0tIFBhbmVsIDMgLS0+CiAgICA8cmVjdCB4PSI2MTIiIHk9IjQ1NSIgd2lkdGg9IjE5MCIgaGVpZ2h0PSI5NSIgcng9IjEiIGZpbGw9IiM2MGE1ZmEiIGZpbGwtb3BhY2l0eT0iMC4wMyIvPgogICAgPHBhdGggZD0iTTYxNyw0NzggQzY0MCw0ODIgNjYwLDQ4NyA2ODIsNDkzIEM3MDQsNDk5IDcyNCw1MDYgODAyLDUxNiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjBhNWZhIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLW9wYWNpdHk9IjAuNCIvPgogICAgPCEtLSBQYW5lbCA0IC0tPgogICAgPHJlY3QgeD0iMjIwIiB5PSI1NTYiIHdpZHRoPSIxOTAiIGhlaWdodD0iOTUiIHJ4PSIxIiBmaWxsPSIjYTc4YmZhIiBmaWxsLW9wYWNpdHk9IjAuMDMiLz4KICAgIDxwYXRoIGQ9Ik0yMjUsNTkwIEMyNDgsNTg4IDI2OCw1ODYgMjkwLDU4NSBDMzEyLDU4NCAzMzIsNTgzIDQxMCw1ODAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2E3OGJmYSIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1vcGFjaXR5PSIwLjQiLz4KICAgIDwhLS0gUGFuZWwgNSAtLT4KICAgIDxyZWN0IHg9IjQxNiIgeT0iNTU2IiB3aWR0aD0iMTkwIiBoZWlnaHQ9Ijk1IiByeD0iMSIgZmlsbD0iI2Y4NzE3MSIgZmlsbC1vcGFjaXR5PSIwLjAzIi8+CiAgICA8cGF0aCBkPSJNNDIxLDU5MCBDNDQ0LDU5MiA0NjQsNTkxIDQ4Niw1OTMgQzUwOCw1OTUgNTI4LDU5MyA2MDYsNTkwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmODcxNzEiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2Utb3BhY2l0eT0iMC4zNSIvPgogICAgPCEtLSBQYW5lbCA2IC0tPgogICAgPHJlY3QgeD0iNjEyIiB5PSI1NTYiIHdpZHRoPSIxOTAiIGhlaWdodD0iOTUiIHJ4PSIxIiBmaWxsPSIjNGFkZTgwIiBmaWxsLW9wYWNpdHk9IjAuMDMiLz4KICAgIDxwYXRoIGQ9Ik02MTcsNjIwIEM2NDAsNjEwIDY2MCw1OTggNjgyLDU4NCBDNzA0LDU3MCA3MjQsNTU1IDgwMiw1MzUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzRhZGU4MCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1vcGFjaXR5PSIwLjQiLz4KICA8L2c+CgogIDwhLS0g4pSA4pSAIEpVSUNFIERST1AgTU9USUYgKGRlY29yYXRpdmUsIHRvcC1yaWdodCBhcmVhKSDilIDilIAgLS0+CiAgPCEtLSBEcm9wIHNoYXBlOiBjaXJjbGUgKyB0cmlhbmdsZSAtLT4KICA8Y2lyY2xlIGN4PSIxMzgwIiBjeT0iMjAwIiByPSIzOCIgZmlsbD0iI2Y1YTYyMyIgZmlsbC1vcGFjaXR5PSIwLjA3Ii8+CiAgPHBvbHlnb24gcG9pbnRzPSIxMzgwLDE0MiAxMzYyLDE3MiAxMzk4LDE3MiIgZmlsbD0iI2Y1YTYyMyIgZmlsbC1vcGFjaXR5PSIwLjA2Ii8+CiAgPGNpcmNsZSBjeD0iMTM4MCIgY3k9IjIwMCIgcj0iMjIiIGZpbGw9IiNmNWE2MjMiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPgogIDwhLS0gU21hbGxlciBkcm9wIC0tPgogIDxjaXJjbGUgY3g9IjEzMTAiIGN5PSIxNTAiIHI9IjE4IiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KICA8cG9seWdvbiBwb2ludHM9IjEzMTAsMTEyIDEyOTgsMTMyIDEzMjIsMTMyIiBmaWxsPSIjZjVhNjIzIiBmaWxsLW9wYWNpdHk9IjAuMDQiLz4KCiAgPCEtLSDilIDilIAgSE9SSVpPTlRBTCBSRUZFUkVOQ0UgTElORVMg4pSA4pSAIC0tPgogIDxnIHN0cm9rZT0iIzFlMjMyOCIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2Utb3BhY2l0eT0iMC4zNSI+CiAgICA8bGluZSB4MT0iMjIwIiB5MT0iMzIwIiB4Mj0iMTA1MCIgeTI9IjMyMCIvPgogICAgPGxpbmUgeDE9IjIyMCIgeTE9IjQ0MCIgeDI9IjEwNTAiIHkyPSI0NDAiLz4KICAgIDxsaW5lIHgxPSIyMjAiIHkxPSI1NjAiIHgyPSIxMDUwIiB5Mj0iNTYwIi8+CiAgICA8bGluZSB4MT0iMjIwIiB5MT0iNjgwIiB4Mj0iMTA1MCIgeTI9IjY4MCIvPgogICAgPGxpbmUgeDE9IjIyMCIgeTE9IjgwMCIgeDI9IjEwNTAiIHkyPSI4MDAiLz4KICA8L2c+CgogIDwhLS0g4pSA4pSAIFNUUlVDVFVSQUwg4pSA4pSAIC0tPgogIDxsaW5lIHgxPSIyMDAiICB5MT0iMCIgICAgeDI9IjIwMCIgIHkyPSI5MDAiIHN0cm9rZT0iIzJhMzAzOCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgPGxpbmUgeDE9IjAiICAgIHkxPSI0OCIgICB4Mj0iMTQ0MCIgeTI9IjQ4IiAgc3Ryb2tlPSIjMWUyMzI4IiBzdHJva2Utd2lkdGg9IjEiLz4KICA8bGluZSB4MT0iMCIgICAgeTE9Ijg0IiAgIHgyPSIxNDQwIiB5Mj0iODQiICBzdHJva2U9IiMyYTMwMzgiIHN0cm9rZS13aWR0aD0iMSIvPgoKICA8cmVjdCB4PSIwIiAgIHk9IjAiICB3aWR0aD0iMTQ0MCIgaGVpZ2h0PSI0OCIgIGZpbGw9IiMxMTE0MTgiIGZpbGwtb3BhY2l0eT0iMC45NSIvPgogIDxyZWN0IHg9IjAiICAgeT0iNDgiIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjM2IiAgZmlsbD0iIzExMTQxOCIgZmlsbC1vcGFjaXR5PSIwLjkwIi8+CiAgPHJlY3QgeD0iMCIgICB5PSI4NCIgd2lkdGg9IjIwMCIgIGhlaWdodD0iODE2IiBmaWxsPSIjMTExNDE4IiBmaWxsLW9wYWNpdHk9IjAuODUiLz4KCiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjMiIGhlaWdodD0iNDgiIGZpbGw9IiNmNWE2MjMiIGZpbGwtb3BhY2l0eT0iMC44Ii8+Cjwvc3ZnPgo='); background-size: cover; background-position: top left; background-repeat: no-repeat; }
+
+  .canvas { background: transparent !important; position: relative; }
+  /* Ensure pages clip correctly within shell grid */
+  #page0, #page1, #page2, #page3, #page4 {
+    background-size: cover;
+    background-attachment: local;
+    background-position: 0 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="logo">MAXAB <span>Analytics</span></div>
+    <div class="topbar-sep"></div>
+    <div class="topbar-tag">Retail Performance &amp; Churn</div>
+    <div class="topbar-right">
+      <div class="breadcrumb" id="breadcrumb">
+        Dashboard <span>/</span> <span style="color:var(--amber)">Executive Overview</span>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="refresh-badge">▸ Data: 2025-05-31</div>
+      <div class="param-badge" onclick="toggleParams()">⚙ Parameters</div>
+    </div>
+  </header>
+
+  <!-- TABS -->
+  <nav class="tabs">
+    <div class="tab active" onclick="switchPage(0,this,'Executive Overview')" data-page="0">
+      <span class="tab-num">01</span> Executive Overview
+    </div>
+    <div class="tab" onclick="switchPage(1,this,'Performance & Delivery')" data-page="1">
+      <span class="tab-num">02</span> Performance &amp; Delivery
+    </div>
+    <div class="tab" onclick="switchPage(2,this,'Churn & Activation')" data-page="2">
+      <span class="tab-num">03</span> Churn &amp; Activation
+    </div>
+    <div class="tab" onclick="switchPage(3,this,'Drop Analysis — May')" data-page="3">
+      <span class="tab-num">04</span> Drop Analysis — May
+    </div>
+    <div class="tab" onclick="switchPage(4,this,'Commercial / Juice')" data-page="4">
+      <span class="tab-num">05</span> Commercial / Juice
+    </div>
+    <div class="tab" onclick="switchPage(5,this,'Visual Storytelling Guide')" data-page="5">
+      <span class="tab-num">7.2</span> Storytelling Guide
+    </div>
+  </nav>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">Navigation</div>
+    <div class="sidebar-item active" id="sb0" onclick="switchPage(0,null,'Executive Overview')"><span class="sicon">◈</span> Executive Overview</div>
+    <div class="sidebar-item" id="sb1" onclick="switchPage(1,null,'Performance & Delivery')"><span class="sicon">◈</span> Performance &amp; Delivery</div>
+    <div class="sidebar-item" id="sb2" onclick="switchPage(2,null,'Churn & Activation')"><span class="sicon">◈</span> Churn &amp; Activation</div>
+    <div class="sidebar-item" id="sb3" onclick="switchPage(3,null,'Drop Analysis — May')"><span class="sicon">◈</span> Drop Analysis</div>
+    <div class="sidebar-item" id="sb4" onclick="switchPage(4,null,'Commercial / Juice')"><span class="sicon">◈</span> Commercial / Juice</div>
+    <div class="sidebar-item" id="sb5" onclick="switchPage(5,null,'Visual Storytelling Guide')"><span class="sicon">◈</span> Storytelling Guide</div>
+    <div class="sidebar-section" style="margin-top:12px">Filters</div>
+    <div style="padding:0 12px;display:flex;flex-direction:column;gap:8px;margin-top:4px">
+      <div class="slicer-label">Period</div>
+      <div class="slicer-chips" style="flex-wrap:wrap">
+        <div class="slicer-chip active">YTD</div>
+        <div class="slicer-chip">MoM</div>
+        <div class="slicer-chip">QoQ</div>
+      </div>
+      <div class="slicer-label" style="margin-top:6px">Region</div>
+      <div class="slicer-chips" style="flex-wrap:wrap;gap:3px">
+        <div class="slicer-chip active">All</div>
+        <div class="slicer-chip">Cairo</div>
+        <div class="slicer-chip">Alex</div>
+        <div class="slicer-chip">Delta</div>
+      </div>
+      <div class="slicer-label" style="margin-top:6px">Channel</div>
+      <div class="slicer-chips" style="flex-wrap:wrap;gap:3px">
+        <div class="slicer-chip active">All</div>
+        <div class="slicer-chip">App</div>
+        <div class="slicer-chip">Web</div>
+        <div class="slicer-chip">Direct</div>
+      </div>
+      <div class="slicer-label" style="margin-top:10px">⚙ SLA Threshold</div>
+      <div class="param-slicer">
+        <div class="param-track">
+          <div class="param-fill" style="width:28%"></div>
+          <div class="param-thumb" style="left:28%"></div>
+        </div>
+        <div class="param-slicer-val">2d</div>
+      </div>
+      <div class="slicer-label" style="margin-top:4px">⚙ Churn Lookback</div>
+      <div class="param-slicer">
+        <div class="param-track">
+          <div class="param-fill" style="width:50%"></div>
+          <div class="param-thumb" style="left:50%"></div>
+        </div>
+        <div class="param-slicer-val">3m</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════════════════ PAGE 1 — EXECUTIVE OVERVIEW ════════════════ -->
+  <main class="canvas" id="page0">
+    <div class="page active" id="pg0">
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Executive Overview</div>
+          <div class="page-sub">RETAIL PERFORMANCE SUMMARY · YTD 2025 · ALL REGIONS · ALL CHANNELS</div>
+        </div>
+        <div class="page-controls">
+          <div class="ctrl-chip active">YTD</div>
+          <div class="ctrl-chip">MoM</div>
+          <div class="ctrl-chip">QoQ</div>
+        </div>
+      </div>
+
+      <!-- KPI Strip -->
+      <div class="kpi-strip kpi-strip-5">
+        <div class="kpi-card amber">
+          <div class="kpi-label">Total Sales (YTD)</div>
+          <div class="kpi-value">£ 4.2M</div>
+          <div class="kpi-delta up">▲ +12.4% vs LY</div>
+          <svg class="kpi-sparkline" viewBox="0 0 60 24" fill="none">
+            <polyline points="0,20 10,16 20,14 30,10 40,12 50,7 60,4" stroke="#f5a623" stroke-width="1.5" fill="none" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="kpi-card teal">
+          <div class="kpi-label">Total Orders (MoM)</div>
+          <div class="kpi-value">47.2K</div>
+          <div class="kpi-delta down">▼ −3.1% vs PM</div>
+          <svg class="kpi-sparkline" viewBox="0 0 60 24" fill="none">
+            <polyline points="0,8 10,10 20,9 30,7 40,12 50,15 60,18" stroke="#2dd4bf" stroke-width="1.5" fill="none" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-label">Total Retailers</div>
+          <div class="kpi-value">70.9K</div>
+          <div class="kpi-delta up">▲ +5.8% active</div>
+          <svg class="kpi-sparkline" viewBox="0 0 60 24" fill="none">
+            <polyline points="0,18 10,15 20,14 30,11 40,10 50,9 60,7" stroke="#60a5fa" stroke-width="1.5" fill="none" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">AOV</div>
+          <div class="kpi-value">£ 89.4</div>
+          <div class="kpi-delta neutral">→ Stable ±0.3%</div>
+          <svg class="kpi-sparkline" viewBox="0 0 60 24" fill="none">
+            <polyline points="0,12 10,11 20,13 30,12 40,12 50,11 60,12" stroke="#4ade80" stroke-width="1.5" fill="none" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">Success Rate</div>
+          <div class="kpi-value">84.8%</div>
+          <div class="kpi-delta down">▼ −1.2pp vs target</div>
+          <svg class="kpi-sparkline" viewBox="0 0 60 24" fill="none">
+            <polyline points="0,6 10,8 20,9 30,8 40,12 50,14 60,13" stroke="#f87171" stroke-width="1.5" fill="none" opacity="0.7"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="annotation">
+        <strong>KPI Design Principle:</strong> Each card uses a top-accent color coded to its domain (revenue=amber, ops=teal, retailers=blue, health=green, quality=red). Sparklines embedded for trend direction. Delta shows comparison period for instant context.
+      </div>
+
+      <!-- Charts row 1 -->
+      <div class="chart-row chart-row-2-1">
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Sales Trend — Monthly</div>
+              <div class="chart-meta">Line chart · Dim_Date × Total Sales + AOV overlay</div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center">
+              <div class="chart-tag">Jan–May 2025</div>
+            </div>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-line" style="background:var(--amber)"></div> Total Sales</div>
+            <div class="legend-item"><div class="legend-line" style="background:var(--teal);border-top:1px dashed var(--teal)"></div> AOV (secondary axis)</div>
+          </div>
+          <div class="chart-area" style="height:160px">
+            <svg class="wf" viewBox="0 0 540 160" preserveAspectRatio="none">
+              <!-- Grid -->
+              <line x1="0" y1="40" x2="540" y2="40" stroke="#1e2328" stroke-width="1"/>
+              <line x1="0" y1="80" x2="540" y2="80" stroke="#1e2328" stroke-width="1"/>
+              <line x1="0" y1="120" x2="540" y2="120" stroke="#1e2328" stroke-width="1"/>
+              <line x1="0" y1="155" x2="540" y2="155" stroke="#2a3038" stroke-width="1"/>
+              <!-- Area fill -->
+              <path d="M54,120 C107,120 161,95 215,85 C269,75 323,70 377,60 C431,50 485,40 540,30 L540,155 L54,155 Z"
+                    fill="url(#sg1)" opacity="0.3"/>
+              <defs>
+                <linearGradient id="sg1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#f5a623" stop-opacity="0.6"/>
+                  <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Sales line -->
+              <polyline points="54,120 161,95 269,85 377,60 485,40"
+                        stroke="#f5a623" stroke-width="2" fill="none" stroke-linejoin="round"/>
+              <!-- AOV dashed line -->
+              <polyline points="54,100 161,98 269,96 377,94 485,95"
+                        stroke="#2dd4bf" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+              <!-- Data points -->
+              <circle cx="54"  cy="120" r="4" fill="#f5a623" stroke="#0b0d0f" stroke-width="2"/>
+              <circle cx="161" cy="95"  r="4" fill="#f5a623" stroke="#0b0d0f" stroke-width="2"/>
+              <circle cx="269" cy="85"  r="4" fill="#f5a623" stroke="#0b0d0f" stroke-width="2"/>
+              <circle cx="377" cy="60"  r="6" fill="#f5a623" stroke="#0b0d0f" stroke-width="2"/>
+              <circle cx="485" cy="40"  r="4" fill="#f5a623" stroke="#0b0d0f" stroke-width="2"/>
+              <!-- Anomaly annotation -->
+              <line x1="377" y1="20" x2="377" y2="58" stroke="#f87171" stroke-width="1" stroke-dasharray="3,2"/>
+              <rect x="340" y="6" width="74" height="16" fill="#1e1418" stroke="#f87171" stroke-width="1" rx="1"/>
+              <text x="377" y="17" fill="#f87171" font-size="8" font-family="IBM Plex Mono" text-anchor="middle">⚠ Apr spike</text>
+              <!-- X-axis labels -->
+              <text x="54"  y="155" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Jan</text>
+              <text x="161" y="155" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Feb</text>
+              <text x="269" y="155" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Mar</text>
+              <text x="377" y="155" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Apr</text>
+              <text x="485" y="155" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">May</text>
+            </svg>
+            <!-- Tooltip mock -->
+            <div class="tooltip-mock" style="top:10px;left:340px;display:none" id="tt1">
+              Apr 2025<br>Sales: £ 1.1M<br>AOV: £ 91.2<br>Orders: 12,340
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Sales by Region</div>
+              <div class="chart-meta">Bar chart · Dim_Region × Total Sales</div>
+            </div>
+          </div>
+          <div class="chart-area" style="height:160px">
+            <svg class="wf" viewBox="0 0 240 160" preserveAspectRatio="none">
+              <!-- Bars -->
+              <rect x="20" y="30" width="60" height="110" fill="url(#bg1)" rx="1"/>
+              <rect x="100" y="70" width="60" height="70" fill="url(#bg2)" rx="1"/>
+              <rect x="180" y="90" width="60" height="50" fill="url(#bg3)" rx="1"/>
+              <defs>
+                <linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#f5a623" stop-opacity="0.9"/>
+                  <stop offset="100%" stop-color="#f5a623" stop-opacity="0.3"/>
+                </linearGradient>
+                <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.9"/>
+                  <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0.3"/>
+                </linearGradient>
+                <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.9"/>
+                  <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.3"/>
+                </linearGradient>
+              </defs>
+              <text x="50" y="26" fill="#f5a623" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">£1.8M</text>
+              <text x="130" y="66" fill="#2dd4bf" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">£1.2M</text>
+              <text x="210" y="86" fill="#60a5fa" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">£1.2M</text>
+              <text x="50"  y="152" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Cairo</text>
+              <text x="130" y="152" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Alex</text>
+              <text x="210" y="152" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Delta</text>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Charts row 2 -->
+      <div class="chart-row chart-row-2-1">
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Sales vs Success Rate — Monthly Combo</div>
+              <div class="chart-meta">Combo chart · Bars=Sales · Line=Success Rate% (dual axis)</div>
+            </div>
+            <div class="chart-tag">Dual Axis</div>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Total Sales (bars)</div>
+            <div class="legend-item"><div class="legend-line" style="background:var(--red)"></div>Success Rate % (line)</div>
+          </div>
+          <div class="chart-area" style="height:130px">
+            <svg class="wf" viewBox="0 0 540 130" preserveAspectRatio="none">
+              <line x1="0" y1="30" x2="540" y2="30" stroke="#1e2328" stroke-width="1"/>
+              <line x1="0" y1="65" x2="540" y2="65" stroke="#1e2328" stroke-width="1"/>
+              <line x1="0" y1="100" x2="540" y2="100" stroke="#1e2328" stroke-width="1"/>
+              <!-- Sales bars -->
+              <rect x="30"  y="90" width="50" height="35" fill="#f5a623" opacity="0.3" rx="1"/>
+              <rect x="138" y="70" width="50" height="55" fill="#f5a623" opacity="0.4" rx="1"/>
+              <rect x="246" y="65" width="50" height="60" fill="#f5a623" opacity="0.5" rx="1"/>
+              <rect x="354" y="45" width="50" height="80" fill="#f5a623" opacity="0.6" rx="1"/>
+              <rect x="462" y="55" width="50" height="70" fill="#f5a623" opacity="0.55" rx="1"/>
+              <!-- Success Rate line (secondary axis) -->
+              <polyline points="55,50 163,46 271,52 379,40 487,55"
+                        stroke="#f87171" stroke-width="2" fill="none"/>
+              <circle cx="55"  cy="50" r="3" fill="#f87171" stroke="#0b0d0f" stroke-width="1.5"/>
+              <circle cx="163" cy="46" r="3" fill="#f87171" stroke="#0b0d0f" stroke-width="1.5"/>
+              <circle cx="271" cy="52" r="3" fill="#f87171" stroke="#0b0d0f" stroke-width="1.5"/>
+              <circle cx="379" cy="40" r="3" fill="#f87171" stroke="#0b0d0f" stroke-width="1.5"/>
+              <circle cx="487" cy="55" r="3" fill="#f87171" stroke="#0b0d0f" stroke-width="1.5"/>
+              <!-- X labels -->
+              <text x="55"  y="118" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Jan</text>
+              <text x="163" y="118" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Feb</text>
+              <text x="271" y="118" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Mar</text>
+              <text x="379" y="118" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Apr</text>
+              <text x="487" y="118" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">May</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Regional Map</div>
+              <div class="chart-meta">Map visual · Dim_Region[Latitude/Longitude]</div>
+            </div>
+          </div>
+          <div class="map-placeholder" style="height:160px;border:none">
+            <div class="map-label">[ Egypt Region Map ]</div>
+            <div class="map-dot" style="width:22px;height:22px;top:35%;left:45%;opacity:0.9"></div>
+            <div class="map-dot" style="width:14px;height:14px;top:20%;left:38%;opacity:0.7;animation-delay:0.4s"></div>
+            <div class="map-dot" style="width:10px;height:10px;top:28%;left:52%;opacity:0.5;animation-delay:0.8s"></div>
+            <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.08" viewBox="0 0 240 160" preserveAspectRatio="none">
+              <path d="M70,10 L160,5 L180,40 L170,80 L150,110 L120,130 L80,125 L50,100 L40,60 Z" fill="none" stroke="#f5a623" stroke-width="2"/>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /pg0 -->
+  </main>
+
+  <!-- ════════════════ PAGE 2 — PERFORMANCE & DELIVERY ════════════════ -->
+  <main class="canvas" id="page1" style="display:none">
+    <div class="page active" id="pg1">
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Performance &amp; Delivery</div>
+          <div class="page-sub">OPERATIONAL KPIs · SLA THRESHOLD: <span style="color:var(--amber)">2 WORKING DAYS</span> · DYNAMIC VIA PARAMETER</div>
+        </div>
+        <div class="page-controls">
+          <div class="ctrl-chip active">All Orders</div>
+          <div class="ctrl-chip">Delivered</div>
+          <div class="ctrl-chip">Failed</div>
+        </div>
+      </div>
+
+      <div class="kpi-strip kpi-strip-4">
+        <div class="kpi-card green">
+          <div class="kpi-label">Success Rate %</div>
+          <div class="kpi-value">84.8%</div>
+          <div class="kpi-delta down">▼ −1.2pp vs target 86%</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">Delay Rate %</div>
+          <div class="kpi-value">15.2%</div>
+          <div class="kpi-delta down">▲ +1.2pp vs LM</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Delayed Orders</div>
+          <div class="kpi-value">7,183</div>
+          <div class="kpi-delta neutral">→ Cairo: 4.1K worst</div>
+        </div>
+        <div class="kpi-card teal">
+          <div class="kpi-label">Avg Delivery (Working Days)</div>
+          <div class="kpi-value">1.9d</div>
+          <div class="kpi-delta up">▲ SLA met: 84.8%</div>
+        </div>
+      </div>
+
+      <div class="annotation teal">
+        <strong>Parameter Active:</strong> SLA threshold = 2 working days (driven by <code>DeliveryThresholdDays</code> slicer). Adjust the slicer in the left panel to recalculate all delivery KPIs dynamically. Default = 2.
+      </div>
+
+      <div class="chart-row chart-row-2-1">
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Success vs Delayed Orders by Region</div>
+              <div class="chart-meta">Stacked bar · Dim_Region × Orders Success / Orders Fail</div>
+            </div>
+            <div class="chart-tag">Stacked 100%</div>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Success</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Failed</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>In-Transit</div>
+          </div>
+          <div class="chart-area" style="height:160px">
+            <svg class="wf" viewBox="0 0 540 160" preserveAspectRatio="none">
+              <!-- Cairo -->
+              <rect x="30"  y="30"  width="60" height="95" fill="#4ade80" opacity="0.5" rx="1"/>
+              <rect x="30"  y="125" width="60" height="20" fill="#f87171" opacity="0.7" rx="1"/>
+              <!-- Alex -->
+              <rect x="195" y="20"  width="60" height="100" fill="#4ade80" opacity="0.5" rx="1"/>
+              <rect x="195" y="120" width="60" height="25" fill="#f87171" opacity="0.7" rx="1"/>
+              <!-- Delta -->
+              <rect x="360" y="40"  width="60" height="80" fill="#4ade80" opacity="0.5" rx="1"/>
+              <rect x="360" y="120" width="60" height="22" fill="#f5a623" opacity="0.6" rx="1"/>
+              <rect x="360" y="142" width="60" height="8"  fill="#f87171" opacity="0.5" rx="1"/>
+              <!-- Labels -->
+              <text x="60"  y="150" fill="#5a6370" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">Cairo</text>
+              <text x="225" y="150" fill="#5a6370" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">Alexandria</text>
+              <text x="390" y="150" fill="#5a6370" font-size="10" font-family="IBM Plex Mono" text-anchor="middle">Delta</text>
+              <!-- % annotations -->
+              <text x="60"  y="80" fill="#fff" font-size="11" font-family="IBM Plex Mono" text-anchor="middle" font-weight="600">83.2%</text>
+              <text x="225" y="70" fill="#fff" font-size="11" font-family="IBM Plex Mono" text-anchor="middle" font-weight="600">87.1%</text>
+              <text x="390" y="82" fill="#fff" font-size="11" font-family="IBM Plex Mono" text-anchor="middle" font-weight="600">82.4%</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Delivery Channel Breakdown</div>
+              <div class="chart-meta">Donut · Dim_Channel × Success Rate</div>
+            </div>
+          </div>
+          <div class="chart-area" style="height:160px;display:flex;align-items:center;justify-content:center">
+            <svg viewBox="0 0 160 160" width="160" height="160">
+              <!-- Donut segments -->
+              <circle cx="80" cy="80" r="55" fill="none" stroke="#1e2328" stroke-width="28"/>
+              <circle cx="80" cy="80" r="55" fill="none" stroke="#f5a623" stroke-width="28"
+                      stroke-dasharray="173 172" stroke-dashoffset="43" opacity="0.85"/>
+              <circle cx="80" cy="80" r="55" fill="none" stroke="#2dd4bf" stroke-width="28"
+                      stroke-dasharray="86 259" stroke-dashoffset="-130" opacity="0.85"/>
+              <circle cx="80" cy="80" r="55" fill="none" stroke="#60a5fa" stroke-width="28"
+                      stroke-dasharray="86 259" stroke-dashoffset="-216" opacity="0.85"/>
+              <text x="80" y="76" fill="#fff" font-size="18" font-family="Syne" font-weight="700" text-anchor="middle">84.8%</text>
+              <text x="80" y="92" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">SLA MET</text>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Heatmap -->
+      <div class="chart-box">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Delivery Duration Heatmap — by Day of Week × Week of Month</div>
+            <div class="chart-meta">Heatmap · Dim_Date[DayOfWeek] × Dim_Date[WeekOfMonth] · Avg Delivery Days</div>
+          </div>
+          <div class="chart-tag">Lower = Better</div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;padding:4px 0">
+          <!-- Column headers -->
+          <div style="display:flex;flex-direction:column;gap:3px;padding-top:22px">
+            <div class="heatmap-label">Mon</div>
+            <div class="heatmap-label">Tue</div>
+            <div class="heatmap-label">Wed</div>
+            <div class="heatmap-label">Thu</div>
+            <div class="heatmap-label">Fri</div>
+          </div>
+          <div style="flex:1">
+            <!-- Week labels -->
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-bottom:3px;padding:0 2px">
+              <div style="font-family:var(--mono);font-size:9px;color:var(--muted);text-align:center">Wk 1</div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--muted);text-align:center">Wk 2</div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--muted);text-align:center">Wk 3</div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--muted);text-align:center">Wk 4</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <!-- Row Mon -->
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px">
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.6)">1.2</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.4)">1.5</div>
+                <div class="heatmap-cell" style="background:rgba(245,166,35,0.5)">2.1</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.5)">1.8</div>
+              </div>
+              <!-- Row Tue -->
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px">
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.5)">1.4</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.6)">1.2</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.4)">1.6</div>
+                <div class="heatmap-cell" style="background:rgba(245,166,35,0.4)">1.9</div>
+              </div>
+              <!-- Row Wed -->
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px">
+                <div class="heatmap-cell" style="background:rgba(245,166,35,0.5)">2.0</div>
+                <div class="heatmap-cell" style="background:rgba(248,113,113,0.4)">2.8</div>
+                <div class="heatmap-cell" style="background:rgba(248,113,113,0.5)">3.1</div>
+                <div class="heatmap-cell" style="background:rgba(245,166,35,0.6)">2.3</div>
+              </div>
+              <!-- Row Thu -->
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px">
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.4)">1.7</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.3)">1.9</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.5)">1.5</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.6)">1.3</div>
+              </div>
+              <!-- Row Fri -->
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px">
+                <div class="heatmap-cell" style="background:rgba(248,113,113,0.35)">2.6</div>
+                <div class="heatmap-cell" style="background:rgba(248,113,113,0.45)">2.9</div>
+                <div class="heatmap-cell" style="background:rgba(248,113,113,0.6)">3.4</div>
+                <div class="heatmap-cell" style="background:rgba(248,113,113,0.3)">2.5</div>
+              </div>
+            </div>
+          </div>
+          <!-- Color scale -->
+          <div style="display:flex;flex-direction:column;gap:4px;align-items:center;padding-top:22px">
+            <div style="font-family:var(--mono);font-size:8px;color:var(--muted)">3.5d</div>
+            <div style="width:12px;height:80px;background:linear-gradient(to bottom, rgba(248,113,113,0.8), rgba(245,166,35,0.5), rgba(74,222,128,0.7));border-radius:2px"></div>
+            <div style="font-family:var(--mono);font-size:8px;color:var(--muted)">1.0d</div>
+          </div>
+        </div>
+        <div class="annotation" style="margin-top:6px">
+          <strong>Insight:</strong> Wed–Fri + Wk3 shows highest delivery times (3.1–3.4d). Likely warehouse throughput bottleneck mid-week. Recommend operational review for Wednesday restocking cycle.
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ════════════════ PAGE 3 — CHURN & ACTIVATION ════════════════ -->
+  <main class="canvas" id="page2" style="display:none">
+    <div class="page active" id="pg2">
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Churn &amp; Activation</div>
+          <div class="page-sub">RETAILER LIFECYCLE · CHURN WINDOW: <span style="color:var(--amber)">3 MONTHS</span> · DYNAMIC VIA PARAMETER</div>
+        </div>
+        <div class="page-controls">
+          <div class="ctrl-chip active">Monthly</div>
+          <div class="ctrl-chip">Weekly</div>
+        </div>
+      </div>
+
+      <div class="kpi-strip kpi-strip-4">
+        <div class="kpi-card teal">
+          <div class="kpi-label">Active Retailers</div>
+          <div class="kpi-value">12,841</div>
+          <div class="kpi-delta up">▲ +8.4% MoM</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">Churn Rate %</div>
+          <div class="kpi-value">—%</div>
+          <div class="kpi-delta neutral">→ Needs date filter</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Activation (New Retailers)</div>
+          <div class="kpi-value">2,340</div>
+          <div class="kpi-delta up">▲ +14.2% MoM</div>
+        </div>
+        <div class="kpi-card purple">
+          <div class="kpi-label">Net Retailer Growth</div>
+          <div class="kpi-value">+918</div>
+          <div class="kpi-delta up">▲ Activation &gt; Churn</div>
+        </div>
+      </div>
+
+      <div class="annotation teal">
+        <strong>Parameter Active:</strong> Churn lookback = 3 months (driven by <code>ChurnLookbackMonths</code> slicer). A retailer is "churned" if active in the prior 3 months but absent in the selected period. Adjust window in left panel (1–6m).
+      </div>
+
+      <!-- Cohort + Activation -->
+      <div class="chart-row chart-row-3-2">
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Retention Cohort Matrix</div>
+              <div class="chart-meta">Cohort table · First-order month × Months since activation · % retained</div>
+            </div>
+            <div class="chart-tag">Heat-shaded</div>
+          </div>
+          <!-- Cohort grid -->
+          <div style="overflow-x:auto;padding-top:4px">
+            <div style="display:grid;grid-template-columns:50px repeat(5,44px);gap:2px;min-width:320px">
+              <!-- Header -->
+              <div style="font-family:var(--mono);font-size:9px;color:var(--muted)">Cohort</div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--muted);text-align:center">M+0</div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--muted);text-align:center">M+1</div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--muted);text-align:center">M+2</div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--muted);text-align:center">M+3</div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--muted);text-align:center">M+4</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px;margin-top:4px">
+              <!-- Cohort rows -->
+              <div style="display:grid;grid-template-columns:50px repeat(5,44px);gap:2px">
+                <div class="cohort-label">Jan-25</div>
+                <div class="cohort-cell" style="background:rgba(74,222,128,0.7)">100%</div>
+                <div class="cohort-cell" style="background:rgba(74,222,128,0.5)">72%</div>
+                <div class="cohort-cell" style="background:rgba(245,166,35,0.4)">58%</div>
+                <div class="cohort-cell" style="background:rgba(245,166,35,0.3)">49%</div>
+                <div class="cohort-cell" style="background:rgba(248,113,113,0.3)">41%</div>
+              </div>
+              <div style="display:grid;grid-template-columns:50px repeat(5,44px);gap:2px">
+                <div class="cohort-label">Feb-25</div>
+                <div class="cohort-cell" style="background:rgba(74,222,128,0.7)">100%</div>
+                <div class="cohort-cell" style="background:rgba(74,222,128,0.55)">75%</div>
+                <div class="cohort-cell" style="background:rgba(245,166,35,0.45)">61%</div>
+                <div class="cohort-cell" style="background:rgba(245,166,35,0.35)">52%</div>
+                <div class="cohort-cell" style="background:rgba(0,0,0,0);border:1px dashed #2a3038;color:var(--muted)">—</div>
+              </div>
+              <div style="display:grid;grid-template-columns:50px repeat(5,44px);gap:2px">
+                <div class="cohort-label">Mar-25</div>
+                <div class="cohort-cell" style="background:rgba(74,222,128,0.7)">100%</div>
+                <div class="cohort-cell" style="background:rgba(74,222,128,0.45)">69%</div>
+                <div class="cohort-cell" style="background:rgba(248,113,113,0.35)">44%</div>
+                <div class="cohort-cell" style="background:rgba(0,0,0,0);border:1px dashed #2a3038;color:var(--muted)">—</div>
+                <div class="cohort-cell" style="background:rgba(0,0,0,0);border:1px dashed #2a3038;color:var(--muted)">—</div>
+              </div>
+              <div style="display:grid;grid-template-columns:50px repeat(5,44px);gap:2px">
+                <div class="cohort-label">Apr-25</div>
+                <div class="cohort-cell" style="background:rgba(74,222,128,0.7)">100%</div>
+                <div class="cohort-cell" style="background:rgba(74,222,128,0.6)">78%</div>
+                <div class="cohort-cell" style="background:rgba(0,0,0,0);border:1px dashed #2a3038;color:var(--muted)">—</div>
+                <div class="cohort-cell" style="background:rgba(0,0,0,0);border:1px dashed #2a3038;color:var(--muted)">—</div>
+                <div class="cohort-cell" style="background:rgba(0,0,0,0);border:1px dashed #2a3038;color:var(--muted)">—</div>
+              </div>
+              <div style="display:grid;grid-template-columns:50px repeat(5,44px);gap:2px">
+                <div class="cohort-label">May-25</div>
+                <div class="cohort-cell" style="background:rgba(74,222,128,0.7)">100%</div>
+                <div class="cohort-cell" style="background:rgba(0,0,0,0);border:1px dashed #2a3038;color:var(--muted)">—</div>
+                <div class="cohort-cell" style="background:rgba(0,0,0,0);border:1px dashed #2a3038;color:var(--muted)">—</div>
+                <div class="cohort-cell" style="background:rgba(0,0,0,0);border:1px dashed #2a3038;color:var(--muted)">—</div>
+                <div class="cohort-cell" style="background:rgba(0,0,0,0);border:1px dashed #2a3038;color:var(--muted)">—</div>
+              </div>
+            </div>
+          </div>
+          <div class="annotation" style="margin-top:6px">
+            <strong>Reading:</strong> Mar cohort drops to 44% by M+2 — sharper than Jan/Feb. Investigate onboarding quality or supply issues during Mar activation wave.
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="chart-box" style="flex:1">
+            <div class="chart-header">
+              <div class="chart-title">Activation Heatmap by Week</div>
+              <div class="chart-meta">Dim_Date[WeekOfMonth] × Region</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:3px;margin-top:8px">
+              <div style="display:grid;grid-template-columns:40px repeat(4,1fr);gap:3px">
+                <div></div>
+                <div style="font-family:var(--mono);font-size:8px;color:var(--muted);text-align:center">Wk1</div>
+                <div style="font-family:var(--mono);font-size:8px;color:var(--muted);text-align:center">Wk2</div>
+                <div style="font-family:var(--mono);font-size:8px;color:var(--muted);text-align:center">Wk3</div>
+                <div style="font-family:var(--mono);font-size:8px;color:var(--muted);text-align:center">Wk4</div>
+              </div>
+              <div style="display:grid;grid-template-columns:40px repeat(4,1fr);gap:3px">
+                <div style="font-family:var(--mono);font-size:9px;color:var(--muted);display:flex;align-items:center">Cairo</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.6);height:32px">423</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.4);height:32px">312</div>
+                <div class="heatmap-cell" style="background:rgba(245,166,35,0.5);height:32px">518</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.5);height:32px">387</div>
+              </div>
+              <div style="display:grid;grid-template-columns:40px repeat(4,1fr);gap:3px">
+                <div style="font-family:var(--mono);font-size:9px;color:var(--muted);display:flex;align-items:center">Alex</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.3);height:32px">187</div>
+                <div class="heatmap-cell" style="background:rgba(248,113,113,0.35);height:32px">95</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.4);height:32px">214</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.3);height:32px">176</div>
+              </div>
+              <div style="display:grid;grid-template-columns:40px repeat(4,1fr);gap:3px">
+                <div style="font-family:var(--mono);font-size:9px;color:var(--muted);display:flex;align-items:center">Delta</div>
+                <div class="heatmap-cell" style="background:rgba(245,166,35,0.3);height:32px">143</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.3);height:32px">162</div>
+                <div class="heatmap-cell" style="background:rgba(74,222,128,0.2);height:32px">108</div>
+                <div class="heatmap-cell" style="background:rgba(248,113,113,0.3);height:32px">88</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-box" style="flex:1">
+            <div class="chart-title" style="font-size:12px;margin-bottom:10px">Top Churned Segments</div>
+            <table class="wf-table" style="font-size:10px">
+              <thead>
+                <tr><th>Segment</th><th>Churned</th><th>% of Base</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Cairo / App / FMCG</td><td style="color:var(--red)">412</td><td><span class="pill red">18.3%</span></td></tr>
+                <tr><td>Delta / Web / Dairy</td><td style="color:var(--red)">287</td><td><span class="pill red">14.1%</span></td></tr>
+                <tr><td>Alex / Direct / Bev</td><td style="color:var(--amber)">194</td><td><span class="pill amber">9.8%</span></td></tr>
+                <tr><td>Cairo / App / Juice</td><td style="color:var(--amber)">156</td><td><span class="pill amber">7.2%</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ════════════════ PAGE 4 — DROP ANALYSIS ════════════════ -->
+  <main class="canvas" id="page3" style="display:none">
+    <div class="page active" id="pg3">
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Drop Analysis — May 2025</div>
+          <div class="page-sub">WEEKLY SALES DECOMPOSITION · PRODUCT &amp; CATEGORY CONTRIBUTION</div>
+        </div>
+        <div class="page-controls">
+          <div class="ctrl-chip active">Week View</div>
+          <div class="ctrl-chip">Category Drilldown</div>
+        </div>
+      </div>
+
+      <div class="kpi-strip kpi-strip-4">
+        <div class="kpi-card amber">
+          <div class="kpi-label">May Total Sales</div>
+          <div class="kpi-value">£ 842K</div>
+          <div class="kpi-delta down">▼ −9.2% vs Apr</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">Lowest-Sales Week</div>
+          <div class="kpi-value">Wk 3</div>
+          <div class="kpi-delta down">▼ £ 171K (−22% vs Wk1)</div>
+        </div>
+        <div class="kpi-card purple">
+          <div class="kpi-label">Largest Category Drop</div>
+          <div class="kpi-value">Juices</div>
+          <div class="kpi-delta down">▼ −34% Wk2→Wk3</div>
+        </div>
+        <div class="kpi-card teal">
+          <div class="kpi-label">Top SKU Causing Drop</div>
+          <div class="kpi-value">SKU-4821</div>
+          <div class="kpi-delta down">▼ −£ 28K in Wk3</div>
+        </div>
+      </div>
+
+      <div class="chart-row chart-row-2-1">
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Weekly Sales Trend — May 2025</div>
+              <div class="chart-meta">Line chart · Dim_Date[WeekOfMonth] × Weekly Sales · dynamic via param</div>
+            </div>
+            <div class="chart-tag">⚙ Param-driven</div>
+          </div>
+          <div class="chart-area" style="height:160px">
+            <svg class="wf" viewBox="0 0 540 160" preserveAspectRatio="none">
+              <line x1="0" y1="40" x2="540" y2="40" stroke="#1e2328" stroke-width="1"/>
+              <line x1="0" y1="80" x2="540" y2="80" stroke="#1e2328" stroke-width="1"/>
+              <line x1="0" y1="120" x2="540" y2="120" stroke="#1e2328" stroke-width="1"/>
+              <!-- Area -->
+              <path d="M68,50 C175,50 175,60 283,90 C391,120 391,60 458,70 L458,145 L68,145 Z"
+                    fill="url(#dg1)" opacity="0.25"/>
+              <defs>
+                <linearGradient id="dg1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#f5a623"/>
+                  <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <polyline points="68,50 175,60 283,90 391,70"
+                        stroke="#f5a623" stroke-width="2.5" fill="none"/>
+              <!-- Highlight Wk3 drop -->
+              <rect x="248" y="20" width="70" height="130" fill="rgba(248,113,113,0.07)" rx="2"/>
+              <line x1="283" y1="20" x2="283" y2="88" stroke="#f87171" stroke-width="1" stroke-dasharray="3,2"/>
+              <rect x="236" y="6" width="94" height="16" fill="#1e1418" stroke="#f87171" stroke-width="1" rx="1"/>
+              <text x="283" y="17" fill="#f87171" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">⚠ WoW −22%</text>
+              <circle cx="68"  cy="50" r="5" fill="#f5a623" stroke="#0b0d0f" stroke-width="2"/>
+              <circle cx="175" cy="60" r="5" fill="#f5a623" stroke="#0b0d0f" stroke-width="2"/>
+              <circle cx="283" cy="90" r="7" fill="#f87171" stroke="#0b0d0f" stroke-width="2"/>
+              <circle cx="391" cy="70" r="5" fill="#f5a623" stroke="#0b0d0f" stroke-width="2"/>
+              <text x="68"  y="145" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Wk 1</text>
+              <text x="175" y="145" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Wk 2</text>
+              <text x="283" y="145" fill="#f87171" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Wk 3 ▼</text>
+              <text x="391" y="145" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Wk 4</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Category Mix Change</div>
+              <div class="chart-meta">Bar · Wk2 vs Wk3 by Category</div>
+            </div>
+          </div>
+          <div class="chart-area" style="height:160px">
+            <svg class="wf" viewBox="0 0 260 160" preserveAspectRatio="none">
+              <!-- Paired bars: category comparison -->
+              <rect x="10"  y="50" width="18" height="80" fill="#f5a623" opacity="0.7" rx="1"/>
+              <rect x="30"  y="80" width="18" height="50" fill="#f87171" opacity="0.7" rx="1"/>
+              <rect x="70"  y="40" width="18" height="90" fill="#f5a623" opacity="0.7" rx="1"/>
+              <rect x="90"  y="100" width="18" height="30" fill="#f87171" opacity="0.7" rx="1"/>
+              <rect x="130" y="70" width="18" height="60" fill="#f5a623" opacity="0.7" rx="1"/>
+              <rect x="150" y="65" width="18" height="65" fill="#f87171" opacity="0.7" rx="1"/>
+              <rect x="190" y="60" width="18" height="70" fill="#f5a623" opacity="0.7" rx="1"/>
+              <rect x="210" y="50" width="18" height="80" fill="#2dd4bf"  opacity="0.7" rx="1"/>
+              <text x="25"  y="148" fill="#5a6370" font-size="8" font-family="IBM Plex Mono" text-anchor="middle">Juice</text>
+              <text x="85"  y="148" fill="#5a6370" font-size="8" font-family="IBM Plex Mono" text-anchor="middle">Dairy</text>
+              <text x="145" y="148" fill="#5a6370" font-size="8" font-family="IBM Plex Mono" text-anchor="middle">FMCG</text>
+              <text x="205" y="148" fill="#5a6370" font-size="8" font-family="IBM Plex Mono" text-anchor="middle">Other</text>
+              <!-- Legend -->
+              <rect x="10"  y="10" width="8" height="8" fill="#f5a623" opacity="0.7" rx="1"/>
+              <text x="22" y="18" fill="#5a6370" font-size="8" font-family="IBM Plex Mono">Wk 2</text>
+              <rect x="60"  y="10" width="8" height="8" fill="#f87171" opacity="0.7" rx="1"/>
+              <text x="72" y="18" fill="#5a6370" font-size="8" font-family="IBM Plex Mono">Wk 3</text>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SKU Table -->
+      <div class="chart-box">
+        <div class="chart-header">
+          <div class="chart-title">Top SKUs Contributing to Wk3 Drop</div>
+          <div class="chart-meta">Fact_OrderLines × Dim_Product · Ranked by Sales Δ</div>
+        </div>
+        <table class="wf-table">
+          <thead>
+            <tr>
+              <th>#</th><th>SKU</th><th>Category</th><th>Wk 2 Sales</th><th>Wk 3 Sales</th><th>Δ Amount</th><th>Δ %</th><th>Trend</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:var(--muted)">01</td>
+              <td style="color:var(--amber)">SKU-4821</td>
+              <td>Juice</td>
+              <td>£ 42,300</td>
+              <td>£ 14,100</td>
+              <td style="color:var(--red)">− £ 28,200</td>
+              <td><span class="pill red">−66.7%</span></td>
+              <td><div class="td-bar-wrap"><div class="td-bar" style="width:67%;background:var(--red)"></div></div></td>
+            </tr>
+            <tr>
+              <td style="color:var(--muted)">02</td>
+              <td style="color:var(--amber)">SKU-2190</td>
+              <td>Dairy</td>
+              <td>£ 38,100</td>
+              <td>£ 22,800</td>
+              <td style="color:var(--red)">− £ 15,300</td>
+              <td><span class="pill red">−40.2%</span></td>
+              <td><div class="td-bar-wrap"><div class="td-bar" style="width:40%;background:var(--red)"></div></div></td>
+            </tr>
+            <tr>
+              <td style="color:var(--muted)">03</td>
+              <td style="color:var(--amber)">SKU-3304</td>
+              <td>FMCG</td>
+              <td>£ 29,500</td>
+              <td>£ 20,100</td>
+              <td style="color:var(--amber)">− £ 9,400</td>
+              <td><span class="pill amber">−31.9%</span></td>
+              <td><div class="td-bar-wrap"><div class="td-bar" style="width:32%;background:var(--amber)"></div></div></td>
+            </tr>
+            <tr>
+              <td style="color:var(--muted)">04</td>
+              <td style="color:var(--amber)">SKU-5512</td>
+              <td>Juice</td>
+              <td>£ 18,200</td>
+              <td>£ 10,800</td>
+              <td style="color:var(--amber)">− £ 7,400</td>
+              <td><span class="pill amber">−40.7%</span></td>
+              <td><div class="td-bar-wrap"><div class="td-bar" style="width:41%;background:var(--amber)"></div></div></td>
+            </tr>
+            <tr>
+              <td style="color:var(--muted)">05</td>
+              <td style="color:var(--amber)">SKU-0871</td>
+              <td>Beverage</td>
+              <td>£ 15,600</td>
+              <td>£ 12,200</td>
+              <td style="color:var(--green)">− £ 3,400</td>
+              <td><span class="pill green">−21.8%</span></td>
+              <td><div class="td-bar-wrap"><div class="td-bar" style="width:22%;background:var(--green)"></div></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ════════════════ PAGE 5 — COMMERCIAL / JUICE ════════════════ -->
+  <main class="canvas" id="page4" style="display:none">
+    <div class="page active" id="pg4">
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Commercial — Juice Category</div>
+          <div class="page-sub">NMV ANALYSIS · BRAND MIX · MONTHLY TREND · Jan–May 2025</div>
+        </div>
+        <div class="page-controls">
+          <div class="ctrl-chip active">NMV Share</div>
+          <div class="ctrl-chip">Volume</div>
+        </div>
+      </div>
+
+      <div class="kpi-strip kpi-strip-3">
+        <div class="kpi-card amber">
+          <div class="kpi-label">Juice NMV (YTD)</div>
+          <div class="kpi-value">£ 621K</div>
+          <div class="kpi-delta up">▲ +18.3% YoY</div>
+        </div>
+        <div class="kpi-card teal">
+          <div class="kpi-label">Juice Share of Total NMV</div>
+          <div class="kpi-value">14.8%</div>
+          <div class="kpi-delta up">▲ +2.1pp YoY</div>
+        </div>
+        <div class="kpi-card purple">
+          <div class="kpi-label">Top 3 Brands (NMV%)</div>
+          <div class="kpi-value" style="font-size:14px">Minute Maid · Cappy · Juhayna</div>
+          <div class="kpi-delta neutral">→ 61% of Juice NMV</div>
+        </div>
+      </div>
+
+      <div class="chart-row chart-row-3-2">
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Juice NMV vs Total NMV — Monthly Stack</div>
+              <div class="chart-meta">Stacked column · Fact_MaxabNMV + Fact_JuiceNMV × Dim_Date</div>
+            </div>
+            <div class="chart-tag">Stacked Column</div>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Juice NMV</div>
+            <div class="legend-item"><div class="legend-dot" style="background:var(--border2)"></div>Other NMV</div>
+          </div>
+          <div class="chart-area" style="height:150px">
+            <svg class="wf" viewBox="0 0 540 150" preserveAspectRatio="none">
+              <!-- Stacked bars per month -->
+              <!-- Jan -->
+              <rect x="30"  y="80" width="50" height="55" fill="#1e2328" rx="1"/>
+              <rect x="30"  y="68" width="50" height="12" fill="#f5a623" opacity="0.8" rx="1"/>
+              <!-- Feb -->
+              <rect x="138" y="72" width="50" height="63" fill="#1e2328" rx="1"/>
+              <rect x="138" y="57" width="50" height="15" fill="#f5a623" opacity="0.8" rx="1"/>
+              <!-- Mar -->
+              <rect x="246" y="65" width="50" height="70" fill="#1e2328" rx="1"/>
+              <rect x="246" y="47" width="50" height="18" fill="#f5a623" opacity="0.8" rx="1"/>
+              <!-- Apr -->
+              <rect x="354" y="55" width="50" height="80" fill="#1e2328" rx="1"/>
+              <rect x="354" y="34" width="50" height="21" fill="#f5a623" opacity="0.8" rx="1"/>
+              <!-- May -->
+              <rect x="462" y="60" width="50" height="75" fill="#1e2328" rx="1"/>
+              <rect x="462" y="42" width="50" height="18" fill="#f5a623" opacity="0.6" rx="1"/>
+              <!-- X labels -->
+              <text x="55"  y="146" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Jan</text>
+              <text x="163" y="146" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Feb</text>
+              <text x="271" y="146" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Mar</text>
+              <text x="379" y="146" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">Apr</text>
+              <text x="487" y="146" fill="#5a6370" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">May</text>
+              <!-- % labels -->
+              <text x="55"  y="63" fill="#f5a623" font-size="8" font-family="IBM Plex Mono" text-anchor="middle">12.1%</text>
+              <text x="163" y="52" fill="#f5a623" font-size="8" font-family="IBM Plex Mono" text-anchor="middle">13.4%</text>
+              <text x="271" y="42" fill="#f5a623" font-size="8" font-family="IBM Plex Mono" text-anchor="middle">14.8%</text>
+              <text x="379" y="29" fill="#f5a623" font-size="8" font-family="IBM Plex Mono" text-anchor="middle">16.2%</text>
+              <text x="487" y="37" fill="#f5a623" font-size="8" font-family="IBM Plex Mono" text-anchor="middle">15.1%</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-header">
+            <div class="chart-title">Brand Mix — Treemap</div>
+            <div class="chart-meta">Fact_JuiceNMV × Dim_Brand · Brand Share %</div>
+          </div>
+          <div class="treemap" style="margin-top:8px">
+            <div class="treemap-cell" style="background:rgba(245,166,35,0.7);grid-row:span 2;color:#000">
+              <div style="font-family:var(--head);font-weight:700;font-size:13px">Minute Maid</div>
+              <div class="tc-pct">28.4%</div>
+            </div>
+            <div class="treemap-cell" style="background:rgba(45,212,191,0.6);color:#000">
+              <div style="font-family:var(--head);font-weight:600;font-size:11px">Cappy</div>
+              <div class="tc-pct">19.1%</div>
+            </div>
+            <div class="treemap-cell" style="background:rgba(96,165,250,0.5);color:#fff">
+              <div style="font-family:var(--head);font-size:10px">Juhayna</div>
+              <div class="tc-pct" style="color:rgba(255,255,255,0.7)">13.5%</div>
+            </div>
+            <div class="treemap-cell" style="background:rgba(167,139,250,0.5);color:#fff">
+              <div style="font-family:var(--head);font-size:10px">Beyti</div>
+              <div class="tc-pct" style="color:rgba(255,255,255,0.7)">9.8%</div>
+            </div>
+            <div class="treemap-cell" style="background:rgba(248,113,113,0.45);color:#fff">
+              <div style="font-family:var(--head);font-size:10px">Others</div>
+              <div class="tc-pct" style="color:rgba(255,255,255,0.7)">29.2%</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Small Multiples -->
+      <div class="chart-box">
+        <div class="chart-header">
+          <div class="chart-title">Brand Performance — Small Multiples (Top 6 Brands)</div>
+          <div class="chart-meta">Monthly NMV trend per brand · Fact_JuiceNMV filtered by Dim_Brand</div>
+        </div>
+        <div class="sm-grid">
+          <!-- Brand 1 -->
+          <div class="sm-card">
+            <div class="sm-title">Minute Maid</div>
+            <svg viewBox="0 0 140 50" width="100%" height="50">
+              <polyline points="10,40 38,32 66,25 94,18 122,22" stroke="#f5a623" stroke-width="1.5" fill="none"/>
+              <circle cx="122" cy="22" r="3" fill="#f5a623"/>
+            </svg>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--green)">▲ +22.1%</div>
+          </div>
+          <!-- Brand 2 -->
+          <div class="sm-card">
+            <div class="sm-title">Cappy</div>
+            <svg viewBox="0 0 140 50" width="100%" height="50">
+              <polyline points="10,35 38,28 66,30 94,24 122,20" stroke="#2dd4bf" stroke-width="1.5" fill="none"/>
+              <circle cx="122" cy="20" r="3" fill="#2dd4bf"/>
+            </svg>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--green)">▲ +14.6%</div>
+          </div>
+          <!-- Brand 3 -->
+          <div class="sm-card">
+            <div class="sm-title">Juhayna</div>
+            <svg viewBox="0 0 140 50" width="100%" height="50">
+              <polyline points="10,20 38,22 66,25 94,30 122,35" stroke="#60a5fa" stroke-width="1.5" fill="none"/>
+              <circle cx="122" cy="35" r="3" fill="#60a5fa"/>
+            </svg>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--red)">▼ −8.3%</div>
+          </div>
+          <!-- Brand 4 -->
+          <div class="sm-card">
+            <div class="sm-title">Beyti</div>
+            <svg viewBox="0 0 140 50" width="100%" height="50">
+              <polyline points="10,30 38,28 66,26 94,28 122,25" stroke="#a78bfa" stroke-width="1.5" fill="none"/>
+              <circle cx="122" cy="25" r="3" fill="#a78bfa"/>
+            </svg>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--green)">▲ +3.1%</div>
+          </div>
+          <!-- Brand 5 -->
+          <div class="sm-card">
+            <div class="sm-title">Brand 5</div>
+            <svg viewBox="0 0 140 50" width="100%" height="50">
+              <polyline points="10,25 38,30 66,28 94,32 122,30" stroke="#f87171" stroke-width="1.5" fill="none"/>
+              <circle cx="122" cy="30" r="3" fill="#f87171"/>
+            </svg>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--amber)">→ Flat +0.4%</div>
+          </div>
+          <!-- Brand 6 -->
+          <div class="sm-card">
+            <div class="sm-title">Brand 6</div>
+            <svg viewBox="0 0 140 50" width="100%" height="50">
+              <polyline points="10,40 38,35 66,32 94,28 122,18" stroke="#4ade80" stroke-width="1.5" fill="none"/>
+              <circle cx="122" cy="18" r="3" fill="#4ade80"/>
+            </svg>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--green)">▲ +41.2% emerging</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ════════════════ PAGE 6 — STORYTELLING GUIDE ════════════════ -->
+  <main class="canvas" id="page5" style="display:none">
+    <div class="page active" id="pg5">
+
+      <div class="page-header">
+        <div>
+          <div class="page-title">Visual &amp; Storytelling Recommendations</div>
+          <div class="page-sub">SECTION 7.2 · DESIGN DECISIONS · NARRATIVE STRUCTURE · UX PRINCIPLES</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+        <div class="story-panel">
+          <div class="story-title">📐 Layout Hierarchy Principles</div>
+          <div class="story-item"><div class="story-num">01</div><div class="story-text"><strong>Top-to-bottom reading order:</strong> KPI cards first (answer "what"), then trend charts (answer "when"), then breakdown (answer "where/why"). Never start with a table.</div></div>
+          <div class="story-item"><div class="story-num">02</div><div class="story-text"><strong>2/3 : 1/3 split</strong> for most rows — dominant chart left, supporting context right. Prevents visual symmetry from feeling like a spreadsheet.</div></div>
+          <div class="story-item"><div class="story-num">03</div><div class="story-text"><strong>5-card KPI strip</strong> is the maximum. Beyond 5, use a secondary strip or collapse less-important KPIs into a "More metrics" expandable panel.</div></div>
+          <div class="story-item"><div class="story-num">04</div><div class="story-text"><strong>Consistent color semantics</strong> across all pages: amber=revenue/commercial, teal=operational, green=positive/health, red=alert/negative, purple=retailer lifecycle.</div></div>
+        </div>
+
+        <div class="story-panel">
+          <div class="story-title">📊 Chart Selection Rationale</div>
+          <div class="story-item"><div class="story-num">01</div><div class="story-text"><strong>Line chart for time series</strong> — never bar for continuous trends. Area fill adds weight to magnitude without clutter. Reserve bar for categorical comparisons.</div></div>
+          <div class="story-item"><div class="story-num">02</div><div class="story-text"><strong>Combo (bar + line) for dual-axis</strong> — always put the rate/% metric on the secondary axis as a line. Never two bars on dual axis.</div></div>
+          <div class="story-item"><div class="story-num">03</div><div class="story-text"><strong>Heatmap for time-pattern discovery</strong> — Day × Week matrices surface operational bottlenecks (e.g. Wed-Wk3 delivery spikes) that line charts miss entirely.</div></div>
+          <div class="story-item"><div class="story-num">04</div><div class="story-text"><strong>Cohort matrix for retention</strong> — diagonal reading reveals early churn signals. Color scale green→amber→red maps directly to business health intuition.</div></div>
+        </div>
+
+        <div class="story-panel">
+          <div class="story-title">🗣 Narrative Flow per Page</div>
+          <div class="story-item"><div class="story-num">P1</div><div class="story-text"><strong>Executive Overview:</strong> Lead with revenue trajectory. Immediately juxtapose Sales vs Success Rate — healthy growth with degrading quality is a risk signal. Regional bar anchors "where we are".</div></div>
+          <div class="story-item"><div class="story-num">P2</div><div class="story-text"><strong>Delivery:</strong> Lead with SLA % (outcome), then drill to heatmap (cause). The parameter slicer lets ops teams test different SLA definitions in real-time.</div></div>
+          <div class="story-item"><div class="story-num">P3</div><div class="story-text"><strong>Churn:</strong> Start with net growth (positive), then reveal churn composition (nuance). Cohort matrix before segment table — pattern before detail.</div></div>
+          <div class="story-item"><div class="story-num">P4</div><div class="story-text"><strong>Drop Analysis:</strong> Single-problem page. Lead with the exact week and magnitude, immediately show which SKUs caused it. Action-oriented, not diagnostic.</div></div>
+          <div class="story-item"><div class="story-num">P5</div><div class="story-text"><strong>Commercial/Juice:</strong> Market share story — treemap for intuitive brand sizing, small multiples for trend direction per brand. Juhayna's decline is buried without multiples.</div></div>
+        </div>
+
+        <div class="story-panel">
+          <div class="story-title">⚙ Parameter UX Guidelines</div>
+          <div class="story-item"><div class="story-num">01</div><div class="story-text"><strong>Always show active parameter value</strong> in the page subtitle (e.g. "SLA THRESHOLD: 2 WORKING DAYS"). Users must never wonder what the current setting is.</div></div>
+          <div class="story-item"><div class="story-num">02</div><div class="story-text"><strong>Default-value card</strong>: Place <code>[SLA Threshold Label]</code> and <code>[Churn Window Label]</code> measures as small cards above affected visuals so the current parameter is always visible.</div></div>
+          <div class="story-item"><div class="story-num">03</div><div class="story-text"><strong>Tile slicer</strong> preferred over dropdown for 1–7 range values — faster selection, no click-to-open. Set slicer to single-select. Show default value pre-selected.</div></div>
+          <div class="story-item"><div class="story-num">04</div><div class="story-text"><strong>Annotate affected visuals</strong> with a ⚙ badge (like the chart tag in Drop Analysis page) so users know which charts respond to the parameter — not all visuals do.</div></div>
+        </div>
+
+        <div class="story-panel" style="grid-column:span 2">
+          <div class="story-title">🎨 Color &amp; Interaction System</div>
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:6px">
+            <div style="padding:10px;background:rgba(245,166,35,0.15);border:1px solid var(--amber);border-radius:2px;text-align:center">
+              <div style="font-family:var(--mono);font-size:8px;color:var(--amber)">AMBER</div>
+              <div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:3px">Revenue<br>Commercial</div>
+            </div>
+            <div style="padding:10px;background:rgba(45,212,191,0.1);border:1px solid var(--teal);border-radius:2px;text-align:center">
+              <div style="font-family:var(--mono);font-size:8px;color:var(--teal)">TEAL</div>
+              <div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:3px">Operational<br>SLA / KPI</div>
+            </div>
+            <div style="padding:10px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:2px;text-align:center">
+              <div style="font-family:var(--mono);font-size:8px;color:var(--green)">GREEN</div>
+              <div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:3px">Positive<br>On-target</div>
+            </div>
+            <div style="padding:10px;background:rgba(248,113,113,0.1);border:1px solid var(--red);border-radius:2px;text-align:center">
+              <div style="font-family:var(--mono);font-size:8px;color:var(--red)">RED</div>
+              <div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:3px">Alert<br>Degradation</div>
+            </div>
+            <div style="padding:10px;background:rgba(167,139,250,0.1);border:1px solid var(--purple);border-radius:2px;text-align:center">
+              <div style="font-family:var(--mono);font-size:8px;color:var(--purple)">PURPLE</div>
+              <div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:3px">Retailers<br>Lifecycle</div>
+            </div>
+            <div style="padding:10px;background:rgba(96,165,250,0.1);border:1px solid var(--blue);border-radius:2px;text-align:center">
+              <div style="font-family:var(--mono);font-size:8px;color:var(--blue)">BLUE</div>
+              <div style="font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:3px">Geographic<br>Channel</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <div class="annotation" style="flex:1;min-width:200px">
+              <strong>Tooltip standard:</strong> Always show Measure Name → Value → Comparison period. 3 rows max. Use the dark surface tooltip style shown on Page 1 sales trend.
+            </div>
+            <div class="annotation teal" style="flex:1;min-width:200px">
+              <strong>Drillthrough:</strong> Right-click on any Retailer KPI → Drillthrough to single-retailer view. Set up drillthrough page filtered by RetailerID for support/ops use.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<script>
+  function switchPage(idx, tabEl, title) {
+    // Hide all canvases
+    for (let i = 0; i < 6; i++) {
+      const c = document.getElementById('page' + i);
+      if (c) c.style.display = 'none';
+      const sb = document.getElementById('sb' + i);
+      if (sb) sb.classList.remove('active');
+    }
+    // Show selected
+    const target = document.getElementById('page' + idx);
+    if (target) target.style.display = 'flex';
+    const sbTarget = document.getElementById('sb' + idx);
+    if (sbTarget) sbTarget.classList.add('active');
+
+    // Update tabs
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    if (tabEl) {
+      tabEl.classList.add('active');
+    } else {
+      const tabs = document.querySelectorAll('.tab');
+      if (tabs[idx]) tabs[idx].classList.add('active');
+    }
+
+    // Update breadcrumb
+    const bc = document.getElementById('breadcrumb');
+    if (bc) bc.innerHTML = `Dashboard <span style="color:var(--border2)">/</span> <span style="color:var(--amber)">${title}</span>`;
+  }
+
+  function toggleParams() {
+    // Visual feedback on param badge click
+    const badge = document.querySelector('.param-badge');
+    badge.style.background = 'rgba(245,166,35,0.3)';
+    setTimeout(() => badge.style.background = 'var(--amber-dim)', 300);
+  }
+
+  // Slicer chips toggle
+  document.querySelectorAll('.slicer-chips').forEach(group => {
+    group.querySelectorAll('.slicer-chip').forEach(chip => {
+      chip.addEventListener('click', function() {
+        group.querySelectorAll('.slicer-chip').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  });
+
+  // Init page display
+  document.getElementById('page0').style.display = 'flex';
+</script>
+
+</body>
+</html>
