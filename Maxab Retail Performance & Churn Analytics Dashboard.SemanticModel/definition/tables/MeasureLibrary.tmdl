@@ -846,9 +846,11 @@ table MeasureLibrary
 		lineageTag: 918e61fb-e7c7-4ea5-9d8c-a222d1ddd2b0
 
 	/// Dynamic page subtitle for P1. Drop into a Card or Text Box visual at the top of the page.
-	measure 'Page Subtitle P1' = "RETAIL PERFORMANCE SUMMARY  ·  " & SELECTEDVALUE(Dim_Date[YearMonth],"YTD 2025") & "  ·  " & SELECTEDVALUE(Dim_Region[Region],"ALL REGIONS") & "  ·  " & SELECTEDVALUE(Dim_Channel[Channel],"ALL CHANNELS")
+	measure 'Page Subtitle P1' = "RETAIL PERFORMANCE SUMMARY  ·  " & SELECTEDVALUE(Dim_Date[YearMonth],"YTD 2024") & "  ·  " & SELECTEDVALUE(Dim_Region[Region],"ALL REGIONS") & "  ·  " & SELECTEDVALUE(Dim_Channel[Channel],"ALL CHANNELS")
 		displayFolder: Page Subtitles
 		lineageTag: 08f09fd5-fdbb-47b6-a3d0-a9b414d7ff64
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	/// Dynamic page subtitle for P2 — includes live SLA parameter value.
 	measure 'Page Subtitle P2' = "OPERATIONAL KPIs  ·  SLA THRESHOLD: " & [Delivery Threshold Days Value] & " WORKING DAYS  ·  " & SELECTEDVALUE(Dim_Region[Region],"ALL REGIONS")
@@ -859,6 +861,18 @@ table MeasureLibrary
 	measure 'Page Subtitle P3' = "RETAILER LIFECYCLE  ·  CHURN WINDOW: " & [Churn Lookback Months Value] & " MONTHS  ·  " & SELECTEDVALUE(Dim_Date[YearMonth],"YTD 2024")
 		displayFolder: Page Subtitles
 		lineageTag: 29b98d8f-2eb3-4bde-af15-bba37811be92
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Page Subtitle P4' = "WEEKLY SALES DECOMPOSITION - MAY 2024"
+		displayFolder: Page Subtitles
+		lineageTag: 913c9c7b-5539-4c82-abf3-b52e76d52b0b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Page Subtitle P5' = "NMV ANALYSIS - BRAND MIX - Jan–May 2024"
+		displayFolder: Page Subtitles
+		lineageTag: cbeb64d5-a3af-4171-b41c-65c7c3616e5f
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 

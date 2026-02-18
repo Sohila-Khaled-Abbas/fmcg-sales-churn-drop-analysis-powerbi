@@ -4,7 +4,7 @@
     {
       "ordinal": 0,
       "scrollPosition": {
-        "x": 767.21311475409834,
+        "x": 262.22788736571482,
         "y": 0
       },
       "nodes": [
@@ -254,6 +254,45 @@
             "width": 234
           },
           "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 2199.113133267354,
+            "y": 314.98206882309324
+          },
+          "nodeIndex": "ChurnLookbackMonths",
+          "nodeLineageTag": "537f03a8-ceea-477e-a52b-2ae06b9f01a7",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2483.113133267354,
+            "y": 350.98206882309324
+          },
+          "nodeIndex": "Cohort_Matrix",
+          "nodeLineageTag": "f9d9b0ed-aa07-4673-9fc0-fbe7f0a94a15",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2767.113133267354,
+            "y": 314.98206882309324
+          },
+          "nodeIndex": "DeliveryThresholdDays",
+          "nodeLineageTag": "581f8e21-b45a-4d62-8c43-cb9dc8442488",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
         }
       ],
       "name": "All tables",

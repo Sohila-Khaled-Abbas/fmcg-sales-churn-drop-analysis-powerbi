@@ -3,8 +3,8 @@
   "name": "441e5e44fa0daf9c6ec3",
   "displayName": "Commercial — Juice",
   "displayOption": "FitToPage",
-  "height": 900,
-  "width": 1400,
+  "height": 799,
+  "width": 1279,
   "objects": {
     "displayArea": [
       {
@@ -26,6 +26,33 @@
             "expr": {
               "Literal": {
                 "Value": "0D"
+              }
+            }
+          },
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Maxab_P5_Commercial_Juice.svg'"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "ResourcePackageItem": {
+                    "PackageName": "RegisteredResources",
+                    "PackageType": 1,
+                    "ItemName": "Maxab_P5_Commercial_Juice5624107457726323.svg"
+                  }
+                }
+              },
+              "scaling": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Normal'"
+                  }
+                }
               }
             }
           }

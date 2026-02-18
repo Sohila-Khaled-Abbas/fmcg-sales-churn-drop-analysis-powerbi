@@ -3,8 +3,8 @@
   "name": "1989725aa8018e970357",
   "displayName": "Performance & Delivery",
   "displayOption": "FitToPage",
-  "height": 900,
-  "width": 1400,
+  "height": 799,
+  "width": 1279,
   "objects": {
     "displayArea": [
       {
@@ -26,6 +26,33 @@
             "expr": {
               "Literal": {
                 "Value": "0D"
+              }
+            }
+          },
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Maxab_P2_Performance_Delivery.svg'"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "ResourcePackageItem": {
+                    "PackageName": "RegisteredResources",
+                    "PackageType": 1,
+                    "ItemName": "Maxab_P2_Performance_Delivery6546810987664535.svg"
+                  }
+                }
+              },
+              "scaling": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Normal'"
+                  }
+                }
               }
             }
           }

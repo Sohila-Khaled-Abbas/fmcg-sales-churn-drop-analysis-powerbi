@@ -3,8 +3,8 @@
   "name": "b741210e3bb986e55233",
   "displayName": "Drop Analysis",
   "displayOption": "FitToPage",
-  "height": 900,
-  "width": 1400,
+  "height": 799,
+  "width": 1279,
   "objects": {
     "displayArea": [
       {
@@ -26,6 +26,33 @@
             "expr": {
               "Literal": {
                 "Value": "0D"
+              }
+            }
+          },
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Maxab_P4_Drop_Analysis.svg'"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "ResourcePackageItem": {
+                    "PackageName": "RegisteredResources",
+                    "PackageType": 1,
+                    "ItemName": "Maxab_P4_Drop_Analysis459726100038672.svg"
+                  }
+                }
+              },
+              "scaling": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Normal'"
+                  }
+                }
               }
             }
           }
