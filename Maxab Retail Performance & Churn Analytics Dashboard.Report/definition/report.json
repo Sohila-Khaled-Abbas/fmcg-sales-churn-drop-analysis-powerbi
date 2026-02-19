@@ -87,11 +87,6 @@
           "type": "Image"
         },
         {
-          "name": "Maxab_P1_Executive_Overview_1060915097401554874.svg",
-          "path": "Maxab_P1_Executive_Overview_1060915097401554874.svg",
-          "type": "Image"
-        },
-        {
           "name": "Maxab_P4_Drop_Analysis459726100038672.svg",
           "path": "Maxab_P4_Drop_Analysis459726100038672.svg",
           "type": "Image"
@@ -99,6 +94,11 @@
         {
           "name": "Maxab_P5_Commercial_Juice5624107457726323.svg",
           "path": "Maxab_P5_Commercial_Juice5624107457726323.svg",
+          "type": "Image"
+        },
+        {
+          "name": "Maxab_P1_Executive_Overview_144878457768574054.svg",
+          "path": "Maxab_P1_Executive_Overview_144878457768574054.svg",
           "type": "Image"
         }
       ]

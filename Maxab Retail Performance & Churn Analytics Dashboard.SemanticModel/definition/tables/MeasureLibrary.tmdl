@@ -25,11 +25,11 @@ table MeasureLibrary
 
 	/// Average order value (Total Sales divided by Total Orders)
 	measure AOV = DIVIDE([Total Sales], [Total Orders])
-		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		formatString: #,0.0,," EGP"
 		displayFolder: Performance KPIs
 		lineageTag: c0b584b8-862a-4302-8d71-1e6bb5747bfd
 
-		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+		annotation PBI_FormatHint = {"isCustom":true}
 
 	/// Average number of orders per retailer
 	measure Frequency = DIVIDE([Total Orders], [Total Retailers])
