@@ -77,11 +77,6 @@
           "type": "CustomTheme"
         },
         {
-          "name": "Maxab_P5_Commercial_Juice5624107457726323.svg",
-          "path": "Maxab_P5_Commercial_Juice5624107457726323.svg",
-          "type": "Image"
-        },
-        {
           "name": "Maxab_P1_Executive_Overview_144878457768574054.svg",
           "path": "Maxab_P1_Executive_Overview_144878457768574054.svg",
           "type": "Image"
@@ -99,6 +94,11 @@
         {
           "name": "Maxab_P4_Drop_Analysis20497750081287502.svg",
           "path": "Maxab_P4_Drop_Analysis20497750081287502.svg",
+          "type": "Image"
+        },
+        {
+          "name": "Maxab_P5_Commercial_Juice6951117397197166.svg",
+          "path": "Maxab_P5_Commercial_Juice6951117397197166.svg",
           "type": "Image"
         }
       ]

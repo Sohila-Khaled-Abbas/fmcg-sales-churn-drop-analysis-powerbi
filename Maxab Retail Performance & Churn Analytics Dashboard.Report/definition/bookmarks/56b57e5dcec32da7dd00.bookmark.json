@@ -79,7 +79,7 @@
             "filters": {
               "byExpr": [
                 {
-                  "name": "8987305c4eb4286be91d",
+                  "name": "36cd4096f5cd25ed0b22",
                   "type": "Advanced",
                   "expression": {
                     "Measure": {
@@ -168,7 +168,7 @@
                   "howCreated": 1
                 },
                 {
-                  "name": "52f563c4f39ee7611f1b",
+                  "name": "870cd67049b903053961",
                   "type": "Categorical",
                   "expression": {
                     "Column": {
@@ -281,7 +281,7 @@
                   "howCreated": 1
                 },
                 {
-                  "name": "98685a91eabf4ffb0dc7",
+                  "name": "4640b3be089a86d305ce",
                   "type": "Categorical",
                   "expression": {
                     "Column": {
@@ -434,7 +434,7 @@
             "filters": {
               "byExpr": [
                 {
-                  "name": "fb7e4aab1cff2ac8b8da",
+                  "name": "930305366658377bc902",
                   "type": "Advanced",
                   "expression": {
                     "Measure": {
@@ -459,7 +459,7 @@
             "filters": {
               "byExpr": [
                 {
-                  "name": "2d6272d4d9d08f3f4a4a",
+                  "name": "3e5760a9582fd651e143",
                   "type": "Advanced",
                   "expression": {
                     "Measure": {
@@ -474,7 +474,7 @@
                   "howCreated": 0
                 },
                 {
-                  "name": "7c765b8867f8179116c6",
+                  "name": "145fc96f4ee9eeb79f5b",
                   "type": "Advanced",
                   "expression": {
                     "Measure": {
@@ -489,7 +489,7 @@
                   "howCreated": 0
                 },
                 {
-                  "name": "5a563e342669235c4713",
+                  "name": "472ccdcbe20620beb472",
                   "type": "Advanced",
                   "expression": {
                     "Measure": {
@@ -504,7 +504,7 @@
                   "howCreated": 0
                 },
                 {
-                  "name": "b3adc4178775dadee34b",
+                  "name": "676bc00252491b3689f3",
                   "type": "Advanced",
                   "expression": {
                     "Measure": {
@@ -544,7 +544,7 @@
             "filters": {
               "byExpr": [
                 {
-                  "name": "63b6a3b70f1b9c86bab1",
+                  "name": "5a7441b37a4b4b1d4153",
                   "type": "Advanced",
                   "expression": {
                     "Column": {
@@ -559,7 +559,7 @@
                   "howCreated": 0
                 },
                 {
-                  "name": "ee14067cf717350dccad",
+                  "name": "ba4323853ac0f9409a69",
                   "type": "Advanced",
                   "expression": {
                     "Measure": {
@@ -715,7 +715,7 @@
                   "howCreated": 0
                 },
                 {
-                  "name": "cae66b7573347a67119d",
+                  "name": "1cd507e504709d62c55c",
                   "type": "Advanced",
                   "expression": {
                     "Measure": {
@@ -730,7 +730,7 @@
                   "howCreated": 0
                 },
                 {
-                  "name": "f6033abf0f39241a0ade",
+                  "name": "fd3739467e15d5ff79ca",
                   "type": "Advanced",
                   "expression": {
                     "Measure": {
@@ -784,22 +784,109 @@
             "filters": {
               "byExpr": [
                 {
-                  "name": "06b09addc456379d644a",
-                  "type": "Categorical",
+                  "name": "a04bf0b7eb29e17f8c72",
+                  "type": "TopN",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "subquery",
+                        "Expression": {
+                          "Subquery": {
+                            "Query": {
+                              "Version": 2,
+                              "From": [
+                                {
+                                  "Name": "d",
+                                  "Entity": "Dim_Product",
+                                  "Type": 0
+                                },
+                                {
+                                  "Name": "m",
+                                  "Entity": "MeasureLibrary",
+                                  "Type": 0
+                                }
+                              ],
+                              "Select": [
+                                {
+                                  "Column": {
+                                    "Expression": {
+                                      "SourceRef": {
+                                        "Source": "d"
+                                      }
+                                    },
+                                    "Property": "SKU"
+                                  },
+                                  "Name": "field"
+                                }
+                              ],
+                              "OrderBy": [
+                                {
+                                  "Direction": 2,
+                                  "Expression": {
+                                    "Measure": {
+                                      "Expression": {
+                                        "SourceRef": {
+                                          "Source": "m"
+                                        }
+                                      },
+                                      "Property": "SKU Drop Delta"
+                                    }
+                                  }
+                                }
+                              ],
+                              "Top": 5
+                            }
+                          }
+                        },
+                        "Type": 2
+                      },
+                      {
+                        "Name": "d",
+                        "Entity": "Dim_Product",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "In": {
+                            "Expressions": [
+                              {
+                                "Column": {
+                                  "Expression": {
+                                    "SourceRef": {
+                                      "Source": "d"
+                                    }
+                                  },
+                                  "Property": "SKU"
+                                }
+                              }
+                            ],
+                            "Table": {
+                              "SourceRef": {
+                                "Source": "subquery"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
                   "expression": {
                     "Column": {
                       "Expression": {
                         "SourceRef": {
-                          "Entity": "Dim_Date"
+                          "Entity": "Dim_Product"
                         }
                       },
-                      "Property": "MonthName"
+                      "Property": "SKU"
                     }
                   },
                   "howCreated": 0
                 },
                 {
-                  "name": "fbdbd53d16a58c401128",
+                  "name": "ffa5d5a8033685ec3397",
                   "type": "Advanced",
                   "expression": {
                     "Measure": {
@@ -808,22 +895,7 @@
                           "Entity": "MeasureLibrary"
                         }
                       },
-                      "Property": "Total Orders"
-                    }
-                  },
-                  "howCreated": 0
-                },
-                {
-                  "name": "cc1a9dce6be3f3b6ca4f",
-                  "type": "Advanced",
-                  "expression": {
-                    "Measure": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "MeasureLibrary"
-                        }
-                      },
-                      "Property": "Success Rate %"
+                      "Property": "SKU Drop Delta"
                     }
                   },
                   "howCreated": 0
@@ -831,18 +903,33 @@
               ]
             },
             "singleVisual": {
-              "visualType": "lineStackedColumnComboChart",
+              "visualType": "columnChart",
               "objects": {},
+              "orderBy": [
+                {
+                  "Direction": 1,
+                  "Expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "MeasureLibrary"
+                        }
+                      },
+                      "Property": "SKU Drop Delta"
+                    }
+                  }
+                }
+              ],
               "activeProjections": {
                 "Category": [
                   {
                     "Column": {
                       "Expression": {
                         "SourceRef": {
-                          "Entity": "Dim_Date"
+                          "Entity": "Dim_Product"
                         }
                       },
-                      "Property": "MonthName"
+                      "Property": "SKU"
                     }
                   }
                 ]

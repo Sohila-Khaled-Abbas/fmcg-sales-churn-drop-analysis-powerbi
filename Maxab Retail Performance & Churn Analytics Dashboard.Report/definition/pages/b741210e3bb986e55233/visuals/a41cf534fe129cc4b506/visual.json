@@ -4,10 +4,10 @@
   "position": {
     "x": 176,
     "y": 528,
-    "z": 8001,
+    "z": 9000,
     "height": 256,
     "width": 1072,
-    "tabOrder": 8001
+    "tabOrder": 9000
   },
   "visual": {
     "visualType": "clusteredBarChart",
@@ -397,34 +397,6 @@
             }
           ]
         }
-      },
-      {
-        "name": "cae66b7573347a67119d",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "MeasureLibrary"
-              }
-            },
-            "Property": "May Wk2 Sales"
-          }
-        },
-        "type": "Advanced"
-      },
-      {
-        "name": "f6033abf0f39241a0ade",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "MeasureLibrary"
-              }
-            },
-            "Property": "May Wk3 Sales"
-          }
-        },
-        "type": "Advanced"
       }
     ]
   }
