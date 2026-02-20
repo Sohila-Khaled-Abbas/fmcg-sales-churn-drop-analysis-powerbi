@@ -43,7 +43,7 @@
                   "ResourcePackageItem": {
                     "PackageName": "RegisteredResources",
                     "PackageType": 1,
-                    "ItemName": "Maxab_P3_Churn_Activation8959750177914985.svg"
+                    "ItemName": "Maxab_P3_Churn_Activation6953675535871707.svg"
                   }
                 }
               },
@@ -51,6 +51,30 @@
                 "expr": {
                   "Literal": {
                     "Value": "'Normal'"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspace": [
+      {
+        "properties": {
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "''"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "Literal": {
+                    "Value": "''"
                   }
                 }
               }

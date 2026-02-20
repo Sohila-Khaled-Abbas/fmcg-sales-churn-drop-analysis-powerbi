@@ -109,36 +109,44 @@ table MeasureLibrary
 		displayFolder: Churn measures
 		lineageTag: 8c706329-4d15-40a3-887d-95c9382f26cb
 
-	/// Count of retailers active in the prior N months (controlled by ChurnLookbackMonths slicer, default = 3) but absent in the current selected period.
+	/// Count of retailers active in the prior N months (controlled by ChurnLookbackMonths slicer, default = 3) but absent in the latest month of the current filter context. Works for single month, multi-month, and YTD selections.
 	measure 'Churned Retailers' = ```
 			
 			VAR LookbackMonths = [Churn Lookback Months Value]
 			
-			VAR CurrentMonthDates =
-			    VALUES(Dim_Date[Date])
+			// Use the LAST month in the current filter context
+			VAR MaxDateInContext = MAX(Dim_Date[Date])
+			VAR CurrentMonthStart = EOMONTH(MaxDateInContext, -1) + 1
+			VAR CurrentMonthEnd = EOMONTH(MaxDateInContext, 0)
 			
-			VAR PriorWindowDates =
-			    DATESINPERIOD(
-			        Dim_Date[Date],
-			        MIN(Dim_Date[Date]) - 1,
-			        - LookbackMonths,
-			        MONTH
-			    )
+			// Prior N months window (BEFORE the current month)
+			VAR PriorWindowStart = EOMONTH(CurrentMonthStart, -LookbackMonths) + 1
+			VAR PriorWindowEnd = CurrentMonthStart - 1
 			
+			// Retailers active in the PRIOR window
 			VAR RetailersPrior =
 			    CALCULATETABLE(
 			        VALUES(Fact_Order[RetailerID]),
-			        PriorWindowDates
+			        FILTER(
+			            ALL(Dim_Date),
+			            Dim_Date[Date] >= PriorWindowStart &&
+			            Dim_Date[Date] <= PriorWindowEnd
+			        )
 			    )
 			
+			// Retailers active in the CURRENT month
 			VAR RetailersCurrent =
 			    CALCULATETABLE(
 			        VALUES(Fact_Order[RetailerID]),
-			        CurrentMonthDates
+			        FILTER(
+			            ALL(Dim_Date),
+			            Dim_Date[Date] >= CurrentMonthStart &&
+			            Dim_Date[Date] <= CurrentMonthEnd
+			        )
 			    )
 			
-			VAR Churned =
-			    EXCEPT(RetailersPrior, RetailersCurrent)
+			// Churned = those in prior window but NOT in current month
+			VAR Churned = EXCEPT(RetailersPrior, RetailersCurrent)
 			
 			RETURN
 			COUNTROWS(Churned)
@@ -499,54 +507,64 @@ table MeasureLibrary
 		displayFolder: P3 — Churn & Activation
 		lineageTag: 860eb40c-e3ee-4aff-843a-bfcfc53717cb
 
-	/// Cohort retention rate for Matrix visual. Rows=CohortMonth, Cols=MonthOffset (0–4). Use conditional formatting green→red.
+	/// Cohort retention rate for Matrix visual. Rows=CohortMonth, Cols=MonthOffset (0–4). Use conditional formatting green→red. Now with proper error handling for blank selections.
 	measure 'Cohort Retention %' = ```
 			
 			VAR CohortMonth = SELECTEDVALUE('Cohort_Matrix'[CohortMonth])
 			VAR MonthOffset = SELECTEDVALUE('Cohort_Matrix'[MonthOffset])
 			
-			VAR CohortStart = DATEVALUE(CohortMonth & "-01")
-			VAR CohortEnd   = EOMONTH(CohortStart, 0)
-			
-			VAR OffsetStart = EOMONTH(CohortStart, MonthOffset - 1) + 1
-			VAR OffsetEnd   = EOMONTH(CohortStart, MonthOffset)
-			
-			-- 1️⃣ Get retailers whose FIRST order is inside cohort month
-			VAR RetailersInCohort =
-			    FILTER(
-			        VALUES(Fact_Order[RetailerID]),
-			        VAR FirstOrderDate =
-			            CALCULATE(
-			                MIN(Fact_Order[Created]),
-			                ALL(Fact_Order)
-			            )
-			        RETURN
-			            FirstOrderDate >= CohortStart &&
-			            FirstOrderDate <= CohortEnd
-			    )
-			
-			-- 2️⃣ Retailers active in offset month
-			VAR RetainedInOffset =
-			    CALCULATETABLE(
-			        VALUES(Fact_Order[RetailerID]),
-			        Fact_Order[Created] >= OffsetStart,
-			        Fact_Order[Created] <= OffsetEnd
-			    )
-			
-			-- 3️⃣ Intersection
-			VAR Retained =
-			    INTERSECT(
-			        RetailersInCohort,
-			        RetainedInOffset
-			    )
+			// Error handling: return BLANK if no selection
+			VAR HasSelection = NOT ISBLANK(CohortMonth) && NOT ISBLANK(MonthOffset)
 			
 			RETURN
 			IF(
-			    MonthOffset = 0,
-			    1,
-			    DIVIDE(
-			        COUNTROWS(Retained),
-			        COUNTROWS(RetailersInCohort)
+			    NOT HasSelection,
+			    BLANK(),
+			    
+			    // Main logic
+			    VAR CohortStart = DATEVALUE(CohortMonth & "-01")
+			    VAR CohortEnd   = EOMONTH(CohortStart, 0)
+			    
+			    VAR OffsetStart = EOMONTH(CohortStart, MonthOffset - 1) + 1
+			    VAR OffsetEnd   = EOMONTH(CohortStart, MonthOffset)
+			    
+			    -- 1️⃣ Get retailers whose FIRST order is inside cohort month
+			    VAR RetailersInCohort =
+			        FILTER(
+			            VALUES(Fact_Order[RetailerID]),
+			            VAR FirstOrderDate =
+			                CALCULATE(
+			                    MIN(Fact_Order[Created]),
+			                    ALL(Fact_Order)
+			                )
+			            RETURN
+			                FirstOrderDate >= CohortStart &&
+			                FirstOrderDate <= CohortEnd
+			        )
+			    
+			    -- 2️⃣ Retailers active in offset month
+			    VAR RetainedInOffset =
+			        CALCULATETABLE(
+			            VALUES(Fact_Order[RetailerID]),
+			            Fact_Order[Created] >= OffsetStart,
+			            Fact_Order[Created] <= OffsetEnd
+			        )
+			    
+			    -- 3️⃣ Intersection
+			    VAR Retained =
+			        INTERSECT(
+			            RetailersInCohort,
+			            RetainedInOffset
+			        )
+			    
+			    RETURN
+			    IF(
+			        MonthOffset = 0,
+			        1,
+			        DIVIDE(
+			            COUNTROWS(Retained),
+			            COUNTROWS(RetailersInCohort)
+			        )
 			    )
 			)
 			

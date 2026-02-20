@@ -77,16 +77,6 @@
           "type": "CustomTheme"
         },
         {
-          "name": "Maxab_P2_Performance_Delivery6546810987664535.svg",
-          "path": "Maxab_P2_Performance_Delivery6546810987664535.svg",
-          "type": "Image"
-        },
-        {
-          "name": "Maxab_P3_Churn_Activation8959750177914985.svg",
-          "path": "Maxab_P3_Churn_Activation8959750177914985.svg",
-          "type": "Image"
-        },
-        {
           "name": "Maxab_P4_Drop_Analysis459726100038672.svg",
           "path": "Maxab_P4_Drop_Analysis459726100038672.svg",
           "type": "Image"
@@ -99,6 +89,16 @@
         {
           "name": "Maxab_P1_Executive_Overview_144878457768574054.svg",
           "path": "Maxab_P1_Executive_Overview_144878457768574054.svg",
+          "type": "Image"
+        },
+        {
+          "name": "Maxab_P2_Performance_Delivery5636245919880855.svg",
+          "path": "Maxab_P2_Performance_Delivery5636245919880855.svg",
+          "type": "Image"
+        },
+        {
+          "name": "Maxab_P3_Churn_Activation6953675535871707.svg",
+          "path": "Maxab_P3_Churn_Activation6953675535871707.svg",
           "type": "Image"
         }
       ]
