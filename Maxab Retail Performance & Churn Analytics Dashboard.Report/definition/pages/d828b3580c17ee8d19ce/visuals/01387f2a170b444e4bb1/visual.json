@@ -4,10 +4,10 @@
   "position": {
     "x": 992.00000000000011,
     "y": 383.99999999999994,
-    "z": 9001,
+    "z": 10000,
     "height": 112,
     "width": 191.99999999999997,
-    "tabOrder": 9001
+    "tabOrder": 10000
   },
   "visual": {
     "visualType": "cardVisual",
@@ -120,18 +120,6 @@
               "expr": {
                 "Literal": {
                   "Value": "22D"
-                }
-              }
-            },
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "ThemeDataColor": {
-                      "ColorId": 9,
-                      "Percent": 0
-                    }
-                  }
                 }
               }
             },

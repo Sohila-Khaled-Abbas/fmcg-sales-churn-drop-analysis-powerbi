@@ -5,11 +5,11 @@ table MeasureLibrary
 
 	/// Total revenue generated from all orders
 	measure 'Total Sales' = SUM(Fact_Order[Sales])
-		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		formatString: #,0.0" EGP"
 		displayFolder: Performance KPIs
 		lineageTag: 5b7046fd-ba7c-40fb-9d63-230e82d4bc5d
 
-		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+		annotation PBI_FormatHint = {"isCustom":true}
 
 	/// Count of unique orders
 	measure 'Total Orders' = DISTINCTCOUNT(Fact_Order[OrderId])
@@ -320,9 +320,11 @@ table MeasureLibrary
 		lineageTag: 7e971e0a-cb04-4ff0-afc2-9fb1dcfa3ce6
 
 	/// Dynamic card label showing the currently selected delivery SLA threshold
-	measure 'SLA Threshold Label' = "SLA Target: " & [Delivery Threshold Days Value] & " working days"
+	measure 'SLA Target' = [Delivery Threshold Days Value] & " working days"
 		displayFolder: Parameters
 		lineageTag: 516f4534-0c87-4547-bf75-b9d9afb20f0a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	/// Dynamic card label showing the currently selected churn lookback window
 	measure 'Churn Window Label' = "Churn Window: Last " & [Churn Lookback Months Value] & " months"
@@ -508,67 +510,77 @@ table MeasureLibrary
 		lineageTag: 860eb40c-e3ee-4aff-843a-bfcfc53717cb
 
 	/// Cohort retention rate for Matrix visual. Rows=CohortMonth, Cols=MonthOffset (0–4). Use conditional formatting green→red. Now with proper error handling for blank selections.
-	measure 'Cohort Retention %' = ```
+	measure 'Cohort Retention %' =
 			
-			VAR CohortMonth = SELECTEDVALUE('Cohort_Matrix'[CohortMonth])
-			VAR MonthOffset = SELECTEDVALUE('Cohort_Matrix'[MonthOffset])
+			VAR CohortMonth =
+			    SELECTEDVALUE('Cohort_Matrix'[CohortMonth])
 			
-			// Error handling: return BLANK if no selection
-			VAR HasSelection = NOT ISBLANK(CohortMonth) && NOT ISBLANK(MonthOffset)
+			VAR MonthOffset =
+			    SELECTEDVALUE('Cohort_Matrix'[MonthOffset])
 			
 			RETURN
 			IF(
-			    NOT HasSelection,
+			    ISBLANK(CohortMonth) || ISBLANK(MonthOffset),
 			    BLANK(),
-			    
-			    // Main logic
-			    VAR CohortStart = DATEVALUE(CohortMonth & "-01")
-			    VAR CohortEnd   = EOMONTH(CohortStart, 0)
-			    
-			    VAR OffsetStart = EOMONTH(CohortStart, MonthOffset - 1) + 1
-			    VAR OffsetEnd   = EOMONTH(CohortStart, MonthOffset)
-			    
-			    -- 1️⃣ Get retailers whose FIRST order is inside cohort month
+			
+			    VAR CohortStart =
+			        DATE(
+			            YEAR(CohortMonth),
+			            MONTH(CohortMonth),
+			            1
+			        )
+			
+			    VAR CohortEnd =
+			        EOMONTH(CohortStart, 0)
+			
+			    VAR OffsetStart =
+			        EOMONTH(CohortStart, MonthOffset - 1) + 1
+			
+			    VAR OffsetEnd =
+			        EOMONTH(CohortStart, MonthOffset)
+			
+			    -- Retailers whose FIRST EVER order is in cohort month
 			    VAR RetailersInCohort =
 			        FILTER(
-			            VALUES(Fact_Order[RetailerID]),
+			            ALL(Fact_Order[RetailerID]),
 			            VAR FirstOrderDate =
 			                CALCULATE(
 			                    MIN(Fact_Order[Created]),
-			                    ALL(Fact_Order)
+			                    REMOVEFILTERS(Fact_Order)
 			                )
 			            RETURN
 			                FirstOrderDate >= CohortStart &&
 			                FirstOrderDate <= CohortEnd
 			        )
-			    
-			    -- 2️⃣ Retailers active in offset month
+			
+			    -- Retailers active in offset month
 			    VAR RetainedInOffset =
 			        CALCULATETABLE(
 			            VALUES(Fact_Order[RetailerID]),
 			            Fact_Order[Created] >= OffsetStart,
 			            Fact_Order[Created] <= OffsetEnd
 			        )
-			    
-			    -- 3️⃣ Intersection
+			
 			    VAR Retained =
 			        INTERSECT(
 			            RetailersInCohort,
 			            RetainedInOffset
 			        )
-			    
-			    RETURN
-			    IF(
-			        MonthOffset = 0,
-			        1,
-			        DIVIDE(
-			            COUNTROWS(Retained),
-			            COUNTROWS(RetailersInCohort)
-			        )
-			    )
-			)
 			
-			```
+			    VAR CohortSize =
+			        COUNTROWS(RetailersInCohort)
+			
+			    RETURN
+			        IF(
+			            CohortSize = 0,
+			            BLANK(),
+			            IF(
+			                MonthOffset = 0,
+			                1,
+			                DIVIDE(COUNTROWS(Retained), CohortSize)
+			            )
+			        )
+			)
 		formatString: 0%
 		displayFolder: P3 — Churn & Activation
 		lineageTag: 003d7088-e730-4c29-876f-46ad44d0d37c
