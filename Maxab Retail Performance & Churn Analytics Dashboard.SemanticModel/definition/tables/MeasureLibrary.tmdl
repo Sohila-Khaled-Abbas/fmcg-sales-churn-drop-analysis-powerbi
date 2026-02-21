@@ -217,11 +217,11 @@ table MeasureLibrary
 
 	/// Total sales for juice category
 	measure 'Juice NMV' = SUM(Fact_JuiceNMV[Sales])
-		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		formatString: #,0.00" EGP"
 		displayFolder: Commercial / Juice
 		lineageTag: cb05016e-6ee6-4adc-8895-f06c46b2282f
 
-		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+		annotation PBI_FormatHint = {"isCustom":true}
 
 	/// Juice category sales as a percentage of total NMV
 	measure 'Juice Share %' = DIVIDE([Juice NMV], [Total NMV], 0)
@@ -888,7 +888,7 @@ table MeasureLibrary
 		lineageTag: 831afb34-b116-434b-bc52-b685b1d9b2c1
 
 	/// Dynamic page subtitle for P3 — includes live churn window value.
-	measure 'Page Subtitle P3' = "RETAILER LIFECYCLE  ·  CHURN WINDOW: " & [Churn Lookback Months Value] & " MONTHS  ·  " & SELECTEDVALUE(Dim_Date[YearMonth],"YTD 2024")
+	measure 'Page Subtitle P3' = "RETAILER LIFECYCLE  -  CHURN WINDOW: " & [Churn Lookback Months Value] & " MONTHS  -  " & SELECTEDVALUE(Dim_Date[YearMonth],"YTD 2024")
 		displayFolder: Page Subtitles
 		lineageTag: 29b98d8f-2eb3-4bde-af15-bba37811be92
 

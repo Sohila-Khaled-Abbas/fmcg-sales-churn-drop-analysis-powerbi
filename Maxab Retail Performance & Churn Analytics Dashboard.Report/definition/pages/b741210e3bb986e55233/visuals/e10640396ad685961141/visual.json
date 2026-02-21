@@ -169,14 +169,14 @@
             "areaShow": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             },
             "areaMatchStrokeColor": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
                 }
               }
             }
@@ -202,7 +202,7 @@
             "transparency": {
               "expr": {
                 "Literal": {
-                  "Value": "12D"
+                  "Value": "70D"
                 }
               }
             }
@@ -396,6 +396,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'ValueAndName'"
+                }
+              }
+            },
+            "shadeShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
