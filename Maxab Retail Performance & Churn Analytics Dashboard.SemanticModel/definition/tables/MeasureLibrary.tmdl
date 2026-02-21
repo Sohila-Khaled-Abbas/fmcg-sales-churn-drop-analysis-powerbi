@@ -906,6 +906,65 @@ table MeasureLibrary
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	/// Dynamic alert text for home page banner. Shows critical issues or "all good" message.
+	measure 'Home Alert Text' = ```
+			
+			VAR Alert1_SLA = IF([Success Rate %] < 0.86, "• Success Rate at " & FORMAT([Success Rate %], "0.0%") & " (below 86% target)" & UNICHAR(10), "")
+			VAR Alert2_Churn = IF([Churn Rate %] > 0.30, "• Churn at " & FORMAT([Churn Rate %], "0.0%") & " — Cairo Online worst segment" & UNICHAR(10), "")
+			VAR Alert3_Drop = IF([May Wk3 vs Wk2 Delta %] < -0.15, "• May Wk3 sales dropped " & FORMAT([May Wk3 vs Wk2 Delta %], "0%") & " vs Wk2", "")
+			
+			VAR AllAlerts = Alert1_SLA & Alert2_Churn & Alert3_Drop
+			
+			RETURN
+			IF(
+			    LEN(AllAlerts) > 0,
+			    AllAlerts,
+			    "✓ All metrics within target thresholds"
+			)
+			
+			```
+		displayFolder: Home Page
+
+	/// Footer text showing current filter context on home page
+	measure 'Home Filter Context' = ```
+			
+			"Filters: " & SELECTEDVALUE(Dim_Region[Region], "All Regions") & " · " & SELECTEDVALUE(Dim_Channel[Channel], "All Channels")
+			
+			```
+		displayFolder: Home Page
+
+	/// Mini stat for Page 2 navigation card showing current SLA status
+	measure 'Nav Card P2 Stats' = ```
+			
+			"SLA: " & FORMAT([SLA Status], "0.0%") & " · Avg: " & FORMAT([Delivery SLA (Working Days)], "0.0") & "d"
+			
+			```
+		displayFolder: Home Page
+
+	/// Mini stat for Page 3 navigation card showing churn and net growth
+	measure 'Nav Card P3 Stats' = ```
+			
+			FORMAT([Churn Rate %], "0.0%") & " · Net: " & FORMAT([Net Retailer Growth], "+#,0;-#,0;0")
+			
+			```
+		displayFolder: Home Page
+
+	/// Mini stat for Page 4 navigation card showing May week 3 drop
+	measure 'Nav Card P4 Stats' = ```
+			
+			"May Wk3 · " & FORMAT([May Wk3 vs Wk2 Delta %], "0%")
+			
+			```
+		displayFolder: Home Page
+
+	/// Mini stat for Page 5 navigation card showing juice share and NMV
+	measure 'Nav Card P5 Stats' = ```
+			
+			FORMAT([Juice Share %], "0.0%") & " share · £" & FORMAT([Juice NMV]/1000000, "0.0") & "M"
+			
+			```
+		displayFolder: Home Page
+
 	column Column
 		isHidden
 		formatString: 0
