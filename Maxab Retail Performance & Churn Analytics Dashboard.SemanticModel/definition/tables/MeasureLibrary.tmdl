@@ -924,6 +924,7 @@ table MeasureLibrary
 			
 			```
 		displayFolder: Home Page
+		lineageTag: 71712258-9ef7-491b-ad24-57d43cdcf264
 
 	/// Footer text showing current filter context on home page
 	measure 'Home Filter Context' = ```
@@ -932,6 +933,7 @@ table MeasureLibrary
 			
 			```
 		displayFolder: Home Page
+		lineageTag: 88fc5ea7-abdc-409f-8ae0-bd263afb9ab6
 
 	/// Mini stat for Page 2 navigation card showing current SLA status
 	measure 'Nav Card P2 Stats' = ```
@@ -940,6 +942,7 @@ table MeasureLibrary
 			
 			```
 		displayFolder: Home Page
+		lineageTag: adb4c2ee-8274-4982-a1c4-4f0d6ba9f095
 
 	/// Mini stat for Page 3 navigation card showing churn and net growth
 	measure 'Nav Card P3 Stats' = ```
@@ -948,6 +951,7 @@ table MeasureLibrary
 			
 			```
 		displayFolder: Home Page
+		lineageTag: 2a78015c-71db-42d6-9bff-afbb33ba026a
 
 	/// Mini stat for Page 4 navigation card showing May week 3 drop
 	measure 'Nav Card P4 Stats' = ```
@@ -956,6 +960,7 @@ table MeasureLibrary
 			
 			```
 		displayFolder: Home Page
+		lineageTag: 62d0a60b-680a-4b36-b54b-712772f22075
 
 	/// Mini stat for Page 5 navigation card showing juice share and NMV
 	measure 'Nav Card P5 Stats' = ```
@@ -964,6 +969,53 @@ table MeasureLibrary
 			
 			```
 		displayFolder: Home Page
+		lineageTag: c655a347-cc81-4202-ba8b-f3810f64f3bb
+
+	measure 'Landing Page HTML' = ```
+			
+			// 1. Calculate dynamic greeting based on local time (UTC+2 for Egypt)
+			VAR CurrentTimeLocal = NOW() + TIME(2, 0, 0) 
+			VAR CurrentHour = HOUR(CurrentTimeLocal)
+			VAR GreetingText = 
+			    SWITCH(
+			        TRUE(),
+			        CurrentHour >= 5 && CurrentHour < 12, "Good morning",
+			        CurrentHour >= 12 && CurrentHour < 17, "Good afternoon",
+			        "Good evening"
+			    ) & ", Sohila!"
+			
+			// 2. Construct the HTML and CSS string
+			VAR HtmlString = 
+			"
+			<div style='width: 1279px; height: 799px; background-color: #0b0d0f; overflow: hidden; position: relative;'>
+			    
+			    <style>
+			        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@600;700&display=swap');
+			    </style>
+			
+			    <div style='position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.4; width: 500px; height: 500px; background: #f5a623; top: -100px; left: -100px;'></div>
+			    <div style='position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.3; width: 600px; height: 600px; background: #2dd4bf; bottom: -150px; right: -100px;'></div>
+			    <div style='position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.3; width: 400px; height: 400px; background: #a78bfa; top: 50%; left: 40%; transform: translate(-50%, -50%);'></div>
+			    
+			    <div style='position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10;'>
+			        
+			        <div style='background: rgba(17, 20, 24, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid #1e2328; border-radius: 16px; padding: 60px 80px; text-align: center; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);'>
+			            
+			            <h1 style='font-family: ""Syne"", sans-serif; font-size: 48px; margin: 0 0 10px 0; font-weight: 700; color: #ffffff;'>" & GreetingText & "</h1>
+			            
+			            <p style='font-family: ""IBM Plex Mono"", monospace; font-size: 16px; margin: 0; color: #c8cdd4; font-weight: 400; letter-spacing: 0.5px;'>Maxab Executive Portal</p>
+			        
+			        </div>
+			    </div>
+			</div>
+			"
+			
+			RETURN 
+			HtmlString
+			```
+		lineageTag: af8ecec0-906a-4ec7-91b5-67cef61b045c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column Column
 		isHidden
