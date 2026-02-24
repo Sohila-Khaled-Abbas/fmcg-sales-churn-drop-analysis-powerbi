@@ -23,11 +23,11 @@
                       "Entity": "MeasureLibrary"
                     }
                   },
-                  "Property": "Landing Page HTML"
+                  "Property": "Home Landing HTML"
                 }
               },
               "queryRef": "MeasureLibrary.Home Landing HTML",
-              "nativeQueryRef": "Landing Page HTML"
+              "nativeQueryRef": "Home Landing HTML"
             }
           ]
         }

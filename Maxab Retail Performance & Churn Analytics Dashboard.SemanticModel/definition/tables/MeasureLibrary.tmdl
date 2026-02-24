@@ -971,49 +971,317 @@ table MeasureLibrary
 		displayFolder: Home Page
 		lineageTag: c655a347-cc81-4202-ba8b-f3810f64f3bb
 
-	measure 'Landing Page HTML' = ```
+	measure 'Home Landing HTML' = ```
 			
-			// 1. Calculate dynamic greeting based on local time (UTC+2 for Egypt)
-			VAR CurrentTimeLocal = NOW() + TIME(2, 0, 0) 
-			VAR CurrentHour = HOUR(CurrentTimeLocal)
-			VAR GreetingText = 
-			    SWITCH(
-			        TRUE(),
-			        CurrentHour >= 5 && CurrentHour < 12, "Good morning",
-			        CurrentHour >= 12 && CurrentHour < 17, "Good afternoon",
-			        "Good evening"
-			    ) & ", Sohila!"
+			VAR User = "Sohila Khaled"
+			VAR FirstName = 
+			    IF(
+			        SEARCH(" ", User, 1, 0) > 0,
+			        LEFT(User, SEARCH(" ", User, 1, 0) - 1),
+			        User
+			    )
 			
-			// 2. Construct the HTML and CSS string
-			VAR HtmlString = 
-			"
-			<div style='width: 1279px; height: 799px; background-color: #0b0d0f; overflow: hidden; position: relative;'>
-			    
+			// Data Statistics
+			VAR MinDate = MIN(Dim_Date[Date])
+			VAR MaxDate = MAX(Dim_Date[Date])
+			VAR DateRange = FORMAT(MinDate, "MMM YYYY") & " — " & FORMAT(MaxDate, "MMM YYYY")
+			VAR TotalOrders = [Total Orders]
+			VAR TotalRetailers = [Active Retailers]
+			VAR TotalSales = [Total Sales]
+			VAR TotalSalesFormatted = FORMAT(TotalSales / 1000000, "£0.0") & "M"
+			VAR RegionCount = DISTINCTCOUNT(Dim_Region[Region])
+			VAR ChannelCount = DISTINCTCOUNT(Dim_Channel[Channel])
+			VAR SKUCount = DISTINCTCOUNT(Dim_Product[SKU])
+			VAR LastRefresh = FORMAT([Last Refresh Date], "DD MMM YYYY")
+			
+			// Quick Stats
+			VAR SuccessRate = [Success Rate %]
+			VAR ChurnRate = [Churn Rate %]
+			VAR AvgOrderValue = [AOV]
+			VAR DeliverySLA = [Delivery SLA (Working Days)]
+			
+			RETURN
+			"<!DOCTYPE html>
+			<html>
+			<head>
+			    <meta charset='UTF-8'>
 			    <style>
-			        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@600;700&display=swap');
+			        * { margin: 0; padding: 0; box-sizing: border-box; }
+			        body {
+			            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			            background: linear-gradient(135deg, #0b0d0f 0%, #1a1d24 100%);
+			            color: #c8cdd4;
+			            padding: 20px;
+			            height: 799px;
+			            overflow: hidden;
+			        }
+			        .container { 
+			            max-width: 1240px; 
+			            margin: 0 auto; 
+			            height: 100%;
+			            display: flex;
+			            flex-direction: column;
+			        }
+			        .header {
+			            text-align: center;
+			            margin-bottom: 20px;
+			            padding-bottom: 12px;
+			            border-bottom: 2px solid #2a3038;
+			        }
+			        .logo {
+			            font-size: 11px;
+			            font-weight: 600;
+			            color: #f5a623;
+			            letter-spacing: 2px;
+			            margin-bottom: 8px;
+			        }
+			        .title {
+			            font-size: 28px;
+			            font-weight: 700;
+			            color: #ffffff;
+			            margin-bottom: 6px;
+			            line-height: 1.2;
+			        }
+			        .subtitle {
+			            font-size: 13px;
+			            color: #5a6370;
+			            font-family: 'Courier New', monospace;
+			        }
+			        .welcome-box {
+			            background: linear-gradient(135deg, #1e2328 0%, #2a1616 100%);
+			            border: 1px solid #f5a623;
+			            border-radius: 6px;
+			            padding: 16px 20px;
+			            margin-bottom: 18px;
+			            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+			        }
+			        .welcome-text {
+			            font-size: 17px;
+			            color: #ffffff;
+			            margin-bottom: 6px;
+			        }
+			        .welcome-subtext {
+			            font-size: 12px;
+			            color: #5a6370;
+			            line-height: 1.5;
+			        }
+			        .stats-grid {
+			            display: grid;
+			            grid-template-columns: repeat(3, 1fr);
+			            gap: 15px;
+			            margin-bottom: 18px;
+			        }
+			        .stat-card {
+			            background: #111418;
+			            border: 1px solid #2a3038;
+			            border-radius: 5px;
+			            padding: 14px;
+			            text-align: center;
+			            transition: transform 0.2s;
+			        }
+			        .stat-card:hover {
+			            transform: translateY(-2px);
+			            border-color: #f5a623;
+			        }
+			        .stat-value {
+			            font-size: 26px;
+			            font-weight: 700;
+			            color: #ffffff;
+			            margin-bottom: 6px;
+			        }
+			        .stat-label {
+			            font-size: 10px;
+			            color: #5a6370;
+			            text-transform: uppercase;
+			            letter-spacing: 0.8px;
+			        }
+			        .info-row {
+			            display: grid;
+			            grid-template-columns: repeat(2, 1fr);
+			            gap: 15px;
+			            margin-bottom: 15px;
+			        }
+			        .info-section {
+			            background: #111418;
+			            border: 1px solid #2a3038;
+			            border-radius: 6px;
+			            padding: 16px 18px;
+			        }
+			        .info-title {
+			            font-size: 11px;
+			            color: #f5a623;
+			            text-transform: uppercase;
+			            letter-spacing: 1.5px;
+			            margin-bottom: 12px;
+			            font-weight: 600;
+			        }
+			        .info-grid {
+			            display: grid;
+			            grid-template-columns: 1fr;
+			            gap: 8px;
+			        }
+			        .info-item {
+			            display: flex;
+			            justify-content: space-between;
+			            padding: 6px 0;
+			            border-bottom: 1px solid #1e2328;
+			        }
+			        .info-item:last-child {
+			            border-bottom: none;
+			        }
+			        .info-key {
+			            font-size: 11px;
+			            color: #5a6370;
+			            font-family: 'Courier New', monospace;
+			        }
+			        .info-value {
+			            font-size: 11px;
+			            color: #ffffff;
+			            font-weight: 600;
+			        }
+			        .cta-container {
+			            text-align: center;
+			            margin: 20px 0;
+			            padding: 20px 0;
+			        }
+			        .cta-button {
+			            display: inline-block;
+			            background: linear-gradient(135deg, #f5a623 0%, #d68910 100%);
+			            color: #0b0d0f;
+			            font-size: 16px;
+			            font-weight: 700;
+			            padding: 16px 48px;
+			            border-radius: 8px;
+			            text-decoration: none;
+			            text-transform: uppercase;
+			            letter-spacing: 1.5px;
+			            box-shadow: 0 4px 15px rgba(245, 166, 35, 0.3);
+			            transition: all 0.3s ease;
+			            border: none;
+			            cursor: pointer;
+			        }
+			        .cta-button:hover {
+			            transform: translateY(-2px);
+			            box-shadow: 0 6px 20px rgba(245, 166, 35, 0.5);
+			            background: linear-gradient(135deg, #ffc107 0%, #f5a623 100%);
+			        }
+			        .cta-subtitle {
+			            font-size: 11px;
+			            color: #5a6370;
+			            margin-top: 8px;
+			            font-family: 'Courier New', monospace;
+			        }
+			        .footer {
+			            text-align: center;
+			            margin-top: auto;
+			            padding-top: 12px;
+			            border-top: 1px solid #2a3038;
+			            font-size: 10px;
+			            color: #5a6370;
+			        }
+			        .highlight {
+			            color: #f5a623;
+			            font-weight: 600;
+			        }
 			    </style>
-			
-			    <div style='position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.4; width: 500px; height: 500px; background: #f5a623; top: -100px; left: -100px;'></div>
-			    <div style='position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.3; width: 600px; height: 600px; background: #2dd4bf; bottom: -150px; right: -100px;'></div>
-			    <div style='position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.3; width: 400px; height: 400px; background: #a78bfa; top: 50%; left: 40%; transform: translate(-50%, -50%);'></div>
-			    
-			    <div style='position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10;'>
+			</head>
+			<body>
+			    <div class='container'>
+			        <div class='header'>
+			            <div class='logo'>MAXAB ANALYTICS</div>
+			            <div class='title'>Retail Performance & Churn Analytics</div>
+			            <div class='subtitle'>Real-time insights into retailer behavior</div>
+			        </div>
 			        
-			        <div style='background: rgba(17, 20, 24, 0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid #1e2328; border-radius: 16px; padding: 60px 80px; text-align: center; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);'>
-			            
-			            <h1 style='font-family: ""Syne"", sans-serif; font-size: 48px; margin: 0 0 10px 0; font-weight: 700; color: #ffffff;'>" & GreetingText & "</h1>
-			            
-			            <p style='font-family: ""IBM Plex Mono"", monospace; font-size: 16px; margin: 0; color: #c8cdd4; font-weight: 400; letter-spacing: 0.5px;'>Maxab Executive Portal</p>
+			        <div class='welcome-box'>
+			            <div class='welcome-text'>👋 Welcome back, <span class='highlight'>" & FirstName & "</span></div>
+			            <div class='welcome-subtext'>
+			                Analytics across <strong>" & FORMAT(TotalRetailers, "#,0") & " retailers</strong>, 
+			                <strong>" & FORMAT(TotalOrders, "#,0") & " orders</strong>, and 
+			                <strong>" & TotalSalesFormatted & "</strong> in sales.
+			            </div>
+			        </div>
 			        
+			        <div class='stats-grid'>
+			            <div class='stat-card'>
+			                <div class='stat-value'>" & TotalSalesFormatted & "</div>
+			                <div class='stat-label'>Total Sales</div>
+			            </div>
+			            <div class='stat-card'>
+			                <div class='stat-value'>" & FORMAT(TotalOrders, "#,0") & "</div>
+			                <div class='stat-label'>Total Orders</div>
+			            </div>
+			            <div class='stat-card'>
+			                <div class='stat-value'>" & FORMAT(TotalRetailers, "#,0") & "</div>
+			                <div class='stat-label'>Active Retailers</div>
+			            </div>
+			        </div>
+			        
+			        <div class='info-row'>
+			            <div class='info-section'>
+			                <div class='info-title'>▸ DATA COVERAGE</div>
+			                <div class='info-grid'>
+			                    <div class='info-item'>
+			                        <span class='info-key'>Date Range</span>
+			                        <span class='info-value'>" & DateRange & "</span>
+			                    </div>
+			                    <div class='info-item'>
+			                        <span class='info-key'>Last Refresh</span>
+			                        <span class='info-value'>" & LastRefresh & "</span>
+			                    </div>
+			                    <div class='info-item'>
+			                        <span class='info-key'>Regions</span>
+			                        <span class='info-value'>" & RegionCount & " regions</span>
+			                    </div>
+			                    <div class='info-item'>
+			                        <span class='info-key'>Channels</span>
+			                        <span class='info-value'>" & ChannelCount & " channels</span>
+			                    </div>
+			                    <div class='info-item'>
+			                        <span class='info-key'>SKUs Tracked</span>
+			                        <span class='info-value'>" & FORMAT(SKUCount, "#,0") & "</span>
+			                    </div>
+			                </div>
+			            </div>
+			            
+			            <div class='info-section'>
+			                <div class='info-title'>▸ QUICK FACTS</div>
+			                <div class='info-grid'>
+			                    <div class='info-item'>
+			                        <span class='info-key'>Success Rate</span>
+			                        <span class='info-value'>" & FORMAT(SuccessRate, "0.0%") & "</span>
+			                    </div>
+			                    <div class='info-item'>
+			                        <span class='info-key'>Churn Rate</span>
+			                        <span class='info-value'>" & FORMAT(ChurnRate, "0.0%") & "</span>
+			                    </div>
+			                    <div class='info-item'>
+			                        <span class='info-key'>Avg Order Value</span>
+			                        <span class='info-value'>" & FORMAT(AvgOrderValue, "£#,0") & "</span>
+			                    </div>
+			                    <div class='info-item'>
+			                        <span class='info-key'>Delivery SLA</span>
+			                        <span class='info-value'>" & FORMAT(DeliverySLA, "0.0") & " days</span>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			        
+			        <div class='cta-container'>
+			            <div class='cta-button'>ENTER DASHBOARD →</div>
+			            <div class='cta-subtitle'>Click to explore Executive Overview</div>
+			        </div>
+			        
+			        <div class='footer'>
+			            📊 Powered by Power BI · Built for Maxab Analytics<br>
+			            Data Analyst: Sohila Khaled
 			        </div>
 			    </div>
-			</div>
-			"
-			
-			RETURN 
-			HtmlString
+			</body>
+			</html>"
 			```
-		lineageTag: af8ecec0-906a-4ec7-91b5-67cef61b045c
+		displayFolder: Home Page
+		lineageTag: de4d4a8c-2934-425d-906d-59c0b8955253
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
