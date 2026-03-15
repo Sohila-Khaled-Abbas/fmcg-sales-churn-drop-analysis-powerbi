@@ -1,12 +1,28 @@
-# MAXAB RETAIL PERFORMANCE & CHURN ANALYTICS DASHBOARD
-## Complete Project Documentation
+# 📊 MAXAB RETAIL PERFORMANCE & CHURN ANALYTICS DASHBOARD
 
-**Version:** 1.0  
-**Last Updated:** February 2026  
-**Dashboard Pages:** 6 (Home + 5 Analysis Pages)  
-**Total Measures:** 75+  
-**Data Model:** Star Schema  
-**Refresh Frequency:** Daily at 6:00 AM  
+<div align="center">
+
+![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
+![DAX](https://img.shields.io/badge/DAX-0078D4?style=for-the-badge&logo=microsoft&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL_Server-CC292B?style=for-the-badge&logo=microsoft-sql-server&logoColor=white)
+![Star Schema](https://img.shields.io/badge/Data_Model-Star_Schema-4CAF50?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Completed-success?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
+
+**Real-time insights into retailer behavior, operational performance, and customer lifecycle across the Maxab distribution network in Egypt.**
+
+</div>
+
+---
+
+## 📌 Project Snapshot
+
+- **Version:** 1.0  
+- **Last Updated:** February 2026  
+- **Dashboard Pages:** 6 (Home + 5 Analysis Pages)  
+- **Total Measures:** 75+ DAX Measures  
+- **Data Model:** Star Schema  
+- **Refresh Frequency:** Daily at 6:00 AM  
 
 ---
 
@@ -62,11 +78,11 @@ The Maxab Retail Performance & Churn Analytics Dashboard provides real-time insi
 
 | Component | Technology |
 |---|---|
-| **BI Tool** | Power BI Desktop (February 2026) |
-| **Data Source** | SQL Server / CSV imports |
-| **Connectivity** | DirectQuery + Import (hybrid) |
-| **Refresh** | Scheduled daily at 6:00 AM |
-| **Compatibility** | Power BI Service, Mobile App |
+| **BI Tool** | ![Power BI Desktop](https://img.shields.io/badge/Power_BI_Desktop-F2C811?style=flat-square&logo=powerbi&logoColor=black) (February 2026) |
+| **Data Source** | ![SQL Server](https://img.shields.io/badge/SQL_Server-CC292B?style=flat-square&logo=microsoft-sql-server&logoColor=white) / ![CSV](https://img.shields.io/badge/CSV-0078D4?style=flat-square&logo=microsoftexcel&logoColor=white) |
+| **Connectivity** | ⚡ DirectQuery + Import (hybrid) |
+| **Refresh** | 🔄 Scheduled daily at 6:00 AM |
+| **Compatibility** | 📱 Power BI Service, Mobile App |
 
 ### 2.3 Data Coverage
 
