@@ -20,10 +20,10 @@
 <text x="70" y="278" fill="#8b98a8" font-family="Arial,sans-serif" font-size="12" font-weight="700" letter-spacing="1.5">SOURCE ASSETS</text>
 <text x="70" y="321" fill="#f8fafc" font-family="Arial,sans-serif" font-size="20" font-weight="700">Repository inputs</text>
 <path d="M70 344H218" stroke="#334155"/>
-<text x="70" y="386" fill="#dbe3ec" font-family="Arial,sans-serif" font-size="15">Excel workbooks\nDataset 1 · 2 · 3</text>
+<text x="70" y="386" fill="#dbe3ec" font-family="Arial,sans-serif" font-size="15">Excel workbooks / Datasets 1–3</text>
 <text x="70" y="429" fill="#aeb9c7" font-family="Arial,sans-serif" font-size="14">Regional KPI CSV</text>
 <text x="70" y="468" fill="#aeb9c7" font-family="Arial,sans-serif" font-size="14">/data</text>
-<text x="70" y="507" fill="#aeb9c7" font-family="Arial,sans-serif" font-size="14">undefined</text>
+<text x="70" y="507" fill="#aeb9c7" font-family="Arial,sans-serif" font-size="14"></text>
 <rect x="70" y="550" width="148" height="27" rx="13" fill="#1d2a33"/>
 <text x="144" y="568" text-anchor="middle" fill="#2dd4bf" font-family="Arial,sans-serif" font-size="11" font-weight="700">PROJECT ARTIFACT</text>
 </g>
